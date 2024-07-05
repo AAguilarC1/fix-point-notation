@@ -1,7 +1,7 @@
 DIRS := bin obj build data
 CC := gcc 
 CFLAGS := -Wall -Wextra -Werror -Wpedantic -std=c99 -g
-LDFLAGS := -lm
+LDFLAGS := -lm 
 
 SRC := $(wildcard src/*.c)
 OBJ := $(SRC:src/%.c=obj/%.o)
@@ -12,12 +12,12 @@ $(DIRS):
 	mkdir -p $@
 
 $(OBJ): obj/%.o: src/%.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@ $(LDFLAGS)
 
 $(BIN): $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $@ $(LDFLAGS)
 
-all: $(DIRS) build
+all: build run
 
 build: $(DIRS) $(BIN)
 
