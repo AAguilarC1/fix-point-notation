@@ -6,7 +6,7 @@
 #define Q_FORMAT_15     15
 #define Q_FORMAT_31     31
 
-#define Q_FORMAT_CUSTOM 16
+#define Q_FORMAT_CUSTOM 15
 
 #define Q_FORMAT Q_FORMAT_CUSTOM
 
@@ -30,5 +30,14 @@ typedef int32_t q_t;
 
 #define INT_TO_Q(x) ((q_t)((x) << FRACTIONAL_BITS))
 #define Q_TO_INT(x) ((int32_t)(x) >> FRACTIONAL_BITS)
+
+#define Q_ONE INT_TO_Q(1)
+#define Q_MINUS_ONE INT_TO_Q(-1)
+#define Q_ZERO INT_TO_Q(0)
+
+q_t float_to_q(float x);
+float q_to_float(q_t x);
+
+#define Q_RESOLUTION (q_to_float(1))
 
 #endif // FIX_POINT_H
