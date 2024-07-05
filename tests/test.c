@@ -3,6 +3,7 @@
 #include "../include/fix_point.h"
 
 // Test case
+// MARK: - Integer to Q format
 void testIntToQ() {
     CU_ASSERT_EQUAL(Q_FORMAT, Q_FORMAT_CUSTOM);
     int32_t x = 1;
@@ -12,6 +13,24 @@ void testIntToQ() {
     x = 0;
     q_x = INT_TO_Q(x);
     CU_ASSERT_EQUAL(Q_ZERO, q_x);
+
+    x = -1;
+    q_x = INT_TO_Q(x);
+    CU_ASSERT_EQUAL(Q_MINUS_ONE, q_x);
+
+    x = 70;
+    q_x = INT_TO_Q(x);
+    CU_ASSERT_EQUAL(Q_TO_INT(q_x), 70);
+
+    x = -70;
+    q_x = INT_TO_Q(x);
+    CU_ASSERT_EQUAL(Q_TO_INT(q_x), -70);
+}
+
+// MARK: - Float to Q format
+void testFloatToQ() {
+    float x = 0.4738;
+    q_t q_x = float_to_q(x);
 }
 
 // Test suite initialization

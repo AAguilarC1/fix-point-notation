@@ -2,7 +2,7 @@
 #include "../include/fix_point.h"
 int main() {
     printf("Hello, World!\n");
-    q_t x = INT_TO_Q(70);
+    q_t x = INT_TO_Q(-70);
     printf("x = %d\n", x);
 
     int32_t y = Q_TO_INT(x);
