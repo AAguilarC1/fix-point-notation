@@ -24,6 +24,7 @@ typedef q31_t q_t;
 #define Q_FORM_INT_BITS (sizeof(q_t) << 3)
 #elif   Q_FORMAT == Q_FORMAT_CUSTOM
 typedef int32_t q_t;
+#define Q_FORM_INT_BITS (sizeof(q_t) << 3)
 #else
 #error "Q_FORMAT not supported"
 #endif
@@ -31,12 +32,20 @@ typedef int32_t q_t;
 #define FRACTIONAL_BITS (Q_FORMAT)
 #define INT_BITS (Q_FORM_INT_BITS - FRACTIONAL_BITS)
 
-#define INT_TO_Q(x) ((q_t)((x) << FRACTIONAL_BITS))
-#define Q_TO_INT(x) ((int32_t)(x) >> FRACTIONAL_BITS)
+#define Q_FORM_INT_MASK (((1 << INT_BITS) - 1) << FRACTIONAL_BITS)
+#define Q_FORM_FRACTIONAL_MASK ((1 << FRACTIONAL_BITS) - 1)
 
-#define Q_ONE INT_TO_Q(1)
+#define GET_FORMAT (Q_FORMAT)
+
+#define INT_TO_Q(__X__) ((q_t)((__X__) << FRACTIONAL_BITS))
+#define Q_TO_INT(__Q__) ((int32_t)(__Q__) >> FRACTIONAL_BITS)
+
+#define Q_ZERO      INT_TO_Q(0)
+#define Q_ONE       INT_TO_Q(1)
 #define Q_MINUS_ONE INT_TO_Q(-1)
-#define Q_ZERO INT_TO_Q(0)
+
+#define Q_SIGN_BIT(__Q__)   (((__Q__) >> (Q_FORM_INT_BITS - 1)) & 1)
+#define Q_SIGN(__Q__)       (Q_SIGN_BIT(__Q__) == Q_ONE ? 1 : -1)
 
 q_t float_to_q(float x);
 float q_to_float(q_t x);
