@@ -19,10 +19,12 @@ else
 	CFLAGS += -O3
 endif
 
-SRC := $(wildcard src/*.c)
+
+SRC_DIR := src
+SRC := $(wildcard $(SRC_DIR)/*.c)
 OBJ := $(SRC:src/%.c=obj/%.o)
 BIN := 	bin/$(NAME)
-MAIN := src/main.c
+TEST := bin/$(NAME)_test
 
 $(DIRS):
 	mkdir -p $@
@@ -31,7 +33,10 @@ $(OBJ): obj/%.o: src/%.c
 	$(CC) $(CFLAGS) -c $< -o $@ $(LDFLAGS)
 
 $(BIN): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $@ $(LDFLAGS)
+	$(CC) $(CFLAGS) $(OBJ) -o $@
+
+$(TEST): $(OBJ)
+	$(CC) $(CFLAGS) $(filter-out obj/main.o, $(OBJ)) $(TESTS_DIR)/*.c -lcunit -o $@ $(LDFLAGS) 
 
 all: build run
 
@@ -43,11 +48,8 @@ run: $(BIN)
 check:
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose ./$(BIN_DIR)/$(NAME)
 
-$(NAME)_test:
-	@$(CC) $(CFLAGS) -lcunit -o $(BIN_DIR)/$@ $(TESTS_DIR)/*.c
-
-test: $(NAME)_test
-	@$(BIN_DIR)/$(NAME)_test
+test: $(TEST)
+	@./$(TEST)
 
 setup:
 	@sudo apt install -y valgrind

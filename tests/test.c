@@ -31,6 +31,7 @@ void testIntToQ() {
 void testFloatToQ() {
     float x = 0.4738;
     q_t q_x = float_to_q(x);
+    CU_ASSERT_EQUAL(q_to_float(q_x), x);
 }
 
 // Test suite initialization
@@ -58,6 +59,11 @@ int main() {
 
     // Add the test case to the suite
     if (NULL == CU_add_test(suite, "Int2Q", testIntToQ)) {
+        CU_cleanup_registry();
+        return CU_get_error();
+    }
+
+    if (NULL == CU_add_test(suite, "Float2Q", testFloatToQ)) {
         CU_cleanup_registry();
         return CU_get_error();
     }
