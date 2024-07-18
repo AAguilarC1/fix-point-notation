@@ -38,7 +38,7 @@ $(BIN): $(OBJ)
 $(TEST): $(OBJ)
 	$(CC) $(CFLAGS) $(filter-out obj/main.o, $(OBJ)) $(TESTS_DIR)/*.c -lcunit -o $@ $(LDFLAGS) 
 
-all: build run
+all: build test
 
 build: $(DIRS) $(BIN)
 
