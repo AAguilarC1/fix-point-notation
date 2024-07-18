@@ -50,12 +50,13 @@ test: $(NAME)_test
 	@$(BIN_DIR)/$(NAME)_test
 
 setup:
-	@sudo apt install -y valgrind clang-format clang-tidy
+	@sudo apt install -y valgrind
 	@sudo apt install -y build-essential
 	@sudo apt install -y libcunit1 libcunit1-doc libcunit1-dev
 	@sudo apt update
 	@sudo apt upgrade -y
 	@sudo apt autoremove -y
+	@sudo apt autoclean -y
 
 clean:
 	rm -rf $(DIRS)
