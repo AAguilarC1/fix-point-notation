@@ -63,4 +63,4 @@ setup:
 clean:
 	rm -rf $(DIRS)
 
-.PHONY: all build run clean
+.PHONY: all setup build run clean
