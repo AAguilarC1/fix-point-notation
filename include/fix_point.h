@@ -12,18 +12,22 @@
 
 #if     Q_FORMAT == Q_FORMAT_7
 typedef int8_t q7_t;
+typedef int16_t q_long_t;
 typedef q7_t q_t;
 #define Q_FORM_INT_BITS (sizeof(q_t) << 1)
 #elif   Q_FORMAT == Q_FORMAT_15
 typedef int16_t q15_t;
+typedef int32_t q_long_t;
 typedef q15_t q_t;
 #define Q_FORM_INT_BITS (sizeof(q_t) << 2)
 #elif   Q_FORMAT == Q_FORMAT_31
 typedef int32_t q31_t;
+typedef int64_t q_long_t; 
 typedef q31_t q_t;
 #define Q_FORM_INT_BITS (sizeof(q_t) << 3)
 #elif   Q_FORMAT == Q_FORMAT_CUSTOM
 typedef int32_t q_t;
+typedef int64_t q_long_t;
 #define Q_FORM_INT_BITS (sizeof(q_t) << 3)
 #else
 #error "Q_FORMAT not supported"
@@ -49,6 +53,9 @@ typedef int32_t q_t;
 
 q_t float_to_q(float x);
 float q_to_float(q_t x);
+
+q_t q_product(q_t a, q_t b);
+q_t q_division(q_t a, q_t b);
 
 #define Q_RESOLUTION (q_to_float(1))
 
