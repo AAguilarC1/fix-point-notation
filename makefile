@@ -1,8 +1,7 @@
-NAME := fix-point
+NAME := fix_point
 
 BIN_DIR := bin
 OBJ_DIR := obj
-# BUILD_DIR := build
 DATA_DIR := data
 TESTS_DIR := tests
 
