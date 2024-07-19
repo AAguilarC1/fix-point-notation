@@ -60,6 +60,5 @@ setup:
 	@sudo apt autoclean -y
 
 clean:
-	rm -rf $(DIRS)/*
-
+	rm -rf  $(DIRS)
 .PHONY: all setup build run clean
