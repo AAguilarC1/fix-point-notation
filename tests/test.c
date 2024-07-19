@@ -1,37 +1,71 @@
 #include <stdio.h>
 #include <CUnit/Basic.h>
+#define Q_FORMAT_CUSTOM 16
 #include "../include/fix_point.h"
+
+uint8_t approx_equal(float a, float b, float epsilon) {
+    if (b > a) {
+        return (b - a) < epsilon;
+    }
+    return (a - b) < epsilon;
+}
 
 // Test case
 // MARK: - Integer to Q format
 void testIntToQ() {
     CU_ASSERT_EQUAL(Q_FORMAT, Q_FORMAT_CUSTOM);
-    int32_t x = 1;
-    q_t q_x = INT_TO_Q(x);
+    int32_t x1 = 1;
+    q_t q_x = INT_TO_Q(x1);
     CU_ASSERT_EQUAL(Q_ONE, q_x);
 
-    x = 0;
-    q_x = INT_TO_Q(x);
+    int32_t x2 = 0;
+    q_x = INT_TO_Q(x2);
     CU_ASSERT_EQUAL(Q_ZERO, q_x);
 
-    x = -1;
-    q_x = INT_TO_Q(x);
+    int32_t x3 = -1;
+    q_x = INT_TO_Q(x3);
     CU_ASSERT_EQUAL(Q_MINUS_ONE, q_x);
 
-    x = 70;
-    q_x = INT_TO_Q(x);
+    int32_t x4 = 70;
+    q_x = INT_TO_Q(x4);
     CU_ASSERT_EQUAL(Q_TO_INT(q_x), 70);
 
-    x = -70;
-    q_x = INT_TO_Q(x);
+    int32_t x5 = -70;
+    q_x = INT_TO_Q(x5);
     CU_ASSERT_EQUAL(Q_TO_INT(q_x), -70);
 }
 
 // MARK: - Float to Q format
 void testFloatToQ() {
-    float x = 0.4738;
+    float x = 0.5;
     q_t q_x = float_to_q(x);
-    CU_ASSERT_EQUAL(q_to_float(q_x), x);
+    CU_ASSERT_EQUAL(approx_equal(x, q_to_float(q_x), 0.001), 1);
+
+    x = 0.25;
+    q_x = float_to_q(x);
+    CU_ASSERT_EQUAL(approx_equal(x, q_to_float(q_x), 0.001), 1);
+
+    x = 0.1234;
+    q_x = float_to_q(x);
+    CU_ASSERT_EQUAL(approx_equal(x, q_to_float(q_x), 0.001), 1);
+
+    x = 0.0;
+    q_x = float_to_q(x);
+    CU_ASSERT_EQUAL(approx_equal(x, q_to_float(q_x), 0.001), 1);
+
+    x = 0.0000001;
+    q_x = float_to_q(x);
+    CU_ASSERT_EQUAL(approx_equal(x, q_to_float(q_x), 0.001), 1);
+
+    q_x = float_to_q(1.0);
+    CU_ASSERT_EQUAL(approx_equal(1.0, q_to_float(q_x), 0.001), 1);
+
+    q_x = float_to_q(-1.0);
+    CU_ASSERT_EQUAL(approx_equal(-1.0, q_to_float(q_x), 0.001), 1);
+
+    q_x = float_to_q(0.0);
+    CU_ASSERT_EQUAL(approx_equal(0.0, q_to_float(q_x), 0.001), 1);
+
 }
 
 // Test suite initialization

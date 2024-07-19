@@ -2,7 +2,7 @@ NAME := fix-point
 
 BIN_DIR := bin
 OBJ_DIR := obj
-BUILD_DIR := build
+# BUILD_DIR := build
 DATA_DIR := data
 TESTS_DIR := tests
 
@@ -42,13 +42,13 @@ all: build test
 
 build: $(DIRS) $(BIN)
 
-run: $(BIN)
+run: build
 	@ ./$(BIN)
 
 check:
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose ./$(BIN_DIR)/$(NAME)
 
-test: $(TEST)
+test: build $(TEST)
 	@./$(TEST)
 
 setup:

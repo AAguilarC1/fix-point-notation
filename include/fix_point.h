@@ -6,7 +6,7 @@
 #define Q_FORMAT_15     15
 #define Q_FORMAT_31     31
 
-#define Q_FORMAT_CUSTOM 24
+#define Q_FORMAT_CUSTOM 16
 
 #define Q_FORMAT Q_FORMAT_CUSTOM
 
