@@ -23,14 +23,13 @@ q_t q_absolute(q_t a){
 
 q_t q_int_power(q_t a, int32_t n){
     if (a == 0) return INT_TO_Q(0);
+    if (n == 0) return INT_TO_Q(1);
 
     if (n < 0) {
         a = q_division(INT_TO_Q(1), a);
         n = -n;
     }
 
-    if (n == 0) return INT_TO_Q(1);
-    if (n == 1) return a;
 
     return q_product(a, q_int_power(a, n - 1));
 }

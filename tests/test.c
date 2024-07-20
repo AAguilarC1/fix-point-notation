@@ -274,6 +274,16 @@ void testIntPower()
     b = q_int_power(a, -10);
     CU_ASSERT_EQUAL(approx_equal(0.0, q_to_float(b), 0.001), 1);
 
+    a = float_to_q(0.01f);
+    b = q_int_power(a, -2);
+
+    CU_ASSERT_EQUAL(approx_equal(10000.0, q_to_float(b), 10000.0 * 0.01), 1);
+
+    a = float_to_q(0.021);
+    b = q_int_power(a, -2);
+
+    CU_ASSERT_EQUAL(approx_equal(2267.5736961451244, q_to_float(b), 2267.5736961451244 * 0.01), 1);
+
 }
 
 // Test suite initialization
