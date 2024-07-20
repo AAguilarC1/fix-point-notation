@@ -161,8 +161,121 @@ void testDivision(){
     c = q_division(a, b);
 
     CU_ASSERT_EQUAL(approx_equal(x / 200.0f, q_to_float(c), 0.001), 1);
+}
+
+void testAbsolute(){
+    q_t a = INT_TO_Q(1);
+    q_t b = q_absolute(a);
+
+    CU_ASSERT_EQUAL(Q_TO_INT(b), 1);
+
+    a = INT_TO_Q(-1);
+    b = q_absolute(a);
+
+    CU_ASSERT_EQUAL(Q_TO_INT(b), 1);
+
+    a = INT_TO_Q(0);
+    b = q_absolute(a);
+
+    CU_ASSERT_EQUAL(Q_TO_INT(b), 0);
+
+    a = float_to_q(-0.5);
+    b = q_absolute(a);
+    CU_ASSERT_EQUAL(approx_equal(0.5, q_to_float(b), 0.001), 1);
+
+    a = float_to_q(0.5);
+    b = q_absolute(a);
+    CU_ASSERT_EQUAL(approx_equal(0.5, q_to_float(b), 0.001), 1);
+
+    a = float_to_q(0.0);
+    b = q_absolute(a);
+    CU_ASSERT_EQUAL(approx_equal(0.0, q_to_float(b), 0.001), 1);
+
+    a = float_to_q(-0.0000001);
+    b = q_absolute(a);
+    CU_ASSERT_EQUAL(approx_equal(0.0000001, q_to_float(b), 0.001), 1);
+
+    a = float_to_q(0.0000001);
+    b = q_absolute(a);
+    CU_ASSERT_EQUAL(approx_equal(0.0000001, q_to_float(b), 0.001), 1);
+}
+
+void testIntPower()
+{
+    q_t a = INT_TO_Q(2);
+    q_t b = q_int_power(a, 0);
+    CU_ASSERT_EQUAL(Q_TO_INT(b), 1);
+
+    a = INT_TO_Q(2);
+    b = q_int_power(a, 1);
+    CU_ASSERT_EQUAL(Q_TO_INT(b), 2);
+
+    a = INT_TO_Q(2);
+    b = q_int_power(a, 2);
+    CU_ASSERT_EQUAL(Q_TO_INT(b), 4);
+
+    a = INT_TO_Q(4);
+    b = q_int_power(a, 3);
+    CU_ASSERT_EQUAL(Q_TO_INT(b), 64);
+
+    a = INT_TO_Q(5);
+    b = q_int_power(a, 3);
+    CU_ASSERT_EQUAL(Q_TO_INT(b), 125);
+
+    a = INT_TO_Q(-5);
+    b = q_int_power(a, 3);
+    CU_ASSERT_EQUAL(Q_TO_INT(b), -125);
+
+    a = float_to_q(0.5);
+    b = q_int_power(a, 3);
+    CU_ASSERT_EQUAL(approx_equal(0.5 * 0.5 * 0.5, q_to_float(b), 0.001), 1);
+
+    a = float_to_q(-0.5);
+    b = q_int_power(a, 3);
+    CU_ASSERT_EQUAL(approx_equal(-0.5 * -0.5 * -0.5, q_to_float(b), 0.001), 1);
+
+    a = float_to_q(0.0);
+    b = q_int_power(a, 10);
+    CU_ASSERT_EQUAL(approx_equal(0.0, q_to_float(b), 0.001), 1);
+
+    a = INT_TO_Q(0);
+    b = q_int_power(a, 10);
+    CU_ASSERT_EQUAL(Q_TO_INT(b), 0);
+
+    a = float_to_q(0.5);
+    b = q_int_power(a, 0);
+    CU_ASSERT_EQUAL(approx_equal(1.0, q_to_float(b), 0.001), 1);
+
+    a = INT_TO_Q(4);
+    b = q_int_power(a, -1);
+    CU_ASSERT_EQUAL(approx_equal(0.25, q_to_float(b), 0.001), 1);
+
+    a = INT_TO_Q(4);
+    b = q_int_power(a, -2);
+    CU_ASSERT_EQUAL(approx_equal(0.0625, q_to_float(b), 0.001), 1);
+
+    a = INT_TO_Q(-125);
+    b = q_int_power(a, -3);
+    CU_ASSERT_EQUAL(approx_equal(-5.12e-7, q_to_float(b), 0.001), 1);
+
+    a = float_to_q(0.5);
+    b = q_int_power(a, -3);
+    CU_ASSERT_EQUAL(approx_equal(8.0, q_to_float(b), 0.001), 1);
+
+    a = float_to_q(-0.5);
+    b = q_int_power(a, -3);
+    CU_ASSERT_EQUAL(approx_equal(-8.0, q_to_float(b), 0.001), 1);
+
+    a = float_to_q(0.125);
+    b = q_int_power(a, -3);
+    CU_ASSERT_EQUAL(approx_equal(512.0, q_to_float(b), 0.001), 1);
+
+    a = float_to_q(0.0);
+    b = q_int_power(a, -10);
+    CU_ASSERT_EQUAL(approx_equal(0.0, q_to_float(b), 0.001), 1);
 
 }
+
 // Test suite initialization
 int initialize_suite() {
     return 0;
@@ -203,6 +316,16 @@ int main() {
     }
 
     if (NULL == CU_add_test(suite, "Q_Division", testDivision)) {
+        CU_cleanup_registry();
+        return CU_get_error();
+    }
+
+    if (NULL == CU_add_test(suite, "Q_Absolute", testAbsolute)) {
+        CU_cleanup_registry();
+        return CU_get_error();
+    }
+
+    if (NULL == CU_add_test(suite, "Q_Int_Power", testIntPower)) {
         CU_cleanup_registry();
         return CU_get_error();
     }
