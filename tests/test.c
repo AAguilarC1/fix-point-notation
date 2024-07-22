@@ -2,13 +2,6 @@
 #include <CUnit/Basic.h>
 #include "../include/fix_point.h"
 
-uint8_t approx_equal(float a, float b, float epsilon) {
-    if (b > a) {
-        return (b - a) < epsilon;
-    }
-    return (a - b) < epsilon;
-}
-
 // Test case
 // MARK: - Integer to Q format
 void testIntToQ() {
@@ -38,35 +31,36 @@ void testIntToQ() {
 void testFloatToQ() {
     float x = 0.5;
     q_t q_x = float_to_q(x);
-    CU_ASSERT_EQUAL(approx_equal(x, q_to_float(q_x), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(x, q_to_float(q_x), 0.001);
 
     x = 0.25;
     q_x = float_to_q(x);
-    CU_ASSERT_EQUAL(approx_equal(x, q_to_float(q_x), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(x, q_to_float(q_x), 0.001);
 
     x = 0.1234;
     q_x = float_to_q(x);
-    CU_ASSERT_EQUAL(approx_equal(x, q_to_float(q_x), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(x, q_to_float(q_x), 0.001);
 
     x = 0.0;
     q_x = float_to_q(x);
-    CU_ASSERT_EQUAL(approx_equal(x, q_to_float(q_x), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(x, q_to_float(q_x), 0.001);
 
     x = 0.0000001;
     q_x = float_to_q(x);
-    CU_ASSERT_EQUAL(approx_equal(x, q_to_float(q_x), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(x, q_to_float(q_x), 0.001);
 
     q_x = float_to_q(1.0);
-    CU_ASSERT_EQUAL(approx_equal(1.0, q_to_float(q_x), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(1.0, q_to_float(q_x), 0.001);
 
     q_x = float_to_q(-1.0);
-    CU_ASSERT_EQUAL(approx_equal(-1.0, q_to_float(q_x), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(-1.0, q_to_float(q_x), 0.001);
 
     q_x = float_to_q(0.0);
-    CU_ASSERT_EQUAL(approx_equal(0.0, q_to_float(q_x), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(0.0, q_to_float(q_x), 0.001);
 
 }
 
+// MARK: - Product Q format
 void testProduct() {
     q_t a = INT_TO_Q(1);
     q_t b = INT_TO_Q(2);
@@ -85,7 +79,7 @@ void testProduct() {
     b = INT_TO_Q(2);
     c = q_product(a, b);
 
-    CU_ASSERT_EQUAL(approx_equal(x * 2, q_to_float(c), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(x * 2, q_to_float(c), 0.001);
 
     float y = 0.25;
     a = float_to_q(y);
@@ -93,7 +87,7 @@ void testProduct() {
     b = float_to_q(x);
     c = q_product(a, b);
     
-    CU_ASSERT_EQUAL(approx_equal(y * x, q_to_float(c), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(y * x, q_to_float(c), 0.001);
 
     float z = 0.0001234;
     y = 0.25;
@@ -109,19 +103,20 @@ void testProduct() {
     b = float_to_q(x);
     c = q_product(b, c);
 
-    CU_ASSERT_EQUAL(approx_equal(z * 2 * 0.25 * 0.5, q_to_float(c), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(z * 2 * 0.25 * 0.5, q_to_float(c), 0.001);
 }
 
+// MARK: - Division Q format
 void testDivision(){
     float x = 0.5;
     q_t a = float_to_q(x);
     q_t b = INT_TO_Q(2);
 
     q_t c = q_division(b, a);
-    CU_ASSERT_EQUAL(approx_equal(2 / x, q_to_float(c), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(2 / x, q_to_float(c), 0.001);
     
     c = q_division(a, b);
-    CU_ASSERT_EQUAL(approx_equal(x / 2, q_to_float(c), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(x / 2, q_to_float(c), 0.001);
 
     float y = 0.25;
     x = 0.5;
@@ -129,7 +124,7 @@ void testDivision(){
     b = float_to_q(x);
 
     c = q_division(a, b);
-    CU_ASSERT_EQUAL(approx_equal(y / x, q_to_float(c), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(y / x, q_to_float(c), 0.001);
 
     float z = 0.0001234;
     y = 0.25;
@@ -142,7 +137,7 @@ void testDivision(){
     a = float_to_q(x);
     c = q_division(c, a);
 
-    CU_ASSERT_EQUAL(approx_equal((z / y) / x, q_to_float(c), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL((z / y) / x, q_to_float(c), 0.001);
 
     a = INT_TO_Q(10000);
     b = INT_TO_Q(100);
@@ -152,7 +147,7 @@ void testDivision(){
     a = INT_TO_Q(1);
     b = INT_TO_Q(1000);
     c = q_division(a, b);
-    CU_ASSERT_EQUAL(approx_equal(1 / (1000.0f), q_to_float(c), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(1 / (1000.0f), q_to_float(c), 0.001);
 
     x = 0.5;
     a = float_to_q(x);
@@ -160,9 +155,11 @@ void testDivision(){
 
     c = q_division(a, b);
 
-    CU_ASSERT_EQUAL(approx_equal(x / 200.0f, q_to_float(c), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(x / 200.0f, q_to_float(c), 0.001);
 }
 
+
+// MARK: - Absolute Q format
 void testAbsolute(){
     q_t a = INT_TO_Q(1);
     q_t b = q_absolute(a);
@@ -181,25 +178,26 @@ void testAbsolute(){
 
     a = float_to_q(-0.5);
     b = q_absolute(a);
-    CU_ASSERT_EQUAL(approx_equal(0.5, q_to_float(b), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(0.5, q_to_float(b), 0.001);
 
     a = float_to_q(0.5);
     b = q_absolute(a);
-    CU_ASSERT_EQUAL(approx_equal(0.5, q_to_float(b), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(0.5, q_to_float(b), 0.001);
 
     a = float_to_q(0.0);
     b = q_absolute(a);
-    CU_ASSERT_EQUAL(approx_equal(0.0, q_to_float(b), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(0.0, q_to_float(b), 0.001);
 
     a = float_to_q(-0.0000001);
     b = q_absolute(a);
-    CU_ASSERT_EQUAL(approx_equal(0.0000001, q_to_float(b), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(0.0000001, q_to_float(b), 0.001);
 
     a = float_to_q(0.0000001);
     b = q_absolute(a);
-    CU_ASSERT_EQUAL(approx_equal(0.0000001, q_to_float(b), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(0.0000001, q_to_float(b), 0.001);
 }
 
+// MARK: - Int Power Q format
 void testIntPower()
 {
     q_t a = INT_TO_Q(2);
@@ -228,15 +226,15 @@ void testIntPower()
 
     a = float_to_q(0.5);
     b = q_int_power(a, 3);
-    CU_ASSERT_EQUAL(approx_equal(0.5 * 0.5 * 0.5, q_to_float(b), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(0.5 * 0.5 * 0.5, q_to_float(b), 0.001);
 
     a = float_to_q(-0.5);
     b = q_int_power(a, 3);
-    CU_ASSERT_EQUAL(approx_equal(-0.5 * -0.5 * -0.5, q_to_float(b), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(-0.5 * -0.5 * -0.5, q_to_float(b), 0.001);
 
     a = float_to_q(0.0);
     b = q_int_power(a, 10);
-    CU_ASSERT_EQUAL(approx_equal(0.0, q_to_float(b), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(0.0, q_to_float(b), 0.001);
 
     a = INT_TO_Q(0);
     b = q_int_power(a, 10);
