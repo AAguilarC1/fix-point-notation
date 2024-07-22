@@ -44,7 +44,7 @@ q_t q_sqrt(q_t a){
 
     q_t Y = INT_TO_Q(1);
     uint8_t n = 10;
-
+    // Newton's method for square root
     while((q_absolute(q_division(a, Y) - Y) > EPSILON) && (n > 0)){
         Y = q_division(q_division(a, Y) + Y, TWO);
         n--;

@@ -45,6 +45,10 @@ typedef int64_t q_long_t;
 #define INT_TO_Q(__X__) ((q_t)((__X__) << FRACTIONAL_BITS))
 #define Q_TO_INT(__Q__) ((int32_t)(__Q__) >> FRACTIONAL_BITS)
 
+
+#define Q_MAX_INT    ((1 << (INT_BITS - 1))  - 1) // 2^(INT_BITS - 1) - 1 because of sign bit
+#define Q_RESOLUTION (q_to_float(1))
+
 #define Q_ZERO       INT_TO_Q(0)
 #define Q_ONE        INT_TO_Q(1)
 #define Q_MINUS_ONE  INT_TO_Q(-1)
@@ -69,6 +73,5 @@ q_t q_int_power(q_t a, int32_t n);
 q_t q_absolute(q_t a);
 q_t q_sqrt(q_t a);
 
-#define Q_RESOLUTION (q_to_float(1))
 
 #endif // FIX_POINT_H

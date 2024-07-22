@@ -16,5 +16,7 @@ int main() {
 
     printf("GET_FORMAT = %d\n", GET_FORMAT);
     printf("Q_RESOLUTION = %e\n", Q_RESOLUTION);
+    printf("Q_MAX_INT = %d\n", Q_MAX_INT);
+    
     return 0;
 }
