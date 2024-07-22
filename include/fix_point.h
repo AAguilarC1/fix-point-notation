@@ -67,6 +67,7 @@ q_t q_product(q_t a, q_t b);
 q_t q_division(q_t a, q_t b);
 q_t q_int_power(q_t a, int32_t n);
 q_t q_absolute(q_t a);
+q_t q_sqrt(q_t a);
 
 #define Q_RESOLUTION (q_to_float(1))
 
