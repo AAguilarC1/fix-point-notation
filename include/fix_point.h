@@ -45,9 +45,17 @@ typedef int64_t q_long_t;
 #define INT_TO_Q(__X__) ((q_t)((__X__) << FRACTIONAL_BITS))
 #define Q_TO_INT(__Q__) ((int32_t)(__Q__) >> FRACTIONAL_BITS)
 
-#define Q_ZERO      INT_TO_Q(0)
-#define Q_ONE       INT_TO_Q(1)
-#define Q_MINUS_ONE INT_TO_Q(-1)
+#define Q_ZERO       INT_TO_Q(0)
+#define Q_ONE        INT_TO_Q(1)
+#define Q_MINUS_ONE  INT_TO_Q(-1)
+#define Q_PI         float_to_q(3.14159265358979323846)
+#define Q_TWO_PI     float_to_q(6.28318530717958647692)
+#define Q_TAI        Q_TWO_PI      
+#define Q_HALF_PI    float_to_q(1.57079632679489661923)
+#define Q_QUARTER_PI float_to_q(0.78539816339744830962)
+#define Q_THIRD_PI   float_to_q(1.04719755119659774615)
+#define Q_SIXTH_PI   float_to_q(0.52359877559829887308)
+#define Q_E          float_to_q(2.71828182845904523536)
 
 #define Q_SIGN_BIT(__Q__)   (((__Q__) >> (Q_FORM_INT_BITS - 1)) & 1)
 #define Q_SIGN(__Q__)       (Q_SIGN_BIT(__Q__) == Q_ONE ? 1 : -1)
