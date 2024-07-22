@@ -3,25 +3,25 @@
 #include <stdint.h>
 #include <assert.h>
 
-#define Q_FORMAT_7      7
-#define Q_FORMAT_15     15
-#define Q_FORMAT_31     31
+#define Q_FORMAT_6      6
+#define Q_FORMAT_14     14
+#define Q_FORMAT_30     30
 
 #define Q_FORMAT_CUSTOM 16
 
 #define Q_FORMAT Q_FORMAT_CUSTOM
 
-#if     Q_FORMAT == Q_FORMAT_7
+#if     Q_FORMAT == Q_FORMAT_6
 typedef int8_t q7_t;
 typedef int16_t q_long_t;
 typedef q7_t q_t;
-#define Q_FORM_INT_BITS (sizeof(q_t) << 1)
-#elif   Q_FORMAT == Q_FORMAT_15
+#define Q_FORM_INT_BITS (sizeof(q_t) << 3)
+#elif   Q_FORMAT == Q_FORMAT_14
 typedef int16_t q15_t;
 typedef int32_t q_long_t;
 typedef q15_t q_t;
-#define Q_FORM_INT_BITS (sizeof(q_t) << 2)
-#elif   Q_FORMAT == Q_FORMAT_31
+#define Q_FORM_INT_BITS (sizeof(q_t) << 3)
+#elif   Q_FORMAT == Q_FORMAT_30
 typedef int32_t q31_t;
 typedef int64_t q_long_t; 
 typedef q31_t q_t;
