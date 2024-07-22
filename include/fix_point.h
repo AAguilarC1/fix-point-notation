@@ -71,5 +71,6 @@ q_t q_int_power(q_t a, int32_t n);
 q_t q_absolute(q_t a);
 q_t q_sqrt(q_t a);
 
+//TODO: Add trigonometric functions
 
 #endif // FIX_POINT_H
