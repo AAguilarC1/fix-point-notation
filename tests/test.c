@@ -242,48 +242,108 @@ void testIntPower()
 
     a = float_to_q(0.5);
     b = q_int_power(a, 0);
-    CU_ASSERT_EQUAL(approx_equal(1.0, q_to_float(b), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(1.0, q_to_float(b), 0.001);
 
     a = INT_TO_Q(4);
     b = q_int_power(a, -1);
-    CU_ASSERT_EQUAL(approx_equal(0.25, q_to_float(b), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(0.25, q_to_float(b), 0.001);
 
     a = INT_TO_Q(4);
     b = q_int_power(a, -2);
-    CU_ASSERT_EQUAL(approx_equal(0.0625, q_to_float(b), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(0.0625, q_to_float(b), 0.001);
 
     a = INT_TO_Q(-125);
     b = q_int_power(a, -3);
-    CU_ASSERT_EQUAL(approx_equal(-5.12e-7, q_to_float(b), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(-5.12e-7, q_to_float(b), 0.001);
 
     a = float_to_q(0.5);
     b = q_int_power(a, -3);
-    CU_ASSERT_EQUAL(approx_equal(8.0, q_to_float(b), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(8.0, q_to_float(b), 0.001);
 
     a = float_to_q(-0.5);
     b = q_int_power(a, -3);
-    CU_ASSERT_EQUAL(approx_equal(-8.0, q_to_float(b), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(-8.0, q_to_float(b), 0.001);
 
     a = float_to_q(0.125);
     b = q_int_power(a, -3);
-    CU_ASSERT_EQUAL(approx_equal(512.0, q_to_float(b), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(512.0, q_to_float(b), 0.001);
 
     a = float_to_q(0.0);
     b = q_int_power(a, -10);
-    CU_ASSERT_EQUAL(approx_equal(0.0, q_to_float(b), 0.001), 1);
+    CU_ASSERT_DOUBLE_EQUAL(0.0, q_to_float(b), 0.001);
 
     a = float_to_q(0.01f);
     b = q_int_power(a, -2);
 
-    CU_ASSERT_EQUAL(approx_equal(10000.0, q_to_float(b), 10000.0 * 0.01), 1);
+    CU_ASSERT_DOUBLE_EQUAL(10000.0, q_to_float(b), 10000.0 * 0.01);
 
     a = float_to_q(0.021);
     b = q_int_power(a, -2);
 
-    CU_ASSERT_EQUAL(approx_equal(2267.5736961451244, q_to_float(b), 2267.5736961451244 * 0.01), 1);
+    CU_ASSERT_DOUBLE_EQUAL(2267.5736961451244, q_to_float(b), 2267.5736961451244 * 0.01);
 
 }
 
+// MARK: - Square Root Q format
+void test_q_sqrt()
+{
+    q_t a = INT_TO_Q(4);
+    q_t b = q_sqrt(a);
+
+    CU_ASSERT_EQUAL(Q_TO_INT(b), 2);
+
+    a = INT_TO_Q(9);
+    b = q_sqrt(a);
+
+    CU_ASSERT_EQUAL(Q_TO_INT(b), 3);
+
+    a = INT_TO_Q(10);
+    b = q_sqrt(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(3.1622776601683795, q_to_float(b), 0.001);
+
+    a = INT_TO_Q(100);
+    b = q_sqrt(a);
+
+    CU_ASSERT_EQUAL(Q_TO_INT(b), 10);
+
+    a = float_to_q(3.425);
+    b = q_sqrt(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(1.8506755523321747, q_to_float(b), 0.001);
+
+    a = float_to_q(0.0);
+    b = q_sqrt(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(0.0, q_to_float(b), 0.001);
+
+    a = float_to_q(3.1415);
+    b = q_sqrt(a);
+    
+    CU_ASSERT_DOUBLE_EQUAL(1.772427713617681, q_to_float(b), 0.001);
+
+    a = float_to_q(0.001);
+    b = q_sqrt(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(0.03162277660168379, q_to_float(b), 0.001);
+
+    a = float_to_q(125.343);
+    b = q_sqrt(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(11.19566880539077, q_to_float(b), 0.001);
+
+    a = float_to_q(1938.256);
+    b = q_sqrt(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(44.02562889953987, q_to_float(b), 0.001);
+
+    a = float_to_q(8000.0001);
+    b = q_sqrt(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(89.44271909999159, q_to_float(b), 0.001);
+}
+
+// MARK: - Test Suite
 // Test suite initialization
 int initialize_suite() {
     return 0;
@@ -334,6 +394,11 @@ int main() {
     }
 
     if (NULL == CU_add_test(suite, "Q_Int_Power", testIntPower)) {
+        CU_cleanup_registry();
+        return CU_get_error();
+    }
+
+    if (NULL == CU_add_test(suite, "Q_Sqrt", test_q_sqrt)) {
         CU_cleanup_registry();
         return CU_get_error();
     }
