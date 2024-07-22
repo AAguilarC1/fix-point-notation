@@ -1,6 +1,7 @@
 #ifndef FIX_POINT_H
 #define FIX_POINT_H 
 #include <stdint.h>
+#include <assert.h>
 
 #define Q_FORMAT_7      7
 #define Q_FORMAT_15     15
