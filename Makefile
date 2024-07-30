@@ -22,8 +22,8 @@ SRC_DIR := src
 SRC := $(wildcard $(SRC_DIR)/*.c)
 
 OBJ := $(SRC:src/%.c=obj/%.o)
-TARGET := bin/$(NAME).out
-TEST := bin/$(NAME)_test.out
+TARGET := $(BIN_DIR)/$(NAME).out
+TEST := $(BIN_DIR)/$(NAME)_test.out
 
 $(DIRS):
 	mkdir -p $@
