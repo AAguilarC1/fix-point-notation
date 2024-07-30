@@ -8,7 +8,7 @@ int main() {
     int32_t y = Q_TO_INT(x);
     printf("y = %d\n", y);
 
-    q_t z = float_to_q(28.4738);
+    q_t z = float_to_q(1/2.0);
     printf("z = %d\n", z);
 
     float w = q_to_float(z);

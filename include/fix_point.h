@@ -11,6 +11,10 @@
 
 #define Q_FORMAT Q_FORMAT_CUSTOM
 
+#if !(Q_FORMAT > 0)
+#error "Q_FORMAT must be greater than 0"
+#endif
+
 #if     Q_FORMAT == Q_FORMAT_6
 typedef int8_t q7_t;
 typedef int16_t q_long_t;
@@ -47,9 +51,13 @@ typedef int64_t q_long_t;
 #define Q_MAX_INT    ((1 << (INT_BITS - 1))  - 1) // 2^(INT_BITS - 1) - 1 because of sign bit
 #define Q_RESOLUTION (q_to_float(1))
 
-#define Q_ZERO       INT_TO_Q(0)
-#define Q_ONE        INT_TO_Q(1)
-#define Q_MINUS_ONE  INT_TO_Q(-1)
+#define Q_MINUS_ONE      INT_TO_Q(-1)
+#define Q_MINUS_ONE_HALF (INT_TO_Q(-1) >> 1)
+#define Q_ZERO           INT_TO_Q(0)
+#define Q_ONE_HALF       (INT_TO_Q(1) >> 1)
+#define Q_ONE            INT_TO_Q(1)
+#define Q_TWO            INT_TO_Q(2)
+
 #define Q_PI         float_to_q(3.14159265358979323846)
 #define Q_TWO_PI     float_to_q(6.28318530717958647692)
 #define Q_TAI        Q_TWO_PI      
