@@ -39,7 +39,7 @@ $(TEST): $(OBJ)
 
 all: build $(TARGET)
 
-build: $(DIRS) $(TARGET)
+build: $(DIRS)
 
 run: all
 	@./$(TARGET)
