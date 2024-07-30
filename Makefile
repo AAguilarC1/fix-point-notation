@@ -1,4 +1,4 @@
-NAME := fix_point
+TARGET := fix_point
 
 BIN_DIR := bin
 OBJ_DIR := obj
@@ -18,12 +18,12 @@ else
 	CFLAGS += -O3
 endif
 
-
 SRC_DIR := src
 SRC := $(wildcard $(SRC_DIR)/*.c)
+
 OBJ := $(SRC:src/%.c=obj/%.o)
-BIN := 	bin/$(NAME)
-TEST := bin/$(NAME)_test
+BIN := 	bin/$(TARGET)
+TEST := bin/$(TARGET)_test
 
 $(DIRS):
 	mkdir -p $@
@@ -45,7 +45,7 @@ run: build
 	@ ./$(BIN)
 
 check:
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose ./$(BIN_DIR)/$(NAME)
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose ./$(BIN_DIR)/$(TARGET)
 
 test: build $(TEST)
 	@./$(TEST)
@@ -61,4 +61,5 @@ setup:
 
 clean:
 	rm -rf  $(DIRS)
+
 .PHONY: all setup build run clean
