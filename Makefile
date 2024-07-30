@@ -1,4 +1,4 @@
-TARGET := fix_point
+NAME := fix_point
 
 BIN_DIR := bin
 OBJ_DIR := obj
@@ -22,8 +22,8 @@ SRC_DIR := src
 SRC := $(wildcard $(SRC_DIR)/*.c)
 
 OBJ := $(SRC:src/%.c=obj/%.o)
-BIN := 	bin/$(TARGET)
-TEST := bin/$(TARGET)_test
+TARGET := bin/$(NAME).out
+TEST := bin/$(NAME)_test.out
 
 $(DIRS):
 	mkdir -p $@
@@ -31,21 +31,21 @@ $(DIRS):
 $(OBJ): obj/%.o: src/%.c
 	$(CC) $(CFLAGS) -c $< -o $@ $(LDFLAGS)
 
-$(BIN): $(OBJ)
+$(TARGET): $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $@
 
 $(TEST): $(OBJ)
 	$(CC) $(CFLAGS) $(filter-out obj/main.o, $(OBJ)) $(TESTS_DIR)/*.c -lcunit -o $@ $(LDFLAGS) 
 
-all: build test
+all: build $(TARGET)
 
-build: $(DIRS) $(BIN)
+build: $(DIRS) $(TARGET)
 
-run: build
-	@ ./$(BIN)
+run: all
+	@./$(TARGET)
 
 check:
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose ./$(BIN_DIR)/$(TARGET)
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose $(TARGET)
 
 test: build $(TEST)
 	@./$(TEST)
