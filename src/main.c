@@ -1,18 +1,16 @@
 #include <stdio.h>
-#include "../include/fix_point.h"
+#include "../include/fix_point_math.h"
+
 int main() {
     printf("Hello, World!\n");
     q_t x = INT_TO_Q(-70);
-    printf("x = %d\n", x);
-
-    int32_t y = Q_TO_INT(x);
-    printf("y = %d\n", y);
+    Q_PRINT(x);
 
     q_t z = float_to_q(1/2.0);
-    printf("z = %d\n", z);
+    Q_PRINT(z);
 
-    float w = q_to_float(z);
-    printf("w = %f\n", w);
+    q_t y = float_to_q(0.01234);
+    Q_PRINT(y);
 
     printf("GET_FORMAT = %d\n", GET_FORMAT);
     printf("Q_RESOLUTION = %e\n", Q_RESOLUTION);

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <CUnit/Basic.h>
-#include "../include/fix_point.h"
+#include "../include/fix_point_math.h"
 
 // Test case
 // MARK: - Integer to Q format
