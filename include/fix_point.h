@@ -3,9 +3,9 @@
 #include <stdint.h>
 #include <assert.h>
 
-#define Q_FORMAT_6      6
-#define Q_FORMAT_14     14
-#define Q_FORMAT_30     30
+#define Q_FORMAT_7      7
+#define Q_FORMAT_15     15
+#define Q_FORMAT_31     31
 
 #define Q_FORMAT_CUSTOM 16
 
@@ -15,15 +15,15 @@
 #error "Q_FORMAT must be greater than 0"
 #endif
 
-#if     Q_FORMAT == Q_FORMAT_6
+#if     Q_FORMAT == Q_FORMAT_7
 typedef int8_t q7_t;
 typedef int16_t q_long_t;
 typedef q7_t q_t;
-#elif   Q_FORMAT == Q_FORMAT_14
+#elif   Q_FORMAT == Q_FORMAT_15
 typedef int16_t q15_t;
 typedef int32_t q_long_t;
 typedef q15_t q_t;
-#elif   Q_FORMAT == Q_FORMAT_30
+#elif   Q_FORMAT == Q_FORMAT_31
 typedef int32_t q31_t;
 typedef int64_t q_long_t; 
 typedef q31_t q_t;
@@ -48,6 +48,7 @@ typedef int64_t q_long_t;
 #define Q_TO_INT(__Q__) ((int32_t)(__Q__) >> FRACTIONAL_BITS)
 
 #define Q_MAX_INT    ((1 << (INT_BITS - 1))  - 1) // 2^(INT_BITS - 1) - 1 because of sign bit
+#define Q_MIN_INT    (-(1 << (INT_BITS - 1))) // -2^(INT_BITS - 1) because of sign bit
 #define Q_RESOLUTION (q_to_float(1))
 
 #define Q_MINUS_ONE      INT_TO_Q(-1)
@@ -70,6 +71,11 @@ typedef int64_t q_long_t;
 #define Q_SIGN(__Q__)       (Q_SIGN_BIT(__Q__) == Q_ONE ? 1 : -1)
 
 #define Q_PRINT(__Q__) q_print((__Q__), (#__Q__))
+#define PRINT_MAX_INT printf("Q_MAX_INT = %d\n", (Q_MAX_INT))
+#define PRINT_MIN_INT printf("Q_MIN_INT = %d\n", (Q_MIN_INT))
+#define PRINT_RANGE printf("Q_RANGE = [%d, %d]\n", (Q_MIN_INT), (Q_MAX_INT))
+#define PRINT_RESOLUTION printf("Q_RESOLUTION = %e\n", Q_RESOLUTION)
+#define PRINT_FORMAT printf("Q_FORMAT => Q%d.%d\n", INT_BITS-1, GET_FORMAT)
 
 q_t float_to_q(float x);
 float q_to_float(q_t x);
