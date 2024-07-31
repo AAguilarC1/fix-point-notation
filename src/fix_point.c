@@ -16,4 +16,3 @@ void q_print(q_t value, char* var_name){
     printf("\tfloat format: %f\n", q_to_float(value));
     printf("}\n");
 }
-

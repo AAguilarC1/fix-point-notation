@@ -15,8 +15,6 @@ int main() {
     Q_PRINT(neg_pi);
 
     PRINT_FORMAT;
-    PRINT_MAX_INT;
-    PRINT_MIN_INT;
     PRINT_RANGE;
     PRINT_RESOLUTION;
 
