@@ -400,6 +400,84 @@ void test_q_sin(){
     b = q_sin(a);
 
     CU_ASSERT_DOUBLE_EQUAL(0.004999979166692708, q_to_float(b), 0.001);
+
+    a = Q_TWO_PI;
+    b = q_sin(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(0.0, q_to_float(b), 0.001);
+    
+    a = q_product(Q_PI, INT_TO_Q(4));
+    b = q_sin(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(0.0, q_to_float(b), 0.001);
+
+    a = q_product(Q_PI, float_to_q(3.291));
+    b = q_sin(a);
+
+    printf("sin(3.291 * PI) = %f\n", q_to_float(b));
+
+    CU_ASSERT_DOUBLE_EQUAL(-0.7920766142499668, q_to_float(b), 0.001);    
+
+}
+
+// MARK: - Cosine Q format
+void test_q_cos(){
+    q_t a = INT_TO_Q(1);
+    q_t b = q_cos(a);
+
+    printf("cos(1) = %f\n", q_to_float(b));
+    CU_ASSERT_DOUBLE_EQUAL(0.5403023058681398, q_to_float(b), 0.001);
+
+    a = INT_TO_Q(0);
+    b = q_cos(a);
+    /*
+    CU_ASSERT_DOUBLE_EQUAL(1.0, q_to_float(b), 0.001);
+
+    a = INT_TO_Q(2);
+    b = q_cos(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(-0.4161468365471424, q_to_float(b), 0.001);
+
+    a = -Q_THIRD_PI;
+    b = q_cos(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(0.5, q_to_float(b), 0.001);
+
+    a = Q_HALF_PI;
+    b = q_cos(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(0.0, q_to_float(b), 0.001);
+
+    a = Q_PI;
+    b = q_cos(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(-1.0, q_to_float(b), 0.001);
+
+    a = -Q_PI;
+    b = q_cos(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(-1.0, q_to_float(b), 0.001);
+
+    a = -Q_HALF_PI;
+    b = q_cos(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(0.0, q_to_float(b), 0.001);
+
+    a = float_to_q(0.5);
+    b = q_cos(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(0.8775825618903728, q_to_float(b), 0.001);
+
+    a = float_to_q(0.25);
+    b = q_cos(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(0.9689124217106447, q_to_float(b), 0.001);
+
+    a = float_to_q(0.005);
+    b = q_cos(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(0.9999995833333333, q_to_float(b), 0.001);
+    */
 }
 
 // MARK: - Test Suite
@@ -479,6 +557,11 @@ int main() {
 
     /*Trigonometric functions tests*/
     if (NULL == CU_add_test(trigonometric, "Q_Sin", test_q_sin)) {
+        CU_cleanup_registry();
+        return CU_get_error();
+    }
+
+    if (NULL == CU_add_test(trigonometric, "Q_Cos", test_q_cos)) {
         CU_cleanup_registry();
         return CU_get_error();
     }
