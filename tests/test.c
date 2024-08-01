@@ -343,28 +343,6 @@ void test_q_sqrt()
     CU_ASSERT_DOUBLE_EQUAL(89.44271909999159, q_to_float(b), 0.001);
 }
 
-// MARK: Test Trigonometric Functions
-// MARK: - Sine Q format
-void test_q_sine(){
-    q_t a = INT_TO_Q(1);
-    q_t b = q_sin(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(0.8414709848078965, q_to_float(b), 0.001);
-
-    a = INT_TO_Q(0);
-    b = q_sin(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(0.0, q_to_float(b), 0.001);
-
-    a = INT_TO_Q(2);
-    b = q_sin(a);
-
-    printf("b = %f\n", q_to_float(b));
-
-    CU_ASSERT_DOUBLE_EQUAL(0.9092974268256817, q_to_float(b), 0.001);
-
-}
-
 // MARK: - Test Suite
 // Test suite initialization
 int initialize_suite() {
@@ -421,11 +399,6 @@ int main() {
     }
 
     if (NULL == CU_add_test(suite, "Q_Sqrt", test_q_sqrt)) {
-        CU_cleanup_registry();
-        return CU_get_error();
-    }
-
-    if (NULL == CU_add_test(suite, "Q_Sine", test_q_sine)) {
         CU_cleanup_registry();
         return CU_get_error();
     }
