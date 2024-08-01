@@ -33,7 +33,7 @@ q_t q_sqrt(q_t a){
     if (a == 0) return Q_ZERO;
 
     const q_t TWO     = INT_TO_Q(2);
-    const q_t EPSILON = q_to_float(0.001);
+    const q_t EPSILON = float_to_q(0.001);
 
     q_t Y = Q_ONE;
     uint8_t n = 10; // max Number of iterations
