@@ -50,28 +50,33 @@ q_t q_sqrt(q_t a){
 //TODO: Add trigonometric functions
 q_t q_sin(q_t a)
 {
-    if (a == Q_ZERO) return Q_ZERO;
-
     q_t ret = Q_ZERO;
-    q_t k1  = Q_ZERO;
-    q_t k2  = Q_ZERO;
-    q_t k3  = Q_ZERO;
 
-    q_t x = a;
-    q_t x3 = q_int_power(x, 3);
-    k1 = q_product(x3, Q_SIN_K1);
-    
-    #ifdef Q_SIN_K2 
-    q_t x5 = q_int_power(x, 5);
-    k2 = q_product(x5, Q_SIN_K2);
-    #endif 
+    if (a == Q_ZERO || a == Q_PI || a == -Q_PI ) return ret;
+    if (a ==  Q_HALF_PI) return Q_ONE;
+    if (a == -Q_HALF_PI) return -Q_ONE;
 
-    #ifdef Q_SIN_K3
-    q_t x7 = q_int_power(x, 7);
-    k3 = q_product(x7, Q_SIN_K3);
-    #endif
+    {
+        q_t k1  = Q_ZERO;
+        q_t k2  = Q_ZERO;
+        q_t k3  = Q_ZERO;
 
-    ret = x - k1 + k2 - k3;
+        q_t x = a % (Q_PI); 
+        q_t x3 = q_int_power(x, 3);
+        k1 = q_product(x3, Q_SIN_K1);
+
+        #ifdef Q_SIN_K2 
+        q_t x5 = q_int_power(x, 5);
+        k2 = q_product(x5, Q_SIN_K2);
+        #endif 
+
+        #ifdef Q_SIN_K3
+        q_t x7 = q_int_power(x, 7);
+        k3 = q_product(x7, Q_SIN_K3);
+        #endif
+
+        ret = x - k1 + k2 - k3;
+    }
 
     return ret;
 }

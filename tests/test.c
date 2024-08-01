@@ -345,7 +345,8 @@ void test_q_sqrt()
 
 // MARK: Test Trigonometric Functions
 // MARK: - Sine Q format
-void test_q_sine(){
+
+void test_q_sin(){
     q_t a = INT_TO_Q(1);
     q_t b = q_sin(a);
 
@@ -359,10 +360,46 @@ void test_q_sine(){
     a = INT_TO_Q(2);
     b = q_sin(a);
 
-    printf("b = %f\n", q_to_float(b));
+    CU_ASSERT_DOUBLE_EQUAL(0.9092974268256817, q_to_float(b), 0.005);
 
-    CU_ASSERT_DOUBLE_EQUAL(0.9092974268256817, q_to_float(b), 0.001);
+    a = -Q_THIRD_PI;
+    b = q_sin(a);
 
+    CU_ASSERT_DOUBLE_EQUAL(-0.8660254037844386, q_to_float(b), 0.001);
+
+    a = Q_HALF_PI;
+    b = q_sin(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(1.0, q_to_float(b), 0.001);
+
+    a = Q_PI;
+    b = q_sin(a);
+    CU_ASSERT_DOUBLE_EQUAL(0.0, q_to_float(b), 0.001);
+
+    a = -Q_PI;
+    b = q_sin(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(0.0, q_to_float(b), 0.001);
+
+    a = -Q_HALF_PI;
+    b = q_sin(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(-1.0, q_to_float(b), 0.001);
+
+    a = float_to_q(0.5);
+    b = q_sin(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(0.479425538604203, q_to_float(b), 0.001);
+
+    a = float_to_q(0.25);
+    b = q_sin(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(0.247403959254523, q_to_float(b), 0.001);
+
+    a = float_to_q(0.005);
+    b = q_sin(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(0.004999979166692708, q_to_float(b), 0.001);
 }
 
 // MARK: - Test Suite
@@ -389,43 +426,59 @@ int main() {
         return CU_get_error();
     }
 
+    CU_pSuite general_math = CU_add_suite("general_math", initialize_suite, cleanup_suite);
+    if (NULL == general_math) {
+        CU_cleanup_registry();
+        return CU_get_error();
+    }
+
+    CU_pSuite trigonometric = CU_add_suite("trigonometric", initialize_suite, cleanup_suite);
+    if (NULL == trigonometric) {
+        CU_cleanup_registry();
+        return CU_get_error();
+    }
+    
     // Add the test case to the suite
-    if (NULL == CU_add_test(suite, "Int2Q", testIntToQ)) {
+
+    /*Q conversion tests*/
+    if (NULL == CU_add_test(suite, "Integer_Q_Conversion", testIntToQ)) {
         CU_cleanup_registry();
         return CU_get_error();
     }
 
-    if (NULL == CU_add_test(suite, "Float2Q", testFloatToQ)) {
+    if (NULL == CU_add_test(suite, "Float_Q_Conversion", testFloatToQ)) {
         CU_cleanup_registry();
         return CU_get_error();
     }
 
-    if (NULL == CU_add_test(suite, "Q_Product", testProduct)) {
+    /*Q math tests*/
+    if (NULL == CU_add_test(general_math, "Q_Product", testProduct)) {
         CU_cleanup_registry();
         return CU_get_error();
     }
 
-    if (NULL == CU_add_test(suite, "Q_Division", testDivision)) {
+    if (NULL == CU_add_test(general_math, "Q_Division", testDivision)) {
         CU_cleanup_registry();
         return CU_get_error();
     }
 
-    if (NULL == CU_add_test(suite, "Q_Absolute", testAbsolute)) {
+    if (NULL == CU_add_test(general_math, "Q_Absolute", testAbsolute)) {
         CU_cleanup_registry();
         return CU_get_error();
     }
 
-    if (NULL == CU_add_test(suite, "Q_Int_Power", testIntPower)) {
+    if (NULL == CU_add_test(general_math, "Q_Int_Power", testIntPower)) {
         CU_cleanup_registry();
         return CU_get_error();
     }
 
-    if (NULL == CU_add_test(suite, "Q_Sqrt", test_q_sqrt)) {
+    if (NULL == CU_add_test(general_math, "Q_Sqrt", test_q_sqrt)) {
         CU_cleanup_registry();
         return CU_get_error();
     }
 
-    if (NULL == CU_add_test(suite, "Q_Sine", test_q_sine)) {
+    /*Trigonometric functions tests*/
+    if (NULL == CU_add_test(trigonometric, "Q_Sin", test_q_sin)) {
         CU_cleanup_registry();
         return CU_get_error();
     }
