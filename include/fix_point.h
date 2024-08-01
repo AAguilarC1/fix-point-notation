@@ -1,5 +1,6 @@
 #ifndef FIX_POINT_H
 #define FIX_POINT_H 
+#include <stdio.h>
 #include <stdint.h>
 #include <assert.h>
 
