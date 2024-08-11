@@ -414,8 +414,6 @@ void test_q_sin(){
     a = q_product(Q_PI, float_to_q(3.291));
     b = q_sin(a);
 
-    printf("sin(3.291 * PI) = %f\n", q_to_float(b)); // Bug -> sin(3.291 * pi) = 0.7920 when it should be negative
-
     CU_ASSERT_DOUBLE_EQUAL(-0.7920766142499668, q_to_float(b), 0.001);    
 
 }
@@ -430,13 +428,13 @@ void test_q_cos(){
 
     a = INT_TO_Q(0);
     b = q_cos(a);
-    /*
     CU_ASSERT_DOUBLE_EQUAL(1.0, q_to_float(b), 0.001);
 
     a = INT_TO_Q(2);
     b = q_cos(a);
 
     CU_ASSERT_DOUBLE_EQUAL(-0.4161468365471424, q_to_float(b), 0.001);
+    /*
 
     a = -Q_THIRD_PI;
     b = q_cos(a);

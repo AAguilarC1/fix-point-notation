@@ -47,45 +47,75 @@ q_t q_sqrt(q_t a){
 }
 
 #ifdef Q_TRIGONOMETRIC_FUNCTIONS
+
 //TODO: Add trigonometric functions
 q_t q_sin(q_t a)
 {
+    q_t sign = Q_ONE;
     q_t ret = Q_ZERO;
-    q_t x = a % (Q_PI); 
-
-    if (x == Q_ZERO || x == Q_PI || x == -Q_PI ) return ret;
-    if (x ==  Q_HALF_PI) return Q_ONE;
-    if (x == -Q_HALF_PI) return -Q_ONE;
+    q_t x = ( a ) % (Q_PI); 
 
     q_t k1  = Q_ZERO;
     q_t k2  = Q_ZERO;
     q_t k3  = Q_ZERO;
 
-    q_t x3 = q_int_power(x, 3);
-    k1 = q_product(x3, Q_SIN_K1);
+    {
+        const q_t x2 = q_int_power(x, 2);
 
-    #ifdef Q_SIN_K2 
-    q_t x5 = q_int_power(x, 5);
-    k2 = q_product(x5, Q_SIN_K2);
-    #endif 
+        const q_t x3 = q_product(x2, x);
+        k1 = q_product(x3, Q_SIN_K1);
 
-    #ifdef Q_SIN_K3
-    q_t x7 = q_int_power(x, 7);
-    k3 = q_product(x7, Q_SIN_K3);
-    #endif
+        #ifdef Q_SIN_K2 
+        const q_t x5 = q_product(x2, x3);
+        k2 = q_product(x5, Q_SIN_K2);
+        #endif 
+
+        #ifdef Q_SIN_K3
+        const q_t x7 = q_product(x2, x5);
+        k3 = q_product(x7, Q_SIN_K3);
+        #endif
+    
+    }
 
     ret = x - k1 + k2 - k3;
 
     return ret;
 }
 
+
 q_t q_cos(q_t a){
     q_t ret = Q_ZERO;
+    q_t sign = Q_ONE;
 
-    if (a == Q_ZERO) return Q_ONE;
-    if (a == Q_PI || a == -Q_PI) return Q_MINUS_ONE;
-    if (a == Q_HALF_PI || a == -Q_HALF_PI) return Q_ZERO;
+    q_t x = ( a ) % (Q_TWO_PI);
 
+    if (x > Q_PI) {
+        x -= Q_PI;
+        sign = Q_MINUS_ONE;
+    }
+
+    q_t k1  = Q_ZERO;
+    q_t k2  = Q_ZERO;
+    q_t k3  = Q_ZERO;
+
+    {
+        const q_t x2 = q_int_power(x, 2);
+        k1 = q_product(x2, Q_COS_K1);
+
+        #ifdef Q_COS_K2
+        const q_t x4 = q_int_power(x2, 2);
+        k2 = q_product(x4, Q_COS_K2);
+        #endif  // Q_COS_K2
+
+        #ifdef Q_COS_K3
+        const q_t x6 = q_product(x2, x4);
+        k3 = q_product(x6, Q_COS_K3);
+        #endif // Q_COS_K3
+    }
+
+    ret = q_product(Q_ONE - k1 + k2 - k3, sign);
+
+    return ret;
 }
 
 #endif // Q_TRIGONOMETRIC_FUNCTIONS
