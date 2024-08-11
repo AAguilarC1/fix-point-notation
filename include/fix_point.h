@@ -53,20 +53,20 @@ typedef int64_t q_long_t;
 #define Q_RESOLUTION (q_to_float(1))
 
 #define Q_MINUS_ONE      INT_TO_Q(-1)
-#define Q_MINUS_ONE_HALF (INT_TO_Q(-1) >> 1)
-#define Q_ZERO           INT_TO_Q(0)
-#define Q_ONE_HALF       (INT_TO_Q(1) >> 1)
+#define Q_MINUS_ONE_HALF (float_to_q(-0.5f))
+#define Q_ZERO           0
+#define Q_ONE_HALF       (float_to_q(0.5f))
 #define Q_ONE            INT_TO_Q(1)
 #define Q_TWO            INT_TO_Q(2)
 
-#define Q_PI         float_to_q(3.14159265358979323846)
-#define Q_TWO_PI     float_to_q(6.28318530717958647692)
+#define Q_PI         float_to_q(3.14159265358979323846f)
+#define Q_TWO_PI     float_to_q(6.28318530717958647692f)
 #define Q_TAI        Q_TWO_PI      
-#define Q_HALF_PI    float_to_q(1.57079632679489661923)
-#define Q_QUARTER_PI float_to_q(0.78539816339744830962)
-#define Q_THIRD_PI   float_to_q(1.04719755119659774615)
-#define Q_SIXTH_PI   float_to_q(0.52359877559829887308)
-#define Q_E          float_to_q(2.71828182845904523536)
+#define Q_HALF_PI    float_to_q(1.57079632679489661923f)
+#define Q_QUARTER_PI float_to_q(0.78539816339744830962f)
+#define Q_THIRD_PI   float_to_q(1.04719755119659774615f)
+#define Q_SIXTH_PI   float_to_q(0.52359877559829887308f)
+#define Q_E          float_to_q(2.71828182845904523536f)
 
 #define Q_SIGN_BIT(__Q__)   (((__Q__) >> (Q_FORM_INT_BITS - 1)) & 1)
 #define Q_SIGN(__Q__)       (Q_SIGN_BIT(__Q__) == Q_ONE ? 1 : -1)
