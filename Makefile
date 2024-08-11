@@ -42,7 +42,7 @@ $(TEST): $(OBJ)
 all: build $(TARGET)
 
 build: $(DIRS)
-	python3 $(SCRIPTS)/look_up.py
+	# python3 $(SCRIPTS)/look_up.py
 
 run: all
 	@./$(TARGET)
