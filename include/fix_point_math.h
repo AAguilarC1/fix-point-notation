@@ -11,5 +11,4 @@ q_t q_sqrt(q_t a);
 q_t q_sin(q_t a);
 q_t q_cos(q_t a);
 
-
 #endif // FIX_POINT_MATH_H
