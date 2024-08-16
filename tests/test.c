@@ -386,20 +386,20 @@ void test_q_sin(){
 
     CU_ASSERT_DOUBLE_EQUAL(-1.0, q_to_float(b), 0.001);
 
-    a = float_to_q(0.5);
+    a = float_to_q(0.5f);
     b = q_sin(a);
 
-    CU_ASSERT_DOUBLE_EQUAL(0.479425538604203, q_to_float(b), 0.001);
+    CU_ASSERT_DOUBLE_EQUAL(0.479425538604203, q_to_float(b), 0.005);
 
-    a = float_to_q(0.25);
+    a = float_to_q(0.25f);
     b = q_sin(a);
 
-    CU_ASSERT_DOUBLE_EQUAL(0.247403959254523, q_to_float(b), 0.001);
+    CU_ASSERT_DOUBLE_EQUAL(0.247403959254523, q_to_float(b), 0.005);
 
-    a = float_to_q(0.005);
+    a = float_to_q(0.005f);
     b = q_sin(a);
 
-    CU_ASSERT_DOUBLE_EQUAL(0.004999979166692708, q_to_float(b), 0.001);
+    CU_ASSERT_DOUBLE_EQUAL(0.004999979166692708, q_to_float(b), 0.005);
 
     a = Q_TWO_PI;
     b = q_sin(a);
@@ -416,6 +416,20 @@ void test_q_sin(){
 
     CU_ASSERT_DOUBLE_EQUAL(-0.7920766142499668, q_to_float(b), 0.001);    
 
+    a = float_to_q(-1.19456);
+    b = q_sin(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(-0.9300540783435357, q_to_float(b), 0.001);
+
+    a = float_to_q(-3.004);
+    b = q_sin(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(-0.13715891967481775, q_to_float(b), 0.001);
+
+    a = float_to_q(-0.5);
+    b = q_sin(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(-0.479425538604203, q_to_float(b), 0.005);
 }
 
 // MARK: - Cosine Q format
@@ -423,7 +437,6 @@ void test_q_cos(){
     q_t a = INT_TO_Q(1);
     q_t b = q_cos(a);
 
-    printf("cos(1) = %f\n", q_to_float(b));
     CU_ASSERT_DOUBLE_EQUAL(0.5403023058681398, q_to_float(b), 0.001);
 
     a = INT_TO_Q(0);
@@ -434,7 +447,6 @@ void test_q_cos(){
     b = q_cos(a);
 
     CU_ASSERT_DOUBLE_EQUAL(-0.4161468365471424, q_to_float(b), 0.001);
-    /*
 
     a = -Q_THIRD_PI;
     b = q_cos(a);

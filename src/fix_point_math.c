@@ -51,71 +51,73 @@ q_t q_sqrt(q_t a){
 //TODO: Add trigonometric functions
 q_t q_sin(q_t a)
 {
-    q_t sign = Q_ONE;
     q_t ret = Q_ZERO;
-    q_t x = ( a ) % (Q_PI); 
 
-    q_t k1  = Q_ZERO;
-    q_t k2  = Q_ZERO;
-    q_t k3  = Q_ZERO;
+    q_t x = a % Q_TWO_PI;
+    q_t sign = Q_ONE;
 
-    {
-        const q_t x2 = q_int_power(x, 2);
-
-        const q_t x3 = q_product(x2, x);
-        k1 = q_product(x3, Q_SIN_K1);
-
-        #ifdef Q_SIN_K2 
-        const q_t x5 = q_product(x2, x3);
-        k2 = q_product(x5, Q_SIN_K2);
-        #endif 
-
-        #ifdef Q_SIN_K3
-        const q_t x7 = q_product(x2, x5);
-        k3 = q_product(x7, Q_SIN_K3);
-        #endif
-    
+    if (x > Q_PI) {
+        x -= Q_TWO_PI;
     }
 
-    ret = x - k1 + k2 - k3;
+    if (x < Q_NEG_PI) {
+        x += Q_TWO_PI;
+    }
+
+    // Adjust the sign based on the quadrant
+    if (x > 0) {
+        sign = Q_ONE;
+    } 
+    if (x < 0) {
+        sign = Q_MINUS_ONE;
+    }
+
+    q_t _cos = q_cos(a);
+    q_t cos2 = q_product(_cos, _cos);
+
+    ret = Q_ONE - cos2;
+    ret = q_sqrt(ret);
+
+    ret = q_product(ret, sign);
 
     return ret;
 }
 
+// TODO: Explore the Bhaskara I's cosine approximation
+// cos(y) \approx = \frac{pi^{2} - 4y^{2}}}{pi^{2} + y^{2}} 
 
 q_t q_cos(q_t a){
     q_t ret = Q_ZERO;
     q_t sign = Q_ONE;
 
-    q_t x = ( a ) % (Q_TWO_PI);
-
+    q_t x = a % Q_TWO_PI;
+    
     if (x > Q_PI) {
-        x -= Q_PI;
+        x -= Q_TWO_PI;
+    } 
+    if (x < Q_NEG_PI) {
+        x += Q_TWO_PI;
+    }
+
+    // Adjust the sign based on the quadrant
+    if (x > Q_HALF_PI) {
+        x = Q_PI - x;
+        sign = Q_MINUS_ONE;
+    } else if (x < Q_NEG_HALF_PI) {
+        x = Q_NEG_PI - x;
         sign = Q_MINUS_ONE;
     }
 
-    q_t k1  = Q_ZERO;
-    q_t k2  = Q_ZERO;
-    q_t k3  = Q_ZERO;
+    q_t pi2 = q_product(Q_PI, Q_PI);
+    q_t x2 = q_product(x, x);
+    q_t x2_4 = x2 + x2 + x2 + x2;
 
-    {
-        const q_t x2 = q_int_power(x, 2);
-        k1 = q_product(x2, Q_COS_K1);
+    q_t num = pi2 - x2_4;
+    q_t den = pi2 + x2;
 
-        #ifdef Q_COS_K2
-        const q_t x4 = q_int_power(x2, 2);
-        k2 = q_product(x4, Q_COS_K2);
-        #endif  // Q_COS_K2
+    ret = q_division(num, den);
 
-        #ifdef Q_COS_K3
-        const q_t x6 = q_product(x2, x4);
-        k3 = q_product(x6, Q_COS_K3);
-        #endif // Q_COS_K3
-    }
-
-    ret = q_product(Q_ONE - k1 + k2 - k3, sign);
-
-    return ret;
+    return q_product(ret, sign);
 }
 
 #endif // Q_TRIGONOMETRIC_FUNCTIONS
