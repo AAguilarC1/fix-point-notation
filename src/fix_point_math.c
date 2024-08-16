@@ -46,9 +46,6 @@ q_t q_sqrt(q_t a){
     return Y;
 }
 
-#ifdef Q_TRIGONOMETRIC_FUNCTIONS
-
-//TODO: Add trigonometric functions
 q_t q_sin(q_t a)
 {
     q_t ret = Q_ZERO;
@@ -83,9 +80,7 @@ q_t q_sin(q_t a)
     return ret;
 }
 
-// TODO: Explore the Bhaskara I's cosine approximation
 // cos(y) \approx = \frac{pi^{2} - 4y^{2}}}{pi^{2} + y^{2}} 
-
 q_t q_cos(q_t a){
     q_t ret = Q_ZERO;
     q_t sign = Q_ONE;
@@ -120,5 +115,5 @@ q_t q_cos(q_t a){
     return q_product(ret, sign);
 }
 
-#endif // Q_TRIGONOMETRIC_FUNCTIONS
+// TODO: Add tangent
 
