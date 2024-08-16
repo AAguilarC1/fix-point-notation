@@ -14,11 +14,11 @@ int main() {
     q_t neg_pi = -Q_PI;
     Q_PRINT(neg_pi);
 
-    q_t a = Q_HALF_PI;
-    q_t b = q_sin(a);
+    q_t a = float_to_q(-3.004);
+    // q_t b = q_sin(a);
     q_t c = q_cos(a);
 
-    printf("sin(3.291 * PI) = %f\n", q_to_float(b)); // Bug -> sin(3.291 * pi) = 0.7920 when it should be negative
+    printf("cos(-3.004) = %f\n", q_to_float(c)); // Bug -> sin(3.291 * pi) = 0.7920 when it should be negative
 
     return 0;
 }

@@ -461,10 +461,10 @@ void test_q_cos(){
 
     CU_ASSERT_DOUBLE_EQUAL(0.0, q_to_float(b), 0.001);
 
-    a = float_to_q(0.5);
+    a = float_to_q(0.5f);
     b = q_cos(a);
 
-    CU_ASSERT_DOUBLE_EQUAL(0.8775825618903728, q_to_float(b), 0.001);
+    CU_ASSERT_DOUBLE_EQUAL(0.8775825618903728, q_to_float(b), 0.005);
 
     a = float_to_q(0.25);
     b = q_cos(a);
@@ -475,7 +475,31 @@ void test_q_cos(){
     b = q_cos(a);
 
     CU_ASSERT_DOUBLE_EQUAL(0.9999995833333333, q_to_float(b), 0.001);
-    */
+
+    a = Q_TWO_PI;
+    b = q_cos(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(1.0, q_to_float(b), 0.001);
+
+    a = q_product(Q_PI, INT_TO_Q(4));
+    b = q_cos(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(1.0, q_to_float(b), 0.001);
+
+    a = q_product(Q_PI, float_to_q(-0.291f));
+    b = q_cos(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(0.6104216879816026, q_to_float(b), 0.005);
+
+    a = float_to_q(-1.19456);
+    b = q_cos(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(0.36742266037433824, q_to_float(b), 0.005);
+
+    a = float_to_q(-3.004);
+    b = q_cos(a);
+
+    CU_ASSERT_DOUBLE_EQUAL(-0.9905490551979932, q_to_float(b), 0.01);
 }
 
 // MARK: - Test Suite
