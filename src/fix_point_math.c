@@ -115,5 +115,9 @@ q_t q_cos(q_t a){
     return q_product(ret, sign);
 }
 
-// TODO: Add tangent
-
+q_t q_tan(q_t a){
+    if (q_cos(a) <= float_to_q(Q_RESOLUTION) && q_cos(a) >= float_to_q(-Q_RESOLUTION)){
+        return INT_TO_Q(Q_MAX_INT); // Infinity is not possible in fixed point because of the limited range of the data type
+    }
+    return q_division(q_sin(a), q_cos(a));
+}

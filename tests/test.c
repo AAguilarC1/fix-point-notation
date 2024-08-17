@@ -254,6 +254,21 @@ void test_q_cos(){
 
 }
 
+// MARK: - Tangent Q format
+void test_q_tan(){
+
+    float range = end_angle - start_angle;
+    float step = range / (11 - 1);
+
+    for (uint32_t i = 0; i < 11; i++){
+        float angle = start_angle + i * step;
+        q_t a = float_to_q(angle);
+        q_t b = q_tan(a);
+        CU_ASSERT_DOUBLE_EQUAL(tan(angle), q_to_float(b), 0.05); // 0.05 is the maximum error but it goes higher when the angle is close to pi/2 or -pi/2
+    }
+
+}
+
 // MARK: - Test Suite
 // Test suite initialization
 int initialize_suite() {
@@ -336,6 +351,11 @@ int main() {
     }
 
     if (NULL == CU_add_test(trigonometric, "Q_Cos", test_q_cos)) {
+        CU_cleanup_registry();
+        return CU_get_error();
+    }
+
+    if (NULL == CU_add_test(trigonometric, "Q_Tan", test_q_tan)) {
         CU_cleanup_registry();
         return CU_get_error();
     }

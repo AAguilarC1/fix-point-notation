@@ -11,4 +11,7 @@ q_t q_sqrt(q_t a);
 q_t q_sin(q_t a);
 q_t q_cos(q_t a);
 
+//TODO: Use another method to calculate tan because the error is too high near the asymptotes
+q_t q_tan(q_t a); // Not recommended to use the error is too high near the asymptotes
+
 #endif // FIX_POINT_MATH_H
