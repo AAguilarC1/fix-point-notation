@@ -198,35 +198,33 @@ void testAbsolute(){
 }
 
 // MARK: - Int Power Q format
+const uint16_t N_power = 5;
 void testIntPower()
 {
-    float start = -5.0f;
-    float end = 5.0f;
-    float range = end - start;
-    uint16_t N = 5;
-    float step = range / (N - 1);
+    float start_power = -5.0f;
+    float end_power = 5.0f;
+    float range = end_power - start_power;
+    float step = range / (N_power - 1);
 
-    for(int32_t i = 0; i < N; i++){
-        float x = start + i * step;
+    for(int32_t i = 0; i < N_power; i++){
+        float x = start_power + i * step;
         q_t a = float_to_q(x);
         q_t b = q_int_power(a, i);
 
         CU_ASSERT_DOUBLE_EQUAL(pow(x, i), q_to_float(b), 0.001);
     }
 
-    start = 5.0f;
-    end = -3.5f;
-    range = end - start;
-    step = range / (N -1);
+    start_power = 5.0f;
+    end_power = -3.5f;
+    range = end_power - start_power;
+    step = range / (N_power -1);
 
-    for(int32_t i = 0; i < N; i++){
-        float x = start + i * step;
+    for(int32_t i = 0; i < N_power; i++){
+        float x = start_power + i * step;
         q_t a = float_to_q(x);
         q_t b = q_int_power(a, -i);
 
-        printf("x = %f, b = %f = %f \n", x, q_to_float(b), pow(x, -i));
         CU_ASSERT_DOUBLE_EQUAL(pow(x, -i), q_to_float(b), 0.001);
-
     }
 
     q_t a = INT_TO_Q(2);
@@ -254,77 +252,37 @@ void testIntPower()
 }
 
 // MARK: - Square Root Q format
+const float start_sqrt = 0;
+const float end_sqrt = 10000;
+const uint16_t N_sqrt = 1 << 15;
+
 void test_q_sqrt()
 {
-    q_t a = INT_TO_Q(4);
-    q_t b = q_sqrt(a);
+    float range = end_sqrt - start_sqrt;
+    float step = range / (N_sqrt - 1);
 
-    CU_ASSERT_EQUAL(Q_TO_INT(b), 2);
+    for (uint32_t i = 0; i < N_sqrt; i++){
+        float x = start_sqrt + i * step;
+        q_t a = float_to_q(x);
+        q_t b = q_sqrt(a);
 
-    a = INT_TO_Q(9);
-    b = q_sqrt(a);
+        CU_ASSERT_DOUBLE_EQUAL(sqrt(x), q_to_float(b), 0.001);
+    }
 
-    CU_ASSERT_EQUAL(Q_TO_INT(b), 3);
-
-    a = INT_TO_Q(10);
-    b = q_sqrt(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(3.1622776601683795, q_to_float(b), 0.001);
-
-    a = INT_TO_Q(100);
-    b = q_sqrt(a);
-
-    CU_ASSERT_EQUAL(Q_TO_INT(b), 10);
-
-    a = float_to_q(3.425);
-    b = q_sqrt(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(1.8506755523321747, q_to_float(b), 0.001);
-
-    a = float_to_q(0.0);
-    b = q_sqrt(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(0.0, q_to_float(b), 0.001);
-
-    a = float_to_q(3.1415);
-    b = q_sqrt(a);
-    
-    CU_ASSERT_DOUBLE_EQUAL(1.772427713617681, q_to_float(b), 0.001);
-
-    a = float_to_q(0.001);
-    b = q_sqrt(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(0.03162277660168379, q_to_float(b), 0.001);
-
-    a = float_to_q(125.343);
-    b = q_sqrt(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(11.19566880539077, q_to_float(b), 0.001);
-
-    a = float_to_q(1938.256);
-    b = q_sqrt(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(44.02562889953987, q_to_float(b), 0.001);
-
-    a = float_to_q(8000.0001);
-    b = q_sqrt(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(89.44271909999159, q_to_float(b), 0.001);
 }
 
 // MARK: Test Trigonometric Functions
-// MARK: - Sine Q format
-
 const float start_angle  = - 3 * 3.14159265358979323846; // -3 * pi
 const float end_angle    = 3 * 3.14159265358979323846;   //  3 * pi
-const uint32_t N = 1000; // Number of points to test
+const uint32_t N_trig = 1 << 15; // Number of points to test
 
+// MARK: - Sine Q format
 void test_q_sin(){
 
     float range = end_angle - start_angle;
-    float step = range / (N - 1);
+    float step = range / (N_trig - 1);
 
-    for (uint32_t i = 0; i < N; i++){
+    for (uint32_t i = 0; i < N_trig; i++){
         float angle = start_angle + i * step;
         q_t a = float_to_q(angle);
         q_t b = q_sin(a);
@@ -338,9 +296,9 @@ void test_q_sin(){
 void test_q_cos(){
 
     float range = end_angle - start_angle;
-    float step = range / (N - 1);
+    float step = range / (N_trig - 1);
 
-    for (uint32_t i = 0; i < N; i++){
+    for (uint32_t i = 0; i < N_trig; i++){
         float angle = start_angle + i * step;
         q_t a = float_to_q(angle);
         q_t b = q_cos(a);
