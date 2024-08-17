@@ -14,8 +14,8 @@ inline q_t q_absolute(q_t a){
 }
 
 q_t q_int_power(q_t a, int32_t n){
-    if (a == 0) return Q_ZERO;
     if (n == 0) return Q_ONE;
+    if (a == 0) return Q_ZERO;
 
     if (n < 0) {
         a = q_division(INT_TO_Q(1), a);

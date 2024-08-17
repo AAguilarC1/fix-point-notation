@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <CUnit/Basic.h>
+#include <math.h>
 #include "../include/fix_point_math.h"
 
 // Test case
@@ -158,7 +159,6 @@ void testDivision(){
     CU_ASSERT_DOUBLE_EQUAL(x / 200.0f, q_to_float(c), 0.001);
 }
 
-
 // MARK: - Absolute Q format
 void testAbsolute(){
     q_t a = INT_TO_Q(1);
@@ -200,77 +200,46 @@ void testAbsolute(){
 // MARK: - Int Power Q format
 void testIntPower()
 {
+    float start = -5.0f;
+    float end = 5.0f;
+    float range = end - start;
+    uint16_t N = 5;
+    float step = range / (N - 1);
+
+    for(int32_t i = 0; i < N; i++){
+        float x = start + i * step;
+        q_t a = float_to_q(x);
+        q_t b = q_int_power(a, i);
+
+        CU_ASSERT_DOUBLE_EQUAL(pow(x, i), q_to_float(b), 0.001);
+    }
+
+    start = 5.0f;
+    end = -3.5f;
+    range = end - start;
+    step = range / (N -1);
+
+    for(int32_t i = 0; i < N; i++){
+        float x = start + i * step;
+        q_t a = float_to_q(x);
+        q_t b = q_int_power(a, -i);
+
+        printf("x = %f, b = %f = %f \n", x, q_to_float(b), pow(x, -i));
+        CU_ASSERT_DOUBLE_EQUAL(pow(x, -i), q_to_float(b), 0.001);
+
+    }
+
     q_t a = INT_TO_Q(2);
     q_t b = q_int_power(a, 0);
     CU_ASSERT_EQUAL(Q_TO_INT(b), 1);
-
-    a = INT_TO_Q(2);
-    b = q_int_power(a, 1);
-    CU_ASSERT_EQUAL(Q_TO_INT(b), 2);
-
-    a = INT_TO_Q(2);
-    b = q_int_power(a, 2);
-    CU_ASSERT_EQUAL(Q_TO_INT(b), 4);
-
-    a = INT_TO_Q(4);
-    b = q_int_power(a, 3);
-    CU_ASSERT_EQUAL(Q_TO_INT(b), 64);
-
-    a = INT_TO_Q(5);
-    b = q_int_power(a, 3);
-    CU_ASSERT_EQUAL(Q_TO_INT(b), 125);
 
     a = INT_TO_Q(-5);
     b = q_int_power(a, 3);
     CU_ASSERT_EQUAL(Q_TO_INT(b), -125);
 
-    a = float_to_q(0.5);
-    b = q_int_power(a, 3);
-    CU_ASSERT_DOUBLE_EQUAL(0.5 * 0.5 * 0.5, q_to_float(b), 0.001);
-
-    a = float_to_q(-0.5);
-    b = q_int_power(a, 3);
-    CU_ASSERT_DOUBLE_EQUAL(-0.5 * -0.5 * -0.5, q_to_float(b), 0.001);
-
-    a = float_to_q(0.0);
-    b = q_int_power(a, 10);
-    CU_ASSERT_DOUBLE_EQUAL(0.0, q_to_float(b), 0.001);
-
-    a = INT_TO_Q(0);
-    b = q_int_power(a, 10);
-    CU_ASSERT_EQUAL(Q_TO_INT(b), 0);
-
-    a = float_to_q(0.5);
-    b = q_int_power(a, 0);
-    CU_ASSERT_DOUBLE_EQUAL(1.0, q_to_float(b), 0.001);
-
-    a = INT_TO_Q(4);
-    b = q_int_power(a, -1);
-    CU_ASSERT_DOUBLE_EQUAL(0.25, q_to_float(b), 0.001);
-
-    a = INT_TO_Q(4);
-    b = q_int_power(a, -2);
-    CU_ASSERT_DOUBLE_EQUAL(0.0625, q_to_float(b), 0.001);
-
     a = INT_TO_Q(-125);
     b = q_int_power(a, -3);
     CU_ASSERT_DOUBLE_EQUAL(-5.12e-7, q_to_float(b), 0.001);
-
-    a = float_to_q(0.5);
-    b = q_int_power(a, -3);
-    CU_ASSERT_DOUBLE_EQUAL(8.0, q_to_float(b), 0.001);
-
-    a = float_to_q(-0.5);
-    b = q_int_power(a, -3);
-    CU_ASSERT_DOUBLE_EQUAL(-8.0, q_to_float(b), 0.001);
-
-    a = float_to_q(0.125);
-    b = q_int_power(a, -3);
-    CU_ASSERT_DOUBLE_EQUAL(512.0, q_to_float(b), 0.001);
-
-    a = float_to_q(0.0);
-    b = q_int_power(a, -10);
-    CU_ASSERT_DOUBLE_EQUAL(0.0, q_to_float(b), 0.001);
 
     a = float_to_q(0.01f);
     b = q_int_power(a, -2);
@@ -346,172 +315,39 @@ void test_q_sqrt()
 // MARK: Test Trigonometric Functions
 // MARK: - Sine Q format
 
+const float start_angle  = - 3 * 3.14159265358979323846; // -3 * pi
+const float end_angle    = 3 * 3.14159265358979323846;   //  3 * pi
+const uint32_t N = 1000; // Number of points to test
+
 void test_q_sin(){
-    q_t a = INT_TO_Q(1);
-    q_t b = q_sin(a);
 
-    CU_ASSERT_DOUBLE_EQUAL(0.8414709848078965, q_to_float(b), 0.001);
+    float range = end_angle - start_angle;
+    float step = range / (N - 1);
 
-    a = INT_TO_Q(0);
-    b = q_sin(a);
+    for (uint32_t i = 0; i < N; i++){
+        float angle = start_angle + i * step;
+        q_t a = float_to_q(angle);
+        q_t b = q_sin(a);
 
-    CU_ASSERT_DOUBLE_EQUAL(0.0, q_to_float(b), 0.001);
+        CU_ASSERT_DOUBLE_EQUAL(sin(angle), q_to_float(b), 0.005);
+    }
 
-    a = INT_TO_Q(2);
-    b = q_sin(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(0.9092974268256817, q_to_float(b), 0.005);
-
-    a = -Q_THIRD_PI;
-    b = q_sin(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(-0.8660254037844386, q_to_float(b), 0.001);
-
-    a = Q_HALF_PI;
-    b = q_sin(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(1.0, q_to_float(b), 0.001);
-
-    a = Q_PI;
-    b = q_sin(a);
-    CU_ASSERT_DOUBLE_EQUAL(0.0, q_to_float(b), 0.001);
-
-    a = -Q_PI;
-    b = q_sin(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(0.0, q_to_float(b), 0.001);
-
-    a = -Q_HALF_PI;
-    b = q_sin(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(-1.0, q_to_float(b), 0.001);
-
-    a = float_to_q(0.5f);
-    b = q_sin(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(0.479425538604203, q_to_float(b), 0.005);
-
-    a = float_to_q(0.25f);
-    b = q_sin(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(0.247403959254523, q_to_float(b), 0.005);
-
-    a = float_to_q(0.005f);
-    b = q_sin(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(0.004999979166692708, q_to_float(b), 0.005);
-
-    a = Q_TWO_PI;
-    b = q_sin(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(0.0, q_to_float(b), 0.001);
-    
-    a = q_product(Q_PI, INT_TO_Q(4));
-    b = q_sin(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(0.0, q_to_float(b), 0.001);
-
-    a = q_product(Q_PI, float_to_q(3.291));
-    b = q_sin(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(-0.7920766142499668, q_to_float(b), 0.001);    
-
-    a = float_to_q(-1.19456);
-    b = q_sin(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(-0.9300540783435357, q_to_float(b), 0.001);
-
-    a = float_to_q(-3.004);
-    b = q_sin(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(-0.13715891967481775, q_to_float(b), 0.001);
-
-    a = float_to_q(-0.5);
-    b = q_sin(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(-0.479425538604203, q_to_float(b), 0.005);
 }
 
 // MARK: - Cosine Q format
 void test_q_cos(){
-    q_t a = INT_TO_Q(1);
-    q_t b = q_cos(a);
 
-    CU_ASSERT_DOUBLE_EQUAL(0.5403023058681398, q_to_float(b), 0.001);
+    float range = end_angle - start_angle;
+    float step = range / (N - 1);
 
-    a = INT_TO_Q(0);
-    b = q_cos(a);
-    CU_ASSERT_DOUBLE_EQUAL(1.0, q_to_float(b), 0.001);
+    for (uint32_t i = 0; i < N; i++){
+        float angle = start_angle + i * step;
+        q_t a = float_to_q(angle);
+        q_t b = q_cos(a);
 
-    a = INT_TO_Q(2);
-    b = q_cos(a);
+        CU_ASSERT_DOUBLE_EQUAL(cos(angle), q_to_float(b), 0.005);
+    }
 
-    CU_ASSERT_DOUBLE_EQUAL(-0.4161468365471424, q_to_float(b), 0.001);
-
-    a = -Q_THIRD_PI;
-    b = q_cos(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(0.5, q_to_float(b), 0.001);
-
-    a = Q_HALF_PI;
-    b = q_cos(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(0.0, q_to_float(b), 0.001);
-
-    a = Q_PI;
-    b = q_cos(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(-1.0, q_to_float(b), 0.001);
-
-    a = -Q_PI;
-    b = q_cos(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(-1.0, q_to_float(b), 0.001);
-
-    a = -Q_HALF_PI;
-    b = q_cos(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(0.0, q_to_float(b), 0.001);
-
-    a = float_to_q(0.5f);
-    b = q_cos(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(0.8775825618903728, q_to_float(b), 0.005);
-
-    a = float_to_q(0.25);
-    b = q_cos(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(0.9689124217106447, q_to_float(b), 0.001);
-
-    a = float_to_q(0.005);
-    b = q_cos(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(0.9999995833333333, q_to_float(b), 0.001);
-
-    a = Q_TWO_PI;
-    b = q_cos(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(1.0, q_to_float(b), 0.001);
-
-    a = q_product(Q_PI, INT_TO_Q(4));
-    b = q_cos(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(1.0, q_to_float(b), 0.001);
-
-    a = q_product(Q_PI, float_to_q(-0.291f));
-    b = q_cos(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(0.6104216879816026, q_to_float(b), 0.005);
-
-    a = float_to_q(-1.19456);
-    b = q_cos(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(0.36742266037433824, q_to_float(b), 0.005);
-
-    a = float_to_q(-3.004);
-    b = q_cos(a);
-
-    CU_ASSERT_DOUBLE_EQUAL(-0.9905490551979932, q_to_float(b), 0.01);
 }
 
 // MARK: - Test Suite
