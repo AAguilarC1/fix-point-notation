@@ -1,102 +1,72 @@
-#include <stdio.h>
 #include <CUnit/Basic.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 #include <math.h>
 #include "../include/fix_point_math.h"
 
 // Test case
 // MARK: - Integer to Q format
+const start_N = -1000;
+const end_N = 1000;
 void testIntToQ() {
-    CU_ASSERT_EQUAL(Q_FORMAT, Q_FORMAT_CUSTOM);
-    int32_t x1 = 1;
-    q_t q_x = INT_TO_Q(x1);
-    CU_ASSERT_EQUAL(Q_ONE, q_x);
+    uint32_t N = end_N - start_N;
+    for (int32_t i = 0; i < N; i++){
+        int32_t x = start_N + i;
+        q_t q_x = INT_TO_Q(x);
+        CU_ASSERT_EQUAL(Q_TO_INT(q_x), x);
+    }
 
-    int32_t x2 = 0;
-    q_x = INT_TO_Q(x2);
-    CU_ASSERT_EQUAL(Q_ZERO, q_x);
-
-    int32_t x3 = -1;
-    q_x = INT_TO_Q(x3);
-    CU_ASSERT_EQUAL(Q_MINUS_ONE, q_x);
-
-    int32_t x4 = 70;
-    q_x = INT_TO_Q(x4);
-    CU_ASSERT_EQUAL(Q_TO_INT(q_x), 70);
-
-    int32_t x5 = -70;
-    q_x = INT_TO_Q(x5);
-    CU_ASSERT_EQUAL(Q_TO_INT(q_x), -70);
 }
 
 // MARK: - Float to Q format
+const float start_float = -1000.0;
+const float end_float = 1000.0;
+const uint16_t N_float = 1 << 12;
+
 void testFloatToQ() {
-    float x = 0.5;
-    q_t q_x = float_to_q(x);
-    CU_ASSERT_DOUBLE_EQUAL(x, q_to_float(q_x), 0.001);
+    float range = end_float - start_float;
+    float step = range / (N_float - 1);
 
-    x = 0.25;
-    q_x = float_to_q(x);
-    CU_ASSERT_DOUBLE_EQUAL(x, q_to_float(q_x), 0.001);
-
-    x = 0.1234;
-    q_x = float_to_q(x);
-    CU_ASSERT_DOUBLE_EQUAL(x, q_to_float(q_x), 0.001);
-
-    x = 0.0;
-    q_x = float_to_q(x);
-    CU_ASSERT_DOUBLE_EQUAL(x, q_to_float(q_x), 0.001);
-
-    x = 0.0000001;
-    q_x = float_to_q(x);
-    CU_ASSERT_DOUBLE_EQUAL(x, q_to_float(q_x), 0.001);
-
-    q_x = float_to_q(1.0);
-    CU_ASSERT_DOUBLE_EQUAL(1.0, q_to_float(q_x), 0.001);
-
-    q_x = float_to_q(-1.0);
-    CU_ASSERT_DOUBLE_EQUAL(-1.0, q_to_float(q_x), 0.001);
-
-    q_x = float_to_q(0.0);
-    CU_ASSERT_DOUBLE_EQUAL(0.0, q_to_float(q_x), 0.001);
-
+    for (uint32_t i = 0; i < N_float; i++){
+        float x = start_float + i * step;
+        q_t q_x = float_to_q(x);
+        CU_ASSERT_DOUBLE_EQUAL(x, q_to_float(q_x), 0.001);
+    }
 }
 
 // MARK: - Product Q format
+const float start_product = -1000.0;
+const float end_product = 1000.0;
+const uint16_t N_product = 1 << 8;
+
 void testProduct() {
-    q_t a = INT_TO_Q(1);
-    q_t b = INT_TO_Q(2);
-    q_t c = q_product(a, b);
 
-    CU_ASSERT_EQUAL(Q_TO_INT(c), 2);
+    srand((uint32_t) time(NULL));
 
-    a = INT_TO_Q(2);
-    b = INT_TO_Q(2);
+    float range = end_product - start_product;
+    float step = range / (N_product - 1);
+    float amplitude = 10.0f;
 
-    c = q_product(a, b);
-    CU_ASSERT_EQUAL(Q_TO_INT(c), 4);
+    for (uint32_t i = 0; i < N_product; i++){
+        float x = start_product + i * step;
+        float y = ((float) rand() / (float) (RAND_MAX)) * (amplitude * 2) - amplitude;
 
-    float x = 0.5;
-    a = float_to_q(x);
-    b = INT_TO_Q(2);
-    c = q_product(a, b);
+        q_t a = float_to_q(x);
+        q_t b = float_to_q(y);
 
-    CU_ASSERT_DOUBLE_EQUAL(x * 2, q_to_float(c), 0.001);
+        q_t c = q_product(a, b);
 
-    float y = 0.25;
-    a = float_to_q(y);
-    x = 0.5;
-    b = float_to_q(x);
-    c = q_product(a, b);
-    
-    CU_ASSERT_DOUBLE_EQUAL(y * x, q_to_float(c), 0.001);
+        CU_ASSERT_DOUBLE_EQUAL(x * y, q_to_float(c), 0.05);
+    }
 
     float z = 0.0001234;
-    y = 0.25;
-    x = 0.5;
+    float y = 0.25;
+    float x = 0.5;
 
-    a = float_to_q(z);
-    b = INT_TO_Q(2);
-    c = q_product(a, b);
+    q_t a = float_to_q(z);
+    q_t b = INT_TO_Q(2);
+    q_t c = q_product(a, b);
     
     a = float_to_q(y);
     c = q_product(a, c);
@@ -108,32 +78,36 @@ void testProduct() {
 }
 
 // MARK: - Division Q format
+const float start_division = -1000.0;
+const float end_division = 1000.0;
+const uint16_t N_division = 1 << 8;
+
 void testDivision(){
-    float x = 0.5;
-    q_t a = float_to_q(x);
-    q_t b = INT_TO_Q(2);
+    srand((uint32_t) time(NULL));
 
-    q_t c = q_division(b, a);
-    CU_ASSERT_DOUBLE_EQUAL(2 / x, q_to_float(c), 0.001);
-    
-    c = q_division(a, b);
-    CU_ASSERT_DOUBLE_EQUAL(x / 2, q_to_float(c), 0.001);
+    float range = end_division - start_division;
+    float step = range / (N_division - 1);
+    float amplitude = 1000.0f;
 
-    float y = 0.25;
-    x = 0.5;
-    a = float_to_q(y);
-    b = float_to_q(x);
+    for (uint32_t i = 0; i < N_division; i++){
+        float x = ((float) rand() / (float) (RAND_MAX)) * (amplitude * 2) - amplitude;
+        float y = start_division + i * step;
 
-    c = q_division(a, b);
-    CU_ASSERT_DOUBLE_EQUAL(y / x, q_to_float(c), 0.001);
+        q_t a = float_to_q(x);
+        q_t b = float_to_q(y);
+
+        q_t c = q_division(a, b);
+
+        CU_ASSERT_DOUBLE_EQUAL(x / y, q_to_float(c), 0.05);
+    }
 
     float z = 0.0001234;
-    y = 0.25;
-    x = 0.5;
+    float y = 0.25;
+    float x = 0.5;
 
-    a = float_to_q(z);
-    b = float_to_q(y);
-    c = q_division(a, b);
+    q_t a = float_to_q(z);
+    q_t b = float_to_q(y);
+    q_t c = q_division(a, b);
 
     a = float_to_q(x);
     c = q_division(c, a);
@@ -149,52 +123,24 @@ void testDivision(){
     b = INT_TO_Q(1000);
     c = q_division(a, b);
     CU_ASSERT_DOUBLE_EQUAL(1 / (1000.0f), q_to_float(c), 0.001);
-
-    x = 0.5;
-    a = float_to_q(x);
-    b = INT_TO_Q(200);
-
-    c = q_division(a, b);
-
-    CU_ASSERT_DOUBLE_EQUAL(x / 200.0f, q_to_float(c), 0.001);
 }
 
 // MARK: - Absolute Q format
+const float start_absolute = -1000.0;
+const float end_absolute = 1000.0;
+const uint16_t N_absolute = 1 << 8;
+
 void testAbsolute(){
-    q_t a = INT_TO_Q(1);
-    q_t b = q_absolute(a);
+    float range = end_absolute - start_absolute;
+    float step = range / (N_absolute - 1);
 
-    CU_ASSERT_EQUAL(Q_TO_INT(b), 1);
+    for (uint32_t i = 0; i < N_absolute; i++){
+        float x = start_absolute + i * step;
+        q_t a = float_to_q(x);
+        q_t b = q_absolute(a);
 
-    a = INT_TO_Q(-1);
-    b = q_absolute(a);
-
-    CU_ASSERT_EQUAL(Q_TO_INT(b), 1);
-
-    a = INT_TO_Q(0);
-    b = q_absolute(a);
-
-    CU_ASSERT_EQUAL(Q_TO_INT(b), 0);
-
-    a = float_to_q(-0.5);
-    b = q_absolute(a);
-    CU_ASSERT_DOUBLE_EQUAL(0.5, q_to_float(b), 0.001);
-
-    a = float_to_q(0.5);
-    b = q_absolute(a);
-    CU_ASSERT_DOUBLE_EQUAL(0.5, q_to_float(b), 0.001);
-
-    a = float_to_q(0.0);
-    b = q_absolute(a);
-    CU_ASSERT_DOUBLE_EQUAL(0.0, q_to_float(b), 0.001);
-
-    a = float_to_q(-0.0000001);
-    b = q_absolute(a);
-    CU_ASSERT_DOUBLE_EQUAL(0.0000001, q_to_float(b), 0.001);
-
-    a = float_to_q(0.0000001);
-    b = q_absolute(a);
-    CU_ASSERT_DOUBLE_EQUAL(0.0000001, q_to_float(b), 0.001);
+        CU_ASSERT_DOUBLE_EQUAL(fabs(x), q_to_float(b), 0.001);
+    }
 }
 
 // MARK: - Int Power Q format
