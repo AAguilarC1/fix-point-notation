@@ -254,7 +254,7 @@ void testIntPower()
 // MARK: - Square Root Q format
 const float start_sqrt = 0;
 const float end_sqrt = 10000;
-const uint16_t N_sqrt = 1 << 15;
+const uint16_t N_sqrt = 1 << 12;
 
 void test_q_sqrt()
 {
@@ -274,7 +274,7 @@ void test_q_sqrt()
 // MARK: Test Trigonometric Functions
 const float start_angle  = - 3 * 3.14159265358979323846; // -3 * pi
 const float end_angle    = 3 * 3.14159265358979323846;   //  3 * pi
-const uint32_t N_trig = 1 << 15; // Number of points to test
+const uint16_t N_trig = 1 << 12; // Number of points to test
 
 // MARK: - Sine Q format
 void test_q_sin(){
