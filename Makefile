@@ -1,3 +1,5 @@
+# TODO: Add multiple OS support
+
 NAME := fix_point
 
 BIN_DIR := bin
