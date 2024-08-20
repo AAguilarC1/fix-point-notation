@@ -8,6 +8,10 @@ q_t q_int_power(q_t a, int32_t n);
 q_t q_absolute(q_t a);
 q_t q_sqrt(q_t a);
 
+#define q_sec(__a__) q_division(INT_TO_Q(1), q_cos(__a__))
+#define q_csc(__a__) q_division(INT_TO_Q(1), q_sin(__a__))
+#define q_cot(__a__) q_division(q_cos(__a__), q_sin(__a__))
+
 q_t q_sin(q_t a);
 q_t q_cos(q_t a);
 
