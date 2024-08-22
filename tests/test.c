@@ -1,11 +1,4 @@
-#include <CUnit/Basic.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <math.h>
-#include "test_q_conversion.h"
-#include "test_q_math.h"
-#include "../include/fix_point_math.h"
+#include "test.h"
 
 // Test suite initialization
 int initialize_suite() {
@@ -24,8 +17,8 @@ int main() {
         return CU_get_error();
 
     // Add a suite to the registry
-    CU_pSuite suite = CU_add_suite("Q_Format", initialize_suite, cleanup_suite);
-    if (NULL == suite) {
+    CU_pSuite conversions = CU_add_suite("Q_Format", initialize_suite, cleanup_suite);
+    if (NULL == conversions) {
         CU_cleanup_registry();
         return CU_get_error();
     }
@@ -43,7 +36,7 @@ int main() {
     }
     
     // Add the test cases to the suite
-    add_conversion_tests(suite);
+    add_conversion_tests(conversions);
     add_general_math_tests(general_math);
     add_trigonometric_tests(trigonometric);
 
