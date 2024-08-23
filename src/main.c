@@ -21,5 +21,7 @@ int main() {
 
     printf("cos(%f) = %f\n",angle , q_to_float(b)); // Bug -> sin(3.291 * pi) = 0.7920 when it should be negative
 
+    printf("%f resolution\n", Q_RESOLUTION);
+
     return 0;
 }

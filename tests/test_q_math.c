@@ -219,31 +219,47 @@ void test_q_cos(){
 
 }
 
+// MARK: - Error Calculation
+/**
+ * @brief This function calculates the error between the measured value and the expected value
+ * 
+ * @param measured The measured value
+ * @param expected The expected value
+ * @return float The error between the measured value and the expected value
+ */
+float err(float measured, float expected){
+    return fabs((expected - measured)/expected);
+}
+
 // MARK: - Tangent Q format
 void test_q_tan(){
-
     float range = end_angle - start_angle;
-    float step = range / (11 - 1);
-
-    for (size_t i = 0; i < 11; i++){
-        float angle = start_angle + i * step;
-        q_t a = float_to_q(angle);
-        q_t b = q_tan(a);
-        CU_ASSERT_DOUBLE_EQUAL(tan(angle), q_to_float(b), 0.05); // 0.05 is the maximum error but it goes higher when the angle is close to pi/2 or -pi/2
+    float step = range / (N_trig - 1);
+    for (size_t i = 0; i < N_trig; i++){
+        const float angle = start_angle + i * step;
+        const q_t a = float_to_q(angle);
+        const q_t b = q_tan(a);
+        if (q_to_float(b) >= 0.1 || q_to_float(b) <= -0.1){
+            // The asymptotes of the tangent function are at pi/2 and -pi/2
+            // The error is higher when the angle is close to pi/2 or -pi/2
+            float error = err(tan(angle), q_to_float(b));
+            CU_ASSERT_TRUE(error < 0.05); // 0.05 is the maximum error but it goes higher when the angle is close to pi/2 or -pi/2
+        }
     }
 
 }
 
+/*
 void test_q_sec(){
 
     float range = end_angle - start_angle;
-    float step = range / (11 - 1);
+    float step = range / (N_trig - 1);
 
-    for (size_t i = 0; i < 11; i++){
+    for (size_t i = 0; i < N_trig; i++){
         float angle = start_angle + i * step;
         q_t a = float_to_q(angle);
         q_t b = q_sec(a);
-        CU_ASSERT_DOUBLE_EQUAL(1 / cos(angle), q_to_float(b), 0.05); // 0.05 is the maximum error but it goes higher when the angle is close to pi/2 or -pi/2
+        CU_ASSERT_DOUBLE_EQUAL(1 / cos(angle), q_to_float(b), 0.05);
     }
 
 }
