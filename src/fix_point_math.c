@@ -116,8 +116,35 @@ q_t q_cos(q_t a){
 }
 
 q_t q_tan(q_t a){
-    if (q_cos(a) <= float_to_q(Q_RESOLUTION) && q_cos(a) >= float_to_q(-Q_RESOLUTION)){
+    if (q_cos(a) <= (2*Q_RESOLUTION) && q_cos(a) >= (-2*Q_RESOLUTION)){
         return INT_TO_Q(Q_MAX_INT); // Infinity is not possible in fixed point because of the limited range of the data type
     }
     return q_division(q_sin(a), q_cos(a));
 }
+
+// Deprecated while finding better approximation
+/*
+q_t q_sec(q_t a){
+    q_t cosine = q_cos(a);
+    if (cosine <= (Q_RESOLUTION) && cosine >= -(Q_RESOLUTION)){
+        return INT_TO_Q(Q_MAX_INT); // Infinity is not possible in fixed point because of the limited range of the data type
+    }
+    return q_division(Q_ONE, cosine);
+}
+
+q_t q_csc(q_t a){
+    q_t sine = q_sin(a);
+    if (sine <= (Q_RESOLUTION) && sine >= -(Q_RESOLUTION)){
+        return INT_TO_Q(Q_MAX_INT); // Infinity is not possible in fixed point because of the limited range of the data type
+    }
+    return q_division(Q_ONE, sine);
+}
+
+q_t q_cot(q_t a){
+    q_t sine = q_sin(a);
+    if (sine <= (Q_RESOLUTION) && sine >= -(Q_RESOLUTION)){
+        return INT_TO_Q(Q_MAX_INT); // Infinity is not possible in fixed point because of the limited range of the data type
+    }
+    return q_division(q_cos(a), sine);
+}
+*/
