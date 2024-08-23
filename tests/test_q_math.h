@@ -12,9 +12,13 @@ void testDivision();
 void testAbsolute();
 void testIntPower();
 void test_q_sqrt();
+
 void test_q_sin();
 void test_q_cos();
 void test_q_tan();
+void test_q_sec();
+void test_q_csc();
+void test_q_cot();
 
 void add_trigonometric_tests(CU_pSuite suite);
 void add_general_math_tests(CU_pSuite suite);
