@@ -11,8 +11,5 @@ q_t q_sqrt(q_t a);
 q_t q_sin(q_t a);
 q_t q_cos(q_t a);
 q_t q_tan(q_t a); 
-// q_t q_cot(q_t a); // Deprecated
-// q_t q_sec(q_t a); // Deprecated
-// q_t q_csc(q_t a); // Deprecated
 
 #endif // FIX_POINT_MATH_H
