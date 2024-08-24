@@ -17,7 +17,7 @@ inline q_t float_to_q(float x) {
  * @return float The floating number representation of the fixed point number
  */
 inline float q_to_float(q_t x) {
-    return (float) x / (1 << FRACTIONAL_BITS);
+    return ((float) x) / (1 << FRACTIONAL_BITS);
 }
 
 /**

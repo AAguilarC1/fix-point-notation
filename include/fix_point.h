@@ -31,9 +31,13 @@
 #define Q_FORMAT_15     15 // Q0.15 => Where max bits = 16
 #define Q_FORMAT_31     31 // Q0.31 => Where max bits = 32
 
+#ifndef Q_FORMAT_CUSTOM
 #define Q_FORMAT_CUSTOM 16
+#endif // Q_FORMAT_CUSTOM
 
+#ifndef Q_FORMAT
 #define Q_FORMAT Q_FORMAT_CUSTOM
+#endif // Q_FORMAT
 
 #if !(Q_FORMAT > 0)
 #error "Q_FORMAT must be greater than 0"
@@ -60,9 +64,9 @@ typedef int64_t q_long_t;
 #endif
 
 #define FRACTIONAL_BITS (Q_FORMAT) // Number of bits used for the fractional part
+#define Q_FORM_INT_BITS (sizeof(q_t) << 3) // Total number of bits in the q_t type
 #define INT_BITS (Q_FORM_INT_BITS - FRACTIONAL_BITS) // Number of bits used for the integer part
 
-#define Q_FORM_INT_BITS (sizeof(q_t) << 3) // Total number of bits in the q_t type
 
 #define Q_FORM_INT_MASK (((1 << INT_BITS) - 1) << FRACTIONAL_BITS) // Mask for the integer part
 #define Q_FORM_FRACTIONAL_MASK ((1 << FRACTIONAL_BITS) - 1) // Mask for the fractional part
@@ -72,8 +76,10 @@ typedef int64_t q_long_t;
 #define INT_TO_Q(__X__) ((q_t)((__X__) << FRACTIONAL_BITS))     // Convert integer to Qm.n
 #define Q_TO_INT(__Q__) ((int32_t)(__Q__) >> FRACTIONAL_BITS)   // Convert Qm.n to integer
 
-#define Q_MAX_INT    ((1 << (INT_BITS - 1))  - 1) // 2^(INT_BITS - 1) - 1 because of sign bit
-#define Q_MIN_INT    (-(1 << (INT_BITS - 1))) // -2^(INT_BITS - 1) because of sign bit
+#define Q_MAX_INT    ((1 << (INT_BITS - 1)))                 // 2^(INT_BITS - 1) - 1 because of sign bit
+#define Q_MIN_INT    (-(1 << (INT_BITS - 1)))                     // -2^(INT_BITS - 1) because of sign bit
+#define Q_MAX_FLOAT  (q_to_float((1 << Q_FORM_INT_BITS - 1) - 1)) // Maximum float value
+#define Q_MIN_FLOAT  (q_to_float((1 << Q_FORM_INT_BITS - 1)))     // Minimum float value
 #define Q_RESOLUTION (q_to_float(1))
 
 #define Q_MINUS_ONE      INT_TO_Q(-1) // Qm.n representation of -1
@@ -97,14 +103,14 @@ typedef int64_t q_long_t;
 #define Q_SIGN_BIT(__Q__)   (((__Q__) >> (Q_FORM_INT_BITS - 1)) & 1) // Get the sign bit of the Qm.n number
 #define Q_SIGN(__Q__)       (Q_SIGN_BIT(__Q__) == Q_ONE ? Q_ONE : Q_MINUS_ONE) // Get the sign of the Qm.n number
 
-#define Q_PRINT(__Q__) q_print((__Q__), (#__Q__)) // Print the Qm.n number
-#define PRINT_MAX_INT printf("Q_MAX_INT = %d\n", (Q_MAX_INT)) // Print the maximum integer value
-#define PRINT_MIN_INT printf("Q_MIN_INT = %d\n", (Q_MIN_INT)) // Print the minimum integer value
-#define PRINT_RANGE printf("Q_RANGE = [%d, %d]\n", (Q_MIN_INT), (Q_MAX_INT)) // Print the range of the Qm.n number
-#define PRINT_RESOLUTION printf("Q_RESOLUTION = %e\n", Q_RESOLUTION) // Print the resolution of the Qm.n number
-#define PRINT_FORMAT printf("Q_FORMAT => Q%d.%d\n", INT_BITS-1, GET_FORMAT) // Print the format of the Qm.n number
-#define PRINT_MAX_FLOAT printf("Q_MAX_FLOAT = %f\n", q_to_float((1 << Q_FORM_INT_BITS - 1) - 1)) // Print the maximum float value
-#define PRINT_MIN_FLOAT printf("Q_MIN_FLOAT = %f\n", q_to_float((1 << Q_FORM_INT_BITS - 1))) // Print the minimum float value
+#define Q_PRINT(__Q__)    q_print((__Q__), (#__Q__)) // Print the Qm.n number
+#define PRINT_MAX_INT     printf("Q_MAX_INT = %d\n", (Q_MAX_INT)) // Print the maximum integer value
+#define PRINT_MIN_INT     printf("Q_MIN_INT = %d\n", (Q_MIN_INT)) // Print the minimum integer value
+#define PRINT_RESOLUTION  printf("Q_RESOLUTION = %e\n", Q_RESOLUTION) // Print the resolution of the Qm.n number
+#define PRINT_FORMAT      printf("Q_FORMAT => Q%d.%d\n", INT_BITS-1, GET_FORMAT) // Print the format of the Qm.n number
+#define PRINT_RANGE       printf("Q_RANGE = [%d, %d)\n", (Q_MIN_INT), (Q_MAX_INT)) // Print the range of the Qm.n number
+#define PRINT_MAX_FLOAT   printf("Q_MAX_FLOAT = %f\n", q_to_float(Q_MAX_FLOAT)) // Print the maximum float value
+#define PRINT_MIN_FLOAT   printf("Q_MIN_FLOAT = %f\n", q_to_float(Q_MIN_FLOAT)) // Print the minimum float value
 
 q_t float_to_q(float x);
 float q_to_float(q_t x);

@@ -1,8 +1,9 @@
 #include <stdio.h>
+#define Q_FORMAT_CUSTOM 10
 #include "../include/fix_point_math.h"
 
 int main() {
-    q_t x = INT_TO_Q(-70);
+    q_t x = float_to_q(-70);
     Q_PRINT(x);
 
     q_t y = float_to_q(0.01234);
@@ -19,12 +20,12 @@ int main() {
     q_t b = q_sin(a);
 
     printf("sin(%f) = %f\n",angle , q_to_float(b)); 
-    
+
     PRINT_FORMAT;
     PRINT_MAX_INT;
     PRINT_MIN_INT;
-    PRINT_RANGE;
     PRINT_RESOLUTION;
+    PRINT_RANGE;
 
     return 0;
 }
