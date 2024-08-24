@@ -18,7 +18,7 @@ int main() {
     q_t a = float_to_q(angle);
     q_t b = q_sin(a);
 
-    printf("sin(%f) = %f\n",angle , q_to_float(b)); // Bug -> sin(3.291 * pi) = 0.7920 when it should be negative
+    printf("sin(%f) = %f\n",angle , q_to_float(b)); 
     
     PRINT_FORMAT;
     PRINT_MAX_INT;
