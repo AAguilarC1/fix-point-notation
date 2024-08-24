@@ -2,8 +2,8 @@
 #include "CUnit/Basic.h"
 #include "../include/fix_point_math.h"
 
-void testIntToQ();
-void testFloatToQ();
+void testInt_Q();
+void testFloat_Q();
 
 void add_conversion_tests(CU_pSuite suite);
 
