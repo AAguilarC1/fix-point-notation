@@ -1,22 +1,29 @@
 #include <stdio.h>
-#include "../include/fix_point.h"
-int main() {
-    printf("Hello, World!\n");
-    q_t x = INT_TO_Q(-70);
-    printf("x = %d\n", x);
+#include "../include/fix_point_math.h"
 
-    int32_t y = Q_TO_INT(x);
-    printf("y = %d\n", y);
+int main() {
+    q_t x = INT_TO_Q(-70);
+    Q_PRINT(x);
+
+    q_t y = float_to_q(0.01234);
+    Q_PRINT(y);
 
     q_t z = float_to_q(1/2.0);
-    printf("z = %d\n", z);
+    Q_PRINT(z);
 
-    float w = q_to_float(z);
-    printf("w = %f\n", w);
+    q_t neg_pi = -Q_PI;
+    Q_PRINT(neg_pi);
 
-    printf("GET_FORMAT = %d\n", GET_FORMAT);
-    printf("Q_RESOLUTION = %e\n", Q_RESOLUTION);
-    printf("Q_MAX_INT = %d\n", Q_MAX_INT);
+    float angle = (43.12394);
+    q_t a = float_to_q(angle);
+    q_t b = q_sin(a);
+
+    printf("sin(%f) = %f\n",angle , q_to_float(b)); // Bug -> sin(3.291 * pi) = 0.7920 when it should be negative
     
+    printf("Max int: %d\n", Q_MAX_INT);
+    printf("Min int: %d\n", Q_MIN_INT);
+    printf("Range: [%d, %d]\n", Q_MIN_INT, Q_MAX_INT);
+    printf("Resolution: %e\n", Q_RESOLUTION);
+
     return 0;
 }

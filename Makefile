@@ -1,11 +1,15 @@
+# TODO: Add multiple OS support
+
 NAME := fix_point
 
 BIN_DIR := bin
 OBJ_DIR := obj
 DATA_DIR := data
 TESTS_DIR := tests
+TABLE_DIR := lib/table
+SCRIPTS := scripts
 
-DIRS := $(BIN_DIR) $(OBJ_DIR) $(BUILD_DIR) $(DATA_DIR)
+DIRS := $(BIN_DIR) $(OBJ_DIR) $(BUILD_DIR) $(DATA_DIR) $(TABLE_DIR)
 
 CC := clang
 CFLAGS := -std=gnu17 -D _GNU_SOURCE -D __STDC_WANT_LIB_EXT1__ -Wall -Wextra -pedantic
@@ -18,12 +22,12 @@ else
 	CFLAGS += -O3
 endif
 
-
 SRC_DIR := src
 SRC := $(wildcard $(SRC_DIR)/*.c)
+
 OBJ := $(SRC:src/%.c=obj/%.o)
-BIN := 	bin/$(NAME)
-TEST := bin/$(NAME)_test
+TARGET := $(BIN_DIR)/$(NAME).out
+TEST := $(BIN_DIR)/$(NAME)_test.out
 
 $(DIRS):
 	mkdir -p $@
@@ -31,21 +35,22 @@ $(DIRS):
 $(OBJ): obj/%.o: src/%.c
 	$(CC) $(CFLAGS) -c $< -o $@ $(LDFLAGS)
 
-$(BIN): $(OBJ)
+$(TARGET): $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $@
 
 $(TEST): $(OBJ)
 	$(CC) $(CFLAGS) $(filter-out obj/main.o, $(OBJ)) $(TESTS_DIR)/*.c -lcunit -o $@ $(LDFLAGS) 
 
-all: build test
+all: build $(TARGET)
 
-build: $(DIRS) $(BIN)
+build: $(DIRS)
+	# python3 $(SCRIPTS)/look_up.py
 
-run: build
-	@ ./$(BIN)
+run: all
+	@./$(TARGET)
 
-check:
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose ./$(BIN_DIR)/$(NAME)
+check: all
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose $(TARGET)
 
 test: build $(TEST)
 	@./$(TEST)
@@ -61,4 +66,5 @@ setup:
 
 clean:
 	rm -rf  $(DIRS)
+
 .PHONY: all setup build run clean

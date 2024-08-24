@@ -1,7 +1,6 @@
-#include <stdio.h>
-#include <CUnit/Basic.h>
-#include "../include/fix_point.h"
+#include "test.h"
 
+<<<<<<< HEAD
 // Test case
 // MARK: - Integer to Q format
 void testIntToQ() {
@@ -344,6 +343,8 @@ void test_q_sqrt()
 }
 
 // MARK: - Test Suite
+=======
+>>>>>>> develop
 // Test suite initialization
 int initialize_suite() {
     return 0;
@@ -361,18 +362,19 @@ int main() {
         return CU_get_error();
 
     // Add a suite to the registry
-    CU_pSuite suite = CU_add_suite("Q_Format", initialize_suite, cleanup_suite);
-    if (NULL == suite) {
+    CU_pSuite conversions = CU_add_suite("Q_Format", initialize_suite, cleanup_suite);
+    if (NULL == conversions) {
         CU_cleanup_registry();
         return CU_get_error();
     }
 
-    // Add the test case to the suite
-    if (NULL == CU_add_test(suite, "Int2Q", testIntToQ)) {
+    CU_pSuite general_math = CU_add_suite("general_math", initialize_suite, cleanup_suite);
+    if (NULL == general_math) {
         CU_cleanup_registry();
         return CU_get_error();
     }
 
+<<<<<<< HEAD
     if (NULL == CU_add_test(suite, "Float2Q", testFloatToQ)) {
         CU_cleanup_registry();
         return CU_get_error();
@@ -402,6 +404,18 @@ int main() {
         CU_cleanup_registry();
         return CU_get_error();
     }
+=======
+    CU_pSuite trigonometric = CU_add_suite("trigonometric", initialize_suite, cleanup_suite);
+    if (NULL == trigonometric) {
+        CU_cleanup_registry();
+        return CU_get_error();
+    }
+    
+    // Add the test cases to the suite
+    add_conversion_tests(conversions);
+    add_general_math_tests(general_math);
+    add_trigonometric_tests(trigonometric);
+>>>>>>> develop
 
     // Run all tests using the basic interface
     CU_basic_set_mode(CU_BRM_VERBOSE);
