@@ -1,24 +1,60 @@
 #include "../include/fix_point_math.h"
 
+/**
+ * @brief This functions multiplies two fixed point numbers (a*b)
+ * 
+ * @param a The first fixed point number
+ * @param b The second fixed point number
+ * @return q_t The result of the multiplication
+ */
 inline q_t q_product(q_t a, q_t b) {
+    /*
+        In order to perform the multiplication we need to upscale one of the fix point number in order to allow for the overflow
+        that may occur during the multiplication. Then downscale the result to the original format.
+    */
     return ((q_long_t) a * b) >> FRACTIONAL_BITS;
 }
 
+/**
+ * @brief This function divides two fixed point numbers (a/b)
+ * 
+ * @param a The numerator of the division
+ * @param b The denominator of the division
+ * @return q_t The result of the division
+ */
 inline q_t q_division(q_t a, q_t b) {
+    /*
+        In order to perform the division we need to upscale the numerator in order to allow for the overflow that occurs when
+        performing the fractional bit shift.
+    */
     return (((q_long_t) (a) << FRACTIONAL_BITS) / b);
 }
 
+/**
+ * @brief This function returns the absolute value of a fixed point number
+ * 
+ * @param a The fixed point number to get the absolute value of
+ * @return q_t The absolute value of the fixed point number
+ */
 inline q_t q_absolute(q_t a){
-    q_t mask = a >> (Q_FORM_INT_BITS - 1);
-    return (a ^ mask) - mask;
+    q_t mask = a >> (Q_FORM_INT_BITS - 1); // mask = 0xFFFFFFFF if a is negative, 0x00000000 otherwise
+    // if a is negative, return -a, otherwise return a
+    return (a ^ mask) - mask; 
 }
 
+/**
+ * @brief This function raises a fixed point number to an integer power (a^n)
+ * 
+ * @param a The fixed point number to be raised to a power
+ * @param n The power to raise the fixed point number to
+ * @return q_t  The result of the fixed point number raised to the power
+ */
 q_t q_int_power(q_t a, int32_t n){
-    if (n == 0) return Q_ONE;
-    if (a == 0) return Q_ZERO;
+    if (n == 0) return Q_ONE; // a^0 = 1
+    if (a == 0) return Q_ZERO; // 0^n = 0
 
     if (n < 0) {
-        a = q_division(INT_TO_Q(1), a);
+        a = q_division(INT_TO_Q(1), a); // a^(-n) = 1/(a^n)
         n = -n;
     }
 
@@ -27,10 +63,16 @@ q_t q_int_power(q_t a, int32_t n){
 
 //TODO: Add q_float_power
 
+/**
+ * @brief The square root of a fixed point number using Newton's method (a^(1/2))
+ * 
+ * @param a The fixed point number to get the square root of
+ * @return q_t The square root of the fixed point number
+ */
 q_t q_sqrt(q_t a){
-    assert(a >= 0 && "The square root of a negative number is not a real number");
+    assert(a >= 0 && "The square root of a negative number is not a real number"); // The square root of a negative number is not a real number
 
-    if (a == 0) return Q_ZERO;
+    if (a == 0) return Q_ZERO; // sqrt(0) = 0
 
     const q_t TWO     = INT_TO_Q(2);
     const q_t EPSILON = float_to_q(0.001);
@@ -46,8 +88,16 @@ q_t q_sqrt(q_t a){
     return Y;
 }
 
+/**
+ * @brief This function returns the sine of a fixed point number (sin(a))
+ * 
+ * @param a The angle in radians
+ * @return q_t Returns the sine of the angle
+ */
 q_t q_sin(q_t a)
 {
+    // Pythagorean trigonometric identity Sin^2(a) + Cos^2(a) = 1 
+    // Sin(a) = sqrt(1 - cos(a)^2)
     q_t ret = Q_ZERO;
 
     q_t x = a % Q_TWO_PI;
@@ -80,8 +130,15 @@ q_t q_sin(q_t a)
     return ret;
 }
 
-// cos(y) \approx = \frac{pi^{2} - 4y^{2}}}{pi^{2} + y^{2}} 
+/**
+ * @brief This function returns the cosine of a fixed point number (cos(a))
+ * 
+ * @param a The angle in radians
+ * @return q_t The cosine of the angle
+ */
 q_t q_cos(q_t a){
+    // Bhaskara II's cosine approximation
+    // cos(y) \approx = \frac{pi^{2} - 4y^{2}}}{pi^{2} + y^{2}} 
     q_t ret = Q_ZERO;
     q_t sign = Q_ONE;
 

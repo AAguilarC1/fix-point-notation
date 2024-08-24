@@ -20,10 +20,11 @@ int main() {
 
     printf("sin(%f) = %f\n",angle , q_to_float(b)); // Bug -> sin(3.291 * pi) = 0.7920 when it should be negative
     
-    printf("Max int: %d\n", Q_MAX_INT);
-    printf("Min int: %d\n", Q_MIN_INT);
-    printf("Range: [%d, %d]\n", Q_MIN_INT, Q_MAX_INT);
-    printf("Resolution: %e\n", Q_RESOLUTION);
+    PRINT_FORMAT;
+    PRINT_MAX_INT;
+    PRINT_MIN_INT;
+    PRINT_RANGE;
+    PRINT_RESOLUTION;
 
     return 0;
 }
