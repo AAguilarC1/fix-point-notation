@@ -17,11 +17,8 @@ int main() {
     float angle = (43.12394);
     q_t a = float_to_q(angle);
     q_t b = q_sin(a);
-    // q_t c = q_cos(a);
 
-    printf("cos(%f) = %f\n",angle , q_to_float(b)); // Bug -> sin(3.291 * pi) = 0.7920 when it should be negative
-
-    printf("%f resolution\n", Q_RESOLUTION);
+    printf("sin(%f) = %f\n",angle , q_to_float(b)); // Bug -> sin(3.291 * pi) = 0.7920 when it should be negative
 
     return 0;
 }
