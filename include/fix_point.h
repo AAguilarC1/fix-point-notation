@@ -67,7 +67,6 @@ typedef int64_t q_long_t;
 #define Q_FORM_INT_BITS (sizeof(q_t) << 3) // Total number of bits in the q_t type
 #define INT_BITS (Q_FORM_INT_BITS - FRACTIONAL_BITS) // Number of bits used for the integer part
 
-
 #define Q_FORM_INT_MASK (((1 << INT_BITS) - 1) << FRACTIONAL_BITS) // Mask for the integer part
 #define Q_FORM_FRACTIONAL_MASK ((1 << FRACTIONAL_BITS) - 1) // Mask for the fractional part
 

@@ -1,31 +1,15 @@
 #include <stdio.h>
-#define Q_FORMAT_CUSTOM 10
-#include "../include/fix_point_math.h"
+#include "../include/fix_point_matrix.h"
 
 int main() {
-    q_t x = float_to_q(-70);
-    Q_PRINT(x);
+    q_matrix_t m = q_matrix_alloc(2, 2);
+    Q_MATRIX_AT(&m, 0, 0) = float_to_q(1.15783f);
+    Q_MATRIX_AT(&m, 0, 1) = float_to_q(2.183f);
+    Q_MATRIX_AT(&m, 1, 0) = float_to_q(3.1f);
+    Q_MATRIX_AT(&m, 1, 1) = float_to_q(42.0f);
 
-    q_t y = float_to_q(0.01234);
-    Q_PRINT(y);
-
-    q_t z = float_to_q(1/2.0);
-    Q_PRINT(z);
-
-    q_t neg_pi = -Q_PI;
-    Q_PRINT(neg_pi);
-
-    float angle = (43.12394);
-    q_t a = float_to_q(angle);
-    q_t b = q_sin(a);
-
-    printf("sin(%f) = %f\n",angle , q_to_float(b)); 
-
-    PRINT_FORMAT;
-    PRINT_MAX_INT;
-    PRINT_MIN_INT;
-    PRINT_RESOLUTION;
-    PRINT_RANGE;
+    Q_MATRIX_PRINT(&m);
+    q_matrix_freeDeep(&m);
 
     return 0;
 }
