@@ -4,7 +4,8 @@
 #include <stdint.h>
 #include <assert.h>
 #include "fix_point_math.h"
-#define Q_FORMAT Q_FORMAT_31
+#define Q_FORMAT_CUSTOM 16
+#define Q_FORMAT Q_FORMAT_CUSTOM
 
 //TODO: Implement the matrix using fixed point numbers
 
