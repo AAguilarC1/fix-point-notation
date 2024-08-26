@@ -185,3 +185,16 @@ q_t q_tan(q_t a){
     }
     return q_division(q_sin(a), q_cos(a)); 
 }
+
+/**
+ * @brief This function returns a random fixed point number between the min and max values
+ * 
+ * @param min The minimum value of the random number
+ * @param max The maximum value of the random number
+ * @return q_t The random fixed point number
+ */
+inline q_t q_rand(q_t min, q_t max)
+{
+    // Generate a random number between 0 and 1 and scale it to the range (min, max)
+    return q_product(float_to_q((float) rand() / ((float) RAND_MAX)), (max - min)) + min;
+}
