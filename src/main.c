@@ -41,6 +41,8 @@ int main() {
     q_matrix_freeDeep(&m);
     q_matrix_freeDeep(&m2);
     q_matrix_freeDeep(&m3);
+    q_matrix_freeDeep(&m4);
+    q_matrix_freeDeep(&m5);
 
     return 0;
 }
