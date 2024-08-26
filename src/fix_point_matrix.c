@@ -72,6 +72,36 @@ void q_matrix_identity(const q_matrix_t* m)
 }
 
 /**
+ * @brief The function fills the matrix with random fixed point numbers in the specified range (min, max).
+ * 
+ * @example
+ * q_matrix_t m = q_matrix_alloc(2, 2);
+ * q_matrix_fill_rand(&m, float_to_q(-1.0f), float_to_q(1.0f));
+ * Q_MATRIX_PRINT(m);
+ * 
+ * Output:
+ * m: [
+ * 0.14134, -0.123523,
+ * 0.5425213, -0.5432346,
+ * ]
+ * 
+ * @param m The matrix to be filled with random fixed point numbers
+ * @param min The minimum value of the random fixed point number
+ * @param max The maximum value of the random fixed point number
+ */
+void q_matrix_fill_rand(const q_matrix_t* m, q_t min, q_t max)
+{
+    Q_MATRIX_ASSERT(m);
+    srand(time(NULL));
+    
+    for(size_t i = 0; i < m->rows; i++){
+        for(size_t j = 0; j < m->cols; j++){
+            Q_MATRIX_AT(m, i, j) = q_rand(min, max);
+        }
+    }
+}
+
+/**
  * @brief This function sums two matrices of fixed point numbers and stores the result in the destination matrix.
  * @example 
  * q_matrix_t a = q_matrix_alloc(2, 2);
@@ -221,7 +251,6 @@ void q_matrix_cpy(const q_matrix_t* src, q_matrix_t* dst)
         }
     }
 }
-
 
 /**
  * @brief This function frees the memory allocated for the matrix of fixed point numbers.

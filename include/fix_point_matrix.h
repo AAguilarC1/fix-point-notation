@@ -1,8 +1,10 @@
 #ifndef FIX_POINT_MATRIX_H
 #define FIX_POINT_MATRIX_H
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <assert.h>
+#include <time.h>
 #include "fix_point_math.h"
 #define Q_FORMAT_CUSTOM 16
 #define Q_FORMAT Q_FORMAT_CUSTOM
@@ -22,6 +24,7 @@
 #define q_matrix_fill_float(m, value) q_matrix_fill((m), float_to_q((value))) // Fill the matrix with a given value in float format
 #define q_ones(m)                     q_matrix_fill((m), Q_ONE) // Fill the matrix with ones
 #define q_zeros(m)                    q_matrix_fill((m), Q_ZERO) // Fill the matrix with zeros
+#define q_matrix_fill_rand_float(m, min, max) q_matrix_fill_rand((m), float_to_q((min)), float_to_q((max))) // Fill the matrix with random values in float format
 
 #define q_matrix_scalar_mul_float(m, scalar) q_matrix_scalar_mul((m), float_to_q((scalar))) // Multiply the matrix by a scalar value in float format
 
@@ -37,13 +40,25 @@ q_matrix_t q_matrix_alloc(size_t rows, size_t cols);
 
 void q_matrix_fill(const q_matrix_t* m, q_t value);
 void q_matrix_identity(const q_matrix_t* m);
+void q_matrix_fill_rand(const q_matrix_t* m, q_t min, q_t max);
 
 void q_matrix_sum(const q_matrix_t* src, q_matrix_t* dst);
 void q_matrix_scalar_mul(const q_matrix_t* m, q_t scalar);
+void q_matrix_elementwise_mul(const q_matrix_t* a, const q_matrix_t* b, q_matrix_t* dst);
+
+//TODO: Implement the following functions
+q_t q_matrix_determinant(const q_matrix_t* m);
+q_matrix_t q_matrix_transpose(const q_matrix_t* m);
+q_matrix_t q_matrix_inverse(const q_matrix_t* m);
+q_matrix_t q_cross_product(const q_matrix_t* a, const q_matrix_t* b);
+
+q_matrix_t q_matrix_slice_row(const q_matrix_t* m, size_t row);
+q_matrix_t q_matrix_slice_col(const q_matrix_t* m, size_t col);
+q_matrix_t q_matrix_submatrix(const q_matrix_t* m, size_t row, size_t col);
+
 q_matrix_t q_matrix_dot_product(const q_matrix_t* a, const q_matrix_t* b);
 
 void q_matrix_cpy(const q_matrix_t* src, q_matrix_t* dst);
-
 void q_matrix_free(q_matrix_t* m);
 void q_matrix_freeDeep(q_matrix_t* m);
 

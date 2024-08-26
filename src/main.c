@@ -38,11 +38,21 @@ int main() {
 
     Q_MATRIX_PRINT(m5);
 
+    q_matrix_t m6 = q_matrix_alloc(1, 2);
+    q_matrix_fill_rand_float(&m6, -24.0f, 24.0f);
+    Q_MATRIX_PRINT(m6);
+
+    q_matrix_t m7 = q_matrix_alloc(1, 2);
+    q_matrix_elementwise_mul(&m5, &m6, &m7);
+    Q_MATRIX_PRINT(m7);
+
     q_matrix_freeDeep(&m);
     q_matrix_freeDeep(&m2);
     q_matrix_freeDeep(&m3);
     q_matrix_freeDeep(&m4);
     q_matrix_freeDeep(&m5);
+    q_matrix_freeDeep(&m6);
+    q_matrix_freeDeep(&m7);
 
     return 0;
 }
