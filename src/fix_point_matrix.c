@@ -165,6 +165,50 @@ void q_matrix_scalar_mul(const q_matrix_t* m, q_t scalar)
 }
 
 /**
+ * @brief The function multiplies each element on their respective position. A .* B = dst
+ * @details The matrices must have the same number of rows and columns.
+ * 
+ * @example
+ * q_matrix_t a = q_matrix_alloc(2, 2);
+ * q_matrix_t b = q_matrix_alloc(2, 2);
+ * q_matrix_t dst = q_matrix_alloc(2, 2);
+ * q_ones(&a);
+ * q_matrix_fill_float(&b, 2.0f);
+ * q_matrix_elementwise_mul(&a, &b, &dst);
+ * Q_MATRIX_PRINT(dst);
+ * 
+ * Output:
+ * dst: [
+ * 2.000000, 2.000000,
+ * 2.000000, 2.000000,
+ * ]
+ * 
+ * @param a The reference to matrix A of fixed point numbers
+ * @param b The reference to matrix B of fixed point numbers
+ * @param dst The resulting matrix of the element-wise multiplication
+ */
+void q_matrix_elementwise_mul(const q_matrix_t* a, const q_matrix_t* b, q_matrix_t* dst)
+{
+    Q_MATRIX_ASSERT(a);
+    Q_MATRIX_ASSERT(b);
+    Q_MATRIX_ASSERT(dst);
+
+    assert((a->rows == b->rows) && "Matrices have different number of rows");
+    assert((a->cols == b->cols) && "Matrices have different number of columns");
+    assert((a->rows == dst->rows) && "Source and destination matrices have different number of rows");
+    assert((a->cols == dst->cols) && "Source and destination matrices have different number of columns");
+
+    for(size_t i = 0; i < a->rows; i++){
+        for(size_t j = 0; j < a->cols; j++){
+            Q_MATRIX_AT(dst, i, j) = q_product(Q_MATRIX_AT(a, i, j), Q_MATRIX_AT(b, i, j));
+        }
+    }
+
+    return;
+}
+
+
+/**
  * @brief The function computes the dot product of two matrices of fixed point numbers.
  * @details The number of columns of the first matrix must be equal to the number of rows of the second matrix.
  * 
