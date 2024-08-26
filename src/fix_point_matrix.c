@@ -40,6 +40,18 @@ void q_matrix_fill(const q_matrix_t* m, q_t value)
 
 /**
  * @brief The function fills the matrix with the identity matrix.
+ * @details The identity matrix is a square matrix in which all the elements of the principal diagonal are ones and all other elements are zeros.
+ * 
+ * @example
+ * q_matrix_t m = q_matrix_alloc(2, 2);
+ * q_matrix_identity(&m);
+ * Q_MATRIX_PRINT(m);
+ * 
+ * Output:
+ * m: [
+ *  1.000000, 0.000000,
+ * 0.000000, 1.000000,
+ * ]
  * 
  * @param m The reference to the matrix of fixed point numbers to be filled with the identity matrix
  */
@@ -67,10 +79,10 @@ void q_matrix_identity(const q_matrix_t* m)
  * q_ones(&a);
  * q_ones(&b);
  * q_matrix_sum(&a, &b);
- * Q_MATRIX_PRINT(&b);
+ * Q_MATRIX_PRINT(b);
  * 
  * Output:
- * &b: [
+ * b: [
  *    2.000000, 2.000000,
  *   2.000000, 2.000000,
  * ]
@@ -100,10 +112,10 @@ void q_matrix_sum(const q_matrix_t* src, q_matrix_t* dst)
  * q_matrix_t m = q_matrix_alloc(2, 2);
  * q_ones(&m);
  * q_matrix_scalar_mul(&m, float_to_q(2.0f));
- * Q_MATRIX_PRINT(&m);
+ * Q_MATRIX_PRINT(m);
  * 
  * Output:
- * &m: [
+ * m: [
  *   2.000000, 2.000000,
  *  2.000000, 2.000000,
  * ]
@@ -122,6 +134,52 @@ void q_matrix_scalar_mul(const q_matrix_t* m, q_t scalar)
     }
 }
 
+/**
+ * @brief The function computes the dot product of two matrices of fixed point numbers.
+ * @details The number of columns of the first matrix must be equal to the number of rows of the second matrix.
+ * 
+ * @param a The reference to matrix A of fixed point numbers
+ * @param b The reference to matrix B of fixed point numbers
+ * 
+ * @example
+ * q_matrix_t a = q_matrix_alloc(2, 2);
+ * q_matrix_t b = q_matrix_alloc(2, 2);
+ * q_ones(&a);
+ * q_ones(&b);
+ * q_matrix_t c = q_matrix_dot_product(&a, &b);
+ * Q_MATRIX_PRINT(c);
+ * 
+ * Output:
+ * c: [
+ *  2.000000, 2.000000,
+ * 2.000000, 2.000000,
+ * ]
+ * 
+ * Explanation:
+ * A = [
+ * 1.000000, 1.000000,
+ * 1.000000, 1.000000,
+ * ]
+ * 
+ * B = [
+ * 1.000000, 1.000000,
+ * 1.000000, 1.000000,
+ * ]
+ * 
+ * C = A * B
+ * 
+ * C: [
+ * (A[0][0] * B[0][0] + A[0][1] * B[1][0]), (A[0][0] * B[0][1] + A[0][1] * B[1][1]), 
+ * (A[1][0] * B[0][0] + A[1][1] * B[1][0]), (A[1][0] * B[0][1] + A[1][1] * B[1][1]),
+ * ]
+ * 
+ * C = [
+ * 2.000000, 2.000000,
+ * 2.000000, 2.000000,
+ * ]
+ * 
+ * @return q_matrix_t The matrix resulting from the dot product of the two matrices
+ */
 q_matrix_t q_matrix_dot_product(const q_matrix_t* a, const q_matrix_t* b)
 {
     Q_MATRIX_ASSERT(a);
