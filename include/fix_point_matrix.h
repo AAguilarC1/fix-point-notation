@@ -9,8 +9,21 @@
 
 //TODO: Implement the matrix using fixed point numbers
 
-#define Q_MATRIX_AT(m, i, j) ((m)->elements[(i) * (m)->stride + (j)])
-#define Q_MATRIX_PRINT(m) q_matrix_print((m), (#m))
+#define Q_MATRIX_ASSERT(m) {\
+    assert(((m) != NULL) && "Matrix is NULL");\
+    assert(((m)->elements != NULL) && "Matrix elements are NULL");\
+}
+
+#define Q_MATRIX_AT(m, i, j) ((m)->elements[(i) * (m)->stride + (j)]) // Access the element at the i-th row and j-th column of the matrix
+#define Q_MATRIX_PRINT(m) q_matrix_print(&(m), (#m)) // Print the matrix
+
+#define q_matrix_square_alloc(size) q_matrix_alloc((size), (size)) // Allocate a square matrix
+
+#define q_matrix_fill_float(m, value) q_matrix_fill((m), float_to_q((value))) // Fill the matrix with a given value in float format
+#define q_ones(m)                     q_matrix_fill((m), Q_ONE) // Fill the matrix with ones
+#define q_zeros(m)                    q_matrix_fill((m), Q_ZERO) // Fill the matrix with zeros
+
+#define q_matrix_scalar_mul_float(m, scalar) q_matrix_scalar_mul((m), float_to_q((scalar))) // Multiply the matrix by a scalar value in float format
 
 struct matrix_t {
     size_t rows;
@@ -18,15 +31,22 @@ struct matrix_t {
     size_t stride;
     q_t* elements;
 };
-
 typedef struct matrix_t q_matrix_t;
 
 q_matrix_t q_matrix_alloc(size_t rows, size_t cols);
 
+void q_matrix_fill(const q_matrix_t* m, q_t value);
+void q_matrix_identity(const q_matrix_t* m);
+
+void q_matrix_sum(const q_matrix_t* src, q_matrix_t* dst);
+void q_matrix_scalar_mul(const q_matrix_t* m, q_t scalar);
+q_matrix_t q_matrix_dot_product(const q_matrix_t* a, const q_matrix_t* b);
+
+void q_matrix_cpy(const q_matrix_t* src, q_matrix_t* dst);
 
 void q_matrix_free(q_matrix_t* m);
 void q_matrix_freeDeep(q_matrix_t* m);
 
-void q_matrix_print(q_matrix_t* m, const char* name);
+void q_matrix_print(const q_matrix_t* m, const char* name);
 
 #endif // FIX_POINT_MATRIX_H
