@@ -9,7 +9,7 @@ TESTS_DIR := tests
 TABLE_DIR := lib/table
 SCRIPTS := scripts
 
-DIRS := $(BIN_DIR) $(OBJ_DIR) $(BUILD_DIR) $(DATA_DIR) $(TABLE_DIR)
+DIRS := $(BIN_DIR) $(OBJ_DIR) $(BUILD_DIR) $(DATA_DIR) 
 
 CC := clang
 CFLAGS := -std=gnu17 -D _GNU_SOURCE -D __STDC_WANT_LIB_EXT1__ -Wall -Wextra -pedantic
@@ -44,7 +44,6 @@ $(TEST): $(OBJ)
 all: build $(TARGET)
 
 build: $(DIRS)
-	# python3 $(SCRIPTS)/look_up.py
 
 run: all
 	@./$(TARGET)
