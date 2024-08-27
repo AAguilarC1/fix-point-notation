@@ -175,8 +175,8 @@ q_t q_cos(q_t a){
 /**
  * @brief The tangent of a fixed point number (tan(a))
  * 
- * @param a 
- * @return q_t 
+ * @param a The angle in radians
+ * @return q_t The tangent of the angle
  */
 q_t q_tan(q_t a){
     // tan(a) = sin(a)/cos(a)
