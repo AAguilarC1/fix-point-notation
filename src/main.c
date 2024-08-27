@@ -29,12 +29,14 @@ int main() {
     Q_MATRIX_AT(&m, 0, 1) = float_to_q(3.0f);
     Q_MATRIX_AT(&m, 1, 0) = float_to_q(4.1f);
 
-    q_matrix_t m3 = q_matrix_dot_product(&m, &m2);
+    q_matrix_t m3 = q_matrix_alloc(2, 2); 
+    q_matrix_dot_product(&m, &m2, &m3);
     Q_MATRIX_PRINT(m3);
 
     q_matrix_t m4 = q_matrix_alloc(1, 2);
     q_matrix_fill_float(&m4, 1.0f);
-    q_matrix_t m5 = q_matrix_dot_product(&m4, &m3);    
+    q_matrix_t m5 = q_matrix_alloc(1, 2); 
+    q_matrix_dot_product(&m4, &m3, &m5);    
 
     Q_MATRIX_PRINT(m5);
 

@@ -108,7 +108,7 @@ void q_matrix_fill_rand(const q_matrix_t* m, q_t min, q_t max)
  * q_matrix_t b = q_matrix_alloc(2, 2);
  * q_ones(&a);
  * q_ones(&b);
- * q_matrix_sum(&a, &b);
+ * q_matrix_sum(&a, &b, &b);
  * Q_MATRIX_PRINT(b);
  * 
  * Output:
@@ -116,21 +116,26 @@ void q_matrix_fill_rand(const q_matrix_t* m, q_t min, q_t max)
  *    2.000000, 2.000000,
  *   2.000000, 2.000000,
  * ]
- * 
- * @param src The reference to the source matrix of fixed point numbers
+ *
+ * @param a The reference to matrix A of fixed point numbers
+ * @param b The reference to matrix B of fixed point numbers 
  * @param dst The reference to the destination matrix of fixed point numbers
  */
-void q_matrix_sum(const q_matrix_t* src, q_matrix_t* dst)
+void q_matrix_sum(const q_matrix_t* a, const q_matrix_t* b, q_matrix_t* dst)
 {
-    Q_MATRIX_ASSERT(src);
+    Q_MATRIX_ASSERT(a);
+    Q_MATRIX_ASSERT(b);
     Q_MATRIX_ASSERT(dst);
 
-    assert((src->rows == dst->rows) && "Source and destination matrices have different number of rows");
-    assert((src->cols == dst->cols) && "Source and destination matrices have different number of columns");
+    // Assert the dimensions of the matrices
+    assert((a->rows == dst->rows) && "Source and destination matrices have different number of rows");
+    assert((a->cols == dst->cols) && "Source and destination matrices have different number of columns");
+    assert((a->rows == b->rows) && "Matrices have different number of rows");
+    assert((a->cols == b->cols) && "Matrices have different number of columns");
 
-    for(size_t i = 0; i < src->rows; i++){
-        for(size_t j = 0; j < src->cols; j++){
-            Q_MATRIX_AT(dst, i, j) += Q_MATRIX_AT(src, i, j);
+    for(size_t i = 0; i < a->rows; i++){
+        for(size_t j = 0; j < a->cols; j++){
+            Q_MATRIX_AT(dst, i, j) = Q_MATRIX_AT(a, i, j) + Q_MATRIX_AT(b, i, j);
         }
     }
 }
@@ -203,10 +208,7 @@ void q_matrix_elementwise_mul(const q_matrix_t* a, const q_matrix_t* b, q_matrix
             Q_MATRIX_AT(dst, i, j) = q_product(Q_MATRIX_AT(a, i, j), Q_MATRIX_AT(b, i, j));
         }
     }
-
-    return;
 }
-
 
 /**
  * @brief The function computes the dot product of two matrices of fixed point numbers.
@@ -214,13 +216,15 @@ void q_matrix_elementwise_mul(const q_matrix_t* a, const q_matrix_t* b, q_matrix
  * 
  * @param a The reference to matrix A of fixed point numbers
  * @param b The reference to matrix B of fixed point numbers
+ * @param dst The resulting matrix of the dot product
  * 
  * @example
  * q_matrix_t a = q_matrix_alloc(2, 2);
  * q_matrix_t b = q_matrix_alloc(2, 2);
+ * q_matrix_t c = q_matrix_alloc(2, 2);
  * q_ones(&a);
  * q_ones(&b);
- * q_matrix_t c = q_matrix_dot_product(&a, &b);
+ * q_matrix_dot_product(&a, &b, &c);
  * Q_MATRIX_PRINT(c);
  * 
  * Output:
@@ -252,27 +256,28 @@ void q_matrix_elementwise_mul(const q_matrix_t* a, const q_matrix_t* b, q_matrix
  * 2.000000, 2.000000,
  * ]
  * 
- * @return q_matrix_t The matrix resulting from the dot product of the two matrices
  */
-q_matrix_t q_matrix_dot_product(const q_matrix_t* a, const q_matrix_t* b)
+void q_matrix_dot_product(const q_matrix_t* a, const q_matrix_t* b, q_matrix_t* dst)
 {
     Q_MATRIX_ASSERT(a);
     Q_MATRIX_ASSERT(b);
+    Q_MATRIX_ASSERT(dst);
+
+    // Assert the dimensions of the matrices
     assert((a->cols == b->rows) && "The number of columns of the first matrix must be equal to the number of rows of the second matrix");
+    assert((a->rows == dst->rows) && "Source and destination matrices have different number of rows");
+    assert((b->cols == dst->cols) && "Source and destination matrices have different number of columns");
 
-    q_matrix_t dst = q_matrix_alloc(a->rows, b->cols);
     size_t n = a->cols;
-    q_zeros(&dst);
+    q_zeros(dst); // Fill destination matrix with 0
 
-    for(size_t i = 0; i < dst.rows; i++){
-        for(size_t j = 0; j < dst.cols; j++){
+    for(size_t i = 0; i < dst->rows; i++){
+        for(size_t j = 0; j < dst->cols; j++){
             for(size_t k = 0; k < n; k++){
-                Q_MATRIX_AT(&dst, i, j) += q_product(Q_MATRIX_AT(a, i, k), Q_MATRIX_AT(b, k, j));
+                Q_MATRIX_AT(dst, i, j) += q_product(Q_MATRIX_AT(a, i, k), Q_MATRIX_AT(b, k, j));
             }
         }
     }
-
-    return dst;
 }
 
 /**
