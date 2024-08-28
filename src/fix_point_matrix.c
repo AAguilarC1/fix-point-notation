@@ -1,5 +1,7 @@
 #include "../include/fix_point_matrix.h"
 
+// MARK: Matrix allocation
+
 /**
  * @brief This function allocates memory for a matrix of fixed point numbers with the specified number of rows and columns.
  * 
@@ -21,6 +23,8 @@ q_matrix_t q_matrix_alloc(size_t rows, size_t cols)
     return m;
 }
 
+// MARK: Matrix manipulation
+
 /**
  * @brief The function returns a slice of the matrix with the specified row
  * @details The row number starts from 0 to N-1, where N is the number of rows in the matrix. Meaning that the row index is zero-based.
@@ -31,9 +35,15 @@ q_matrix_t q_matrix_alloc(size_t rows, size_t cols)
  * q_ones(&m);
  * Q_MATRIX_AT(&m, 0, 0) = float_to_q(2.0f);
  * q_matrix_slice_row(&m, &dst, 0);
+ * Q_MATRIX_PRINT(m);
  * Q_MATRIX_PRINT(dst);
  * 
  * Output:
+ * m: [
+ * 2.000000, 1.000000,
+ * 1.000000, 1.000000,
+ * ]
+ * 
  * dst: [
  * 2.000000, 1.000000,
  * ] 
@@ -61,6 +71,27 @@ void q_matrix_slice_row(const q_matrix_t* m, q_matrix_t* dst, size_t row)
 /**
  * @brief The following function returns a slice of the matrix with the specified column
  * @details The column number starts from 0 to N-1, where N is the number of columns in the matrix. Meaning that the column index is zero-based.
+ * 
+ * @example
+ * q_matrix_t m = q_matrix_alloc(2, 2);
+ * q_matrix_t dst = q_matrix_alloc(2, 1);
+ * q_ones(&m);
+ * Q_MATRIX_AT(&m, 0, 0) = float_to_q(2.0f);
+ * 
+ * q_matrix_slice_col(&m, &dst, 0);
+ * Q_MATRIX_PRINT(m);
+ * Q_MATRIX_PRINT(dst);
+ * 
+ * Output:
+ * m : [
+ * 2.000000, 1.000000,
+ * 1.000000, 1.000000,
+ * ]
+ * 
+ * dst: [
+ * 2.000000,
+ * 1.000000,
+ * ]
  * 
  * @param m The reference to the matrix of fixed point numbers
  * @param dst The slice of the matrix with the specified column
@@ -147,9 +178,21 @@ void q_matrix_submatrix(const q_matrix_t* m, q_matrix_t* dst, size_t row, size_t
 
 }
 
-
+// MARK: Matrix filling
 /**
  * @brief The function fills the matrix with a fixed point number of an specified value.
+ * @details The function fills the matrix with the specified value in Q notation. If you want to use a float value as an input please use the macro q_matrix_fill_float(m, value).
+ * 
+ * @example
+ * q_matrix_t m = q_matrix_alloc(2, 2);
+ * q_matrix_fill(&m, float_to_q(2.0f));
+ * Q_MATRIX_PRINT(m);
+ * 
+ * Output:
+ * m: [
+ * 2.000000, 2.000000,
+ * 2.000000, 2.000000,
+ * ]
  * 
  * @param m The reference to the matrix of fixed point numbers
  * @param value The value to fill the matrix (fixed point number)
@@ -200,6 +243,7 @@ void q_matrix_identity(const q_matrix_t* m)
 
 /**
  * @brief The function fills the matrix with random fixed point numbers in the specified range (min, max).
+ * @details The function fills the matrix with random fixed point numbers in the specified range (min, max). If you want to use a float value as an input please use the macro q_matrix_fill_rand_float(m, min, max).
  * 
  * @example
  * q_matrix_t m = q_matrix_alloc(2, 2);
@@ -470,6 +514,8 @@ void q_matrix_dot_product(const q_matrix_t* a, const q_matrix_t* b, q_matrix_t* 
     }
 }
 
+// MARK: Matrix memory management
+
 /**
  * @brief The function copies the elements of the source matrix to the destination matrix.
  * 
@@ -523,6 +569,8 @@ void q_matrix_freeDeep(q_matrix_t* m)
     }
     q_matrix_free(m);
 }
+
+// MARK: Matrix visualization
 
 /**
  * @brief This function prints the matrix of fixed point numbers.
