@@ -4,6 +4,9 @@
 #include "../include/fix_point_matrix.h"
 //TODO: Implement the tests for the matrix of fixed point numbers
 
+void test_q_matrix_alloc();
+void test_q_fill();
+
 void add_matrix_tests(CU_pSuite suite);
 
 #endif // TEST_Q_MATRIX_H

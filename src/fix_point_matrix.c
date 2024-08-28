@@ -274,10 +274,14 @@ void q_matrix_fill_rand(const q_matrix_t* m, q_t min, q_t max)
     }
 }
 
+
 // MARK: Matrix operations
+
+//TODO: Explore the LU decomposition for determinant to improve the time complexity (O(n^3))
+
 /**
  * @brief The function computes the determinant of the matrix of fixed point numbers. 
- * @details The matrix must be square shape to calculate the determinant. This function uses the Laplace expansion to calculate the determinant.
+ * @details The matrix must be square shape to calculate the determinant. This function uses the Laplace expansion to calculate the determinant. The time complexity of this function is O(n!) where n is the number of rows or columns in the matrix. Do NOT use this function for large matrices (n << 10).
  * 
  * @example 
  * q_matrix_t m = q_matrix_alloc(2, 2);

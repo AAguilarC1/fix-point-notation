@@ -35,10 +35,13 @@ int main() {
         return CU_get_error();
     }
     
+    CU_pSuite matrix = CU_add_suite("matrix", initialize_suite, cleanup_suite);
+
     // Add the test cases to the suite
     add_conversion_tests(conversions);
     add_general_math_tests(general_math);
     add_trigonometric_tests(trigonometric);
+    add_matrix_tests(matrix);
 
     // Run all tests using the basic interface
     CU_basic_set_mode(CU_BRM_VERBOSE);
