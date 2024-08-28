@@ -49,9 +49,16 @@ int main() {
     Q_MATRIX_PRINT(m7);
 
     q_matrix_t m8 = q_matrix_square_alloc(3);
+    
     q_ones(&m8);
-    Q_MATRIX_AT(&m8, 1, 1) = float_to_q(2.0f);
-    Q_MATRIX_AT(&m8, 2, 2) = float_to_q(3.0f);
+    Q_MATRIX_AT(&m8, 0, 0) = float_to_q(2.0f);
+    Q_MATRIX_AT(&m8, 0, 1) = float_to_q(3.0f);
+    Q_MATRIX_AT(&m8, 0, 2) = float_to_q(1.0f);
+    Q_MATRIX_AT(&m8, 1, 0) = float_to_q(-1.432f);
+    Q_MATRIX_AT(&m8, 1, 1) = float_to_q(120.0f);
+    Q_MATRIX_AT(&m8, 1, 2) = float_to_q(-32.0001f);
+
+    Q_MATRIX_PRINT(m8);
 
     q_t det = q_matrix_determinant(&m8);
     printf("Determinant of 'm8': %f\n", q_to_float(det));
