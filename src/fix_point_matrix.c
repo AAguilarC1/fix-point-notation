@@ -368,6 +368,10 @@ void q_matrix_LU_decomposition(const q_matrix_t* m, q_matrix_t* L, q_matrix_t* U
             /*
             L[i][j] = U[i][j] / U[i][i]
             */
+            // If the diagonal element is zero, the matrix is singular
+                // In this case, the LU decomposition is not possible
+            assert((Q_MATRIX_AT(U, i, i) != Q_ZERO) && "Matrix is singular (LU decomposition is not possible)");
+
             Q_MATRIX_AT(L, j, i) = q_division(Q_MATRIX_AT(U, j, i), Q_MATRIX_AT(U, i, i));
             for(size_t k = i; k < m->rows; k++)
             {
@@ -431,8 +435,6 @@ q_t q_matrix_determinant(const q_matrix_t* m)
     }
 
     q_matrix_free(&L); // Free the lower triangular matrix
-    q_matrix_free(&U); // Free the upper triangular matrix
-
     return ret;
 }
 
