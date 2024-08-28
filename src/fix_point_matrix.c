@@ -9,8 +9,8 @@
  */
 q_matrix_t q_matrix_alloc(size_t rows, size_t cols)
 {
-    assert((rows > 0) && "Number of rows must be greater than 0");
-    assert((cols > 0) && "Number of columns must be greater than 0");
+    assert((rows > 0) && "Number of rows must be greater than 0 when allocating a matrix");
+    assert((cols > 0) && "Number of columns must be greater than 0 when allocating a matrix");
 
     q_matrix_t m;
     m.rows     = rows;
@@ -185,7 +185,7 @@ void q_matrix_fill(const q_matrix_t* m, q_t value)
 void q_matrix_identity(const q_matrix_t* m)
 {
     Q_MATRIX_ASSERT(m);
-    assert((m->rows == m->cols) && "Matrix is not square");
+    assert((m->rows == m->cols) && "Matrix is not square shape when filling the identity matrix");
 
     for(size_t i = 0; i < m->rows; i++){
         for(size_t j = 0; j < m->cols; j++){
@@ -221,6 +221,8 @@ void q_matrix_fill_rand(const q_matrix_t* m, q_t min, q_t max)
     Q_MATRIX_ASSERT(m);
     srand(time(NULL));
     
+    assert((min < max) && "Minimum value must be less than the maximum value when filling the matrix with random values");
+
     for(size_t i = 0; i < m->rows; i++){
         for(size_t j = 0; j < m->cols; j++){
             Q_MATRIX_AT(m, i, j) = q_rand(min, max);
@@ -255,13 +257,14 @@ void q_matrix_sum(const q_matrix_t* a, const q_matrix_t* b, q_matrix_t* dst)
     Q_MATRIX_ASSERT(dst);
 
     // Assert the dimensions of the matrices
-    assert((a->rows == dst->rows) && "Source and destination matrices have different number of rows");
-    assert((a->cols == dst->cols) && "Source and destination matrices have different number of columns");
-    assert((a->rows == b->rows) && "Matrices have different number of rows");
-    assert((a->cols == b->cols) && "Matrices have different number of columns");
+    assert((a->rows == dst->rows) && "Source and destination matrices have different number of rows (Can not perform sum)");
+    assert((a->cols == dst->cols) && "Source and destination matrices have different number of columns (Can not perform sum)");
+    assert((a->rows == b->rows) && "Matrices have different number of rows (Can not perform sum)");
+    assert((a->cols == b->cols) && "Matrices have different number of columns (Can not perform sum)");
 
     for(size_t i = 0; i < a->rows; i++){
         for(size_t j = 0; j < a->cols; j++){
+            Q_MATRIX_AT(dst, i, j) = Q_ZERO;
             Q_MATRIX_AT(dst, i, j) = Q_MATRIX_AT(a, i, j) + Q_MATRIX_AT(b, i, j);
         }
     }
@@ -325,13 +328,14 @@ void q_matrix_elementwise_mul(const q_matrix_t* a, const q_matrix_t* b, q_matrix
     Q_MATRIX_ASSERT(b);
     Q_MATRIX_ASSERT(dst);
 
-    assert((a->rows == b->rows) && "Matrices have different number of rows");
-    assert((a->cols == b->cols) && "Matrices have different number of columns");
-    assert((a->rows == dst->rows) && "Source and destination matrices have different number of rows");
-    assert((a->cols == dst->cols) && "Source and destination matrices have different number of columns");
+    assert((a->rows == b->rows) && "Matrices have different number of rows (Can not perform element-wise multiplication)");
+    assert((a->cols == b->cols) && "Matrices have different number of columns (Can not perform element-wise multiplication)");
+    assert((a->rows == dst->rows) && "Source and destination matrices have different number of rows (Can not perform element-wise multiplication)");
+    assert((a->cols == dst->cols) && "Source and destination matrices have different number of columns (Can not perform element-wise multiplication)");
 
     for(size_t i = 0; i < a->rows; i++){
         for(size_t j = 0; j < a->cols; j++){
+            Q_MATRIX_AT(dst, i, j) = Q_ZERO;
             Q_MATRIX_AT(dst, i, j) = q_product(Q_MATRIX_AT(a, i, j), Q_MATRIX_AT(b, i, j));
         }
     }
@@ -391,9 +395,9 @@ void q_matrix_dot_product(const q_matrix_t* a, const q_matrix_t* b, q_matrix_t* 
     Q_MATRIX_ASSERT(dst);
 
     // Assert the dimensions of the matrices
-    assert((a->cols == b->rows) && "The number of columns of the first matrix must be equal to the number of rows of the second matrix");
-    assert((a->rows == dst->rows) && "Source and destination matrices have different number of rows");
-    assert((b->cols == dst->cols) && "Source and destination matrices have different number of columns");
+    assert((a->cols == b->rows) && "The number of columns of the first matrix must be equal to the number of rows of the second matrix (Can not perform dot product)");
+    assert((a->rows == dst->rows) && "Source and destination matrices have different number of rows (Can not perform dot product)");
+    assert((b->cols == dst->cols) && "Source and destination matrices have different number of columns (Can not perform dot product)");
 
     size_t n = a->cols;
     q_zeros(dst); // Fill destination matrix with 0
@@ -418,8 +422,8 @@ void q_matrix_cpy(const q_matrix_t* src, q_matrix_t* dst)
     Q_MATRIX_ASSERT(src);
     Q_MATRIX_ASSERT(dst);
 
-    assert((src->rows == dst->rows) && "Source and destination matrices have different number of rows");
-    assert((src->cols == dst->cols) && "Source and destination matrices have different number of columns");
+    assert((src->rows == dst->rows) && "Source and destination matrices have different number of rows (Can not perform copy)");
+    assert((src->cols == dst->cols) && "Source and destination matrices have different number of columns (Can not perform copy)");
 
     for(size_t i = 0; i < src->rows; i++){
         for(size_t j = 0; j < src->cols; j++){
