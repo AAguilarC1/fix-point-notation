@@ -248,52 +248,6 @@ void test_q_tan(){
     }
 
 }
-
-/*
-void test_q_sec(){
-
-    float range = end_angle - start_angle;
-    float step = range / (N_trig - 1);
-
-    for (size_t i = 0; i < N_trig; i++){
-        float angle = start_angle + i * step;
-        q_t a = float_to_q(angle);
-        q_t b = q_sec(a);
-        CU_ASSERT_DOUBLE_EQUAL(1 / cos(angle), q_to_float(b), 0.05);
-    }
-
-}
-
-void test_q_csc(){
-
-    float range = end_angle - start_angle;
-    float step = range / (N_trig - 1);
-
-    for (size_t i = 0; i < N_trig; i++){
-        float angle = start_angle + i * step;
-        q_t a = float_to_q(angle);
-        q_t b = q_csc(a);
-        CU_ASSERT_DOUBLE_EQUAL(1 / sin(angle), q_to_float(b), 0.05); // 0.05 is the maximum error but it goes higher when the angle is close to pi/2 or -pi/2
-    }
-
-}
-
-void test_q_cot(){
-
-    float range = end_angle - start_angle;
-    float step = range / (N_trig - 1);
-
-    for (size_t i = 0; i < N_trig; i++){
-        float angle = start_angle + i * step;
-        q_t a = float_to_q(angle);
-        q_t b = q_cot(a);
-        CU_ASSERT_DOUBLE_EQUAL(1 / tan(angle), q_to_float(b), 0.1); // 0.05 is the maximum error but it goes higher when the angle is close to pi/2 or -pi/2
-    }
-
-}
-*/
-
-
 // MARK: - Add Tests to Suite
 void add_general_math_tests(CU_pSuite suite)
 {
@@ -339,17 +293,5 @@ void add_trigonometric_tests(CU_pSuite suite)
     if (NULL == CU_add_test(suite, "Q_Tan", test_q_tan)) {
         return;
     }
-
-    // if (NULL == CU_add_test(suite, "Q_Sec", test_q_sec)) {
-    //     return;
-    // }
-
-    // if (NULL == CU_add_test(suite, "Q_Csc", test_q_csc)) {
-    //     return;
-    // }
-
-    // if (NULL == CU_add_test(suite, "Q_Cot", test_q_cot)) {
-    //     return;
-    // }
 
 }

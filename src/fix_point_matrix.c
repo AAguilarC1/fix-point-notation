@@ -327,7 +327,7 @@ q_t q_matrix_determinant(const q_matrix_t* m)
             sign = -sign; // Change the sign for the next term in the Laplace expansion
         }
 
-        q_matrix_freeDeep(&temp); // Free the memory allocated for the temporary matrix
+        q_matrix_free(&temp); // Free the memory allocated for the temporary matrix
     }
 
     return ret;
