@@ -435,6 +435,8 @@ q_t q_matrix_determinant(const q_matrix_t* m)
     }
 
     q_matrix_free(&L); // Free the lower triangular matrix
+    q_matrix_free(&U); // Free the upper triangular matrix
+    
     return ret;
 }
 
