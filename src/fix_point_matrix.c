@@ -277,11 +277,122 @@ void q_matrix_fill_rand(const q_matrix_t* m, q_t min, q_t max)
 
 // MARK: Matrix operations
 
-//TODO: Explore the LU decomposition for determinant to improve the time complexity (O(n^3))
+    /**
+    @brief The function computes the LU decomposition of the matrix of fixed point numbers.
+    @details The LU decomposition is a method to factorize a matrix into the product of a lower triangular matrix and an upper triangular matrix.
+
+    The LU decomposition is calculated as follows:
+    A = L * U
+
+    where:
+    A is the input matrix
+    L is the lower triangular matrix
+    U is the upper triangular matrix
+
+    The LU decomposition is calculated using the Doolittle algorithm.
+
+    The Doolittle algorithm calculates the LU decomposition of a matrix A as follows:
+    1. Set the diagonal elements of the lower triangular matrix to 1
+    2. Calculate the elements of the lower triangular matrix and the upper triangular matrix
+    3. The elements of the lower triangular matrix are calculated as follows:
+        L[i][j] = U[i][j] / U[i][i]
+
+    4. The elements of the upper triangular matrix are calculated as follows:
+        U[j][k] = U[j][k] - L[j][i] * U[i][k]
+
+    5. Repeat the process for all rows and columns of the matrix
+    6. The LU decomposition is complete when the upper triangular matrix is obtained
+
+    @example
+    q_matrix_t m = q_matrix_alloc(3, 3);
+    q_matrix_t L = q_matrix_alloc(3, 3);
+    q_matrix_t U = q_matrix_alloc(3, 3);
+    
+    q_ones(&m);
+    Q_MATRIX_AT(&m, 0, 0) = float_to_q(2.0f);
+    Q_MATRIX_AT(&m, 0, 1) = float_to_q(3.0f);
+    Q_MATRIX_AT(&m, 0, 2) = float_to_q(1.0f);
+    Q_MATRIX_AT(&m, 1, 0) = float_to_q(4.0f);
+    Q_MATRIX_AT(&m, 1, 1) = float_to_q(4.0f);
+    Q_MATRIX_AT(&m, 1, 2) = float_to_q(2.0f);
+
+    q_matrix_LU_decomposition(&m, &L, &U);
+
+    Q_MATRIX_PRINT(m);
+    Q_MATRIX_PRINT(L);
+    Q_MATRIX_PRINT(U);
+
+    Output:
+    m: [
+    2.000000, 3.000000, 1.000000,
+    4.000000, 4.000000, 2.000000,
+    1.000000, 1.000000, 1.000000,
+    ]   
+
+    L: [
+    1.000000, 0.000000, 0.000000,
+    2.000000, 1.000000, 0.000000,
+    0.500000, 0.250000, 1.000000,
+    ]
+
+    U: [
+    2.000000, 3.000000, 1.000000,
+    0.000000, -2.000000, 0.000000,
+    0.000000, 0.000000, 0.500000,
+    ]
+
+    @param m The reference to the matrix of fixed point numbers to be decomposed
+    @param L The reference to the lower triangular matrix of fixed point numbers
+    @param U The reference to the upper triangular matrix of fixed point numbers
+    */
+void q_matrix_LU_decomposition(const q_matrix_t* m, q_matrix_t* L, q_matrix_t* U)
+{
+    Q_MATRIX_ASSERT(m);
+    Q_MATRIX_ASSERT(L);
+    Q_MATRIX_ASSERT(U);
+
+    assert((m->rows == m->cols) && "Matrix is not square shape when performing LU decomposition");
+    assert((L->rows == m->rows) && "Matrix L has different number of rows than the input matrix");
+    assert((L->cols == m->cols) && "Matrix L has different number of columns than the input matrix");
+    assert((U->rows == m->rows) && "Matrix U has different number of rows than the input matrix");
+    assert((U->cols == m->cols) && "Matrix U has different number of columns than the input matrix");
+
+    q_matrix_cpy(m, U); // Copy the input matrix to the upper triangular matrix
+    q_matrix_identity(L); // Fill the lower triangular matrix with the identity matrix
+
+    for(size_t i = 0; i < m->rows; i++)
+    {
+        for(size_t j = i + 1; j < m->rows; j++)
+        {
+            // Calculate the elements of the lower triangular matrix
+            /*
+            L[i][j] = U[i][j] / U[i][i]
+            */
+            Q_MATRIX_AT(L, j, i) = q_division(Q_MATRIX_AT(U, j, i), Q_MATRIX_AT(U, i, i));
+            for(size_t k = i; k < m->rows; k++)
+            {
+                // Calculate the elements of the upper triangular matrix
+                /*
+                U[j][k] = U[j][k] - L[j][i] * U[i][k]
+                */
+                Q_MATRIX_AT(U, j, k) = Q_MATRIX_AT(U, j, k) - q_product(Q_MATRIX_AT(L, j, i), Q_MATRIX_AT(U, i, k));
+            }
+        }
+    }
+}
 
 /**
  * @brief The function computes the determinant of the matrix of fixed point numbers. 
- * @details The matrix must be square shape to calculate the determinant. This function uses the Laplace expansion to calculate the determinant. The time complexity of this function is O(n!) where n is the number of rows or columns in the matrix. Do NOT use this function for large matrices (n << 10).
+ * @details The matrix must be square shape to calculate the determinant. The determinant is calculated using the LU decomposition. 
+ * The determinant is calculated as follows: 
+ * det(A) = det(L) * det(U) = det(U)
+ * 
+ * where:
+ * A is the input matrix
+ * L is the lower triangular matrix
+ * U is the upper triangular matrix
+ * 
+ * The determinant of the upper triangular matrix is the product of the diagonal elements.
  * 
  * @example 
  * q_matrix_t m = q_matrix_alloc(2, 2);
@@ -303,36 +414,24 @@ q_t q_matrix_determinant(const q_matrix_t* m)
 
     // Assert that the matrix is square shape
     assert((m->rows == m->cols) && "Matrix is not square shape when calculating the determinant");
-    q_t ret = Q_ZERO;
+    q_t ret = Q_ONE;
 
-    // Base case for the determinant of a 2x2 matrix
-    if(m->cols == 2 && m->rows == 2)
+    q_matrix_t L = q_matrix_square_alloc(m->rows); // Allocate the lower triangular matrix
+    q_matrix_t U = q_matrix_square_alloc(m->rows); // Allocate the upper triangular matrix
+
+    q_matrix_LU_decomposition(m, &L, &U); // Compute the LU decomposition of the matrix
+
+    for(size_t i = 0; i < m->rows; i++)
     {
         /*
-        The determinant of a 2x2 matrix is calculated as follows:
-        A = | a b |
-            | c d |
-
-        det(A) = a*d - b*c
+        The determinant of the upper triangular matrix is the product of the diagonal elements.
+        det(U) = U[0][0] * U[1][1] * ... * U[n][n]
         */
-        return q_product(Q_MATRIX_AT(m, 0, 0), Q_MATRIX_AT(m, 1, 1)) - q_product(Q_MATRIX_AT(m, 0, 1), Q_MATRIX_AT(m, 1, 0));
+        ret = q_product(ret, Q_MATRIX_AT(&U, i, i));
     }
 
-    // The following is a block of code to make sure that the Laplace expansion happens at this specific point and no memory is allocated if the base case is the one that is being executed
-    {
-        // Calculate the determinant using the Laplace expansion
-        q_matrix_t temp = q_matrix_alloc(m->rows - 1, m->cols - 1); // Temporary matrix to store the submatrix for the Laplace expansion
-        q_t sign = Q_ONE; // Sign of the current term in the Laplace expansion
-
-        for(size_t i = 0; i < m->rows; i++)
-        {
-            q_matrix_submatrix(m, &temp, 0, i); // Get the submatrix for the Laplace expansion
-            ret += q_product(sign, q_product(Q_MATRIX_AT(m, 0, i),  q_matrix_determinant(&temp))); // Calculate the determinant of the submatrix and multiply by the current element in the matrix
-            sign = -sign; // Change the sign for the next term in the Laplace expansion
-        }
-
-        q_matrix_free(&temp); // Free the memory allocated for the temporary matrix
-    }
+    q_matrix_free(&L); // Free the lower triangular matrix
+    q_matrix_free(&U); // Free the upper triangular matrix
 
     return ret;
 }
