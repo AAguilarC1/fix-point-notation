@@ -38,6 +38,10 @@ typedef struct matrix_t q_matrix_t;
 
 q_matrix_t q_matrix_alloc(size_t rows, size_t cols);
 
+void q_matrix_slice_row(const q_matrix_t* m, q_matrix_t* dst, size_t row);
+void q_matrix_slice_col(const q_matrix_t* m, q_matrix_t* dst, size_t col);
+void q_matrix_submatrix(const q_matrix_t* m, q_matrix_t* dst, size_t row, size_t col);
+
 void q_matrix_fill(const q_matrix_t* m, q_t value);
 void q_matrix_identity(const q_matrix_t* m);
 void q_matrix_fill_rand(const q_matrix_t* m, q_t min, q_t max);
@@ -51,10 +55,6 @@ q_t q_matrix_determinant(const q_matrix_t* m);
 void q_matrix_transpose(const q_matrix_t* m, q_matrix_t* dst);
 void q_matrix_inverse(const q_matrix_t* m, q_matrix_t* dst);
 void q_cross_product(const q_matrix_t* a, const q_matrix_t* b, q_matrix_t* dst);
-
-void q_matrix_slice_row(const q_matrix_t* m, q_matrix_t* dst, size_t row);
-void q_matrix_slice_col(const q_matrix_t* m, q_matrix_t* dst, size_t col);
-void q_matrix_submatrix(const q_matrix_t* m, q_matrix_t* dst, size_t row, size_t col);
 
 void q_matrix_dot_product(const q_matrix_t* a, const q_matrix_t* b, q_matrix_t* dst);
 

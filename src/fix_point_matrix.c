@@ -22,6 +22,133 @@ q_matrix_t q_matrix_alloc(size_t rows, size_t cols)
 }
 
 /**
+ * @brief The function returns a slice of the matrix with the specified row
+ * @details The row number starts from 0 to N-1, where N is the number of rows in the matrix. Meaning that the row index is zero-based.
+ * 
+ * @example
+ * q_matrix_t m = q_matrix_alloc(2, 2);
+ * q_matrix_t dst = q_matrix_alloc(1, 2);
+ * q_ones(&m);
+ * Q_MATRIX_AT(&m, 0, 0) = float_to_q(2.0f);
+ * q_matrix_slice_row(&m, &dst, 0);
+ * Q_MATRIX_PRINT(dst);
+ * 
+ * Output:
+ * dst: [
+ * 2.000000, 1.000000,
+ * ] 
+ * 
+ * @param m The reference to the matrix of fixed point numbers
+ * @param dst The slice of the matrix with the specified row
+ * @param row The row number to slice
+ */
+void q_matrix_slice_row(const q_matrix_t* m, q_matrix_t* dst, size_t row)
+{
+    Q_MATRIX_ASSERT(m);
+    Q_MATRIX_ASSERT(dst);
+
+    // Assert that the row index is within the bounds of the matrix
+    assert((row < m->rows) && "Selected row index out of bounds for the row slice");
+    
+    // Assert that the destination matrix has the same number of columns as the source matrix
+    assert((dst->cols == m->cols) && "Destination matrix has different number of columns for the row slice");
+
+    for(size_t j = 0; j < m->cols; j++){
+        Q_MATRIX_AT(dst, 0, j) = Q_MATRIX_AT(m, row, j);
+    }
+}
+
+/**
+ * @brief The following function returns a slice of the matrix with the specified column
+ * @details The column number starts from 0 to N-1, where N is the number of columns in the matrix. Meaning that the column index is zero-based.
+ * 
+ * @param m The reference to the matrix of fixed point numbers
+ * @param dst The slice of the matrix with the specified column
+ * @param col The column number to slice
+ */
+void q_matrix_slice_col(const q_matrix_t* m, q_matrix_t* dst, size_t col)
+{
+    Q_MATRIX_ASSERT(m);
+    Q_MATRIX_ASSERT(dst);
+
+    // Assert that the column index is within the bounds of the matrix
+    assert((col < m->cols) && "Selected column index out of bounds for the column slice");
+    
+    // Assert that the destination matrix has the same number of rows as the source matrix
+    assert((dst->rows == m->rows) && "Destination matrix has different number of rows for the column slice");
+
+    for(size_t i = 0; i < m->rows; i++){
+        Q_MATRIX_AT(dst, i, 0) = Q_MATRIX_AT(m, i, col);
+    }
+}
+
+/** @brief The function returns a submatrix of the matrix with the specified row and column
+ * @details The row and column numbers start from 0 to N-1, where N is the number of rows or columns in the matrix. Meaning that the row and column index is zero-based.
+ * 
+ * @example
+ * q_matrix_t m = q_matrix_alloc(3, 3);
+ * q_matrix_t dst = q_matrix_alloc(2, 2);
+ * q_ones(&m);
+ * Q_MATRIX_AT(&m, 0, 0) = float_to_q(2.0f);
+ * 
+ * q_matrix_submatrix(&m, &dst, 0, 0);
+ * Q_MATRIX_PRINT(m);
+ * Q_MATRIX_PRINT(dst);
+ * 
+ * Output:
+ * m: [
+ * 2.000000, 1.000000, 1.000000,
+ * 1.000000, 1.000000, 1.000000,
+ * 1.000000, 1.000000, 1.000000,
+ * ]
+ * 
+ * dst: [
+ * 1.000000, 1.000000,
+ * 1.000000, 1.000000,
+ * ]
+ * 
+ * @param m The reference to the matrix of fixed point numbers
+ * @param dst The submatrix of the matrix with the specified row and column
+ * @param row The row number to slice
+ * @param col The column number to slice
+ */
+void q_matrix_submatrix(const q_matrix_t* m, q_matrix_t* dst, size_t row, size_t col)
+{
+    Q_MATRIX_ASSERT(m);
+    Q_MATRIX_ASSERT(dst);
+
+    // Assert that the row index and the column index is within the bounds of the matrix
+    assert((row < m->rows) && "Selected row index out of bounds for the submatrix");
+    assert((col < m->cols) && "Selected column index out of bounds for the submatrix");
+
+    // Assert the dimensions of the destination matrix
+    assert((dst->rows == m->rows - 1) && "Destination matrix has an invalid number of rows for the submatrix");
+    assert((dst->cols == m->cols - 1) && "Destination matrix has an invalid number of columns for the submatrix");
+
+    // n represents the row index and k represents the column index for the destination matrix
+    size_t n = 0, k = 0; // Initialize the indexes for the destination matrix 
+
+    for(size_t i = 0; i < m->rows; i++)
+    {
+        for(size_t j = 0; j < m->cols; j++)
+        {
+            if(i != row && j != col)
+            {
+                Q_MATRIX_AT(dst, n, k) = Q_MATRIX_AT(m, i, j);
+                k++;
+                if(k == dst->cols)
+                {
+                    k = 0;
+                    n++;
+                }
+            }
+        }
+    }
+
+}
+
+
+/**
  * @brief The function fills the matrix with a fixed point number of an specified value.
  * 
  * @param m The reference to the matrix of fixed point numbers
