@@ -230,6 +230,65 @@ void q_matrix_fill_rand(const q_matrix_t* m, q_t min, q_t max)
     }
 }
 
+// MARK: Matrix operations
+/**
+ * @brief The function computes the determinant of the matrix of fixed point numbers. 
+ * @details The matrix must be square shape to calculate the determinant. This function uses the Laplace expansion to calculate the determinant.
+ * 
+ * @example 
+ * q_matrix_t m = q_matrix_alloc(2, 2);
+ * q_ones(&m);
+ * Q_MATRIX_AT(&m, 0, 0) = float_to_q(2.0f);
+ * q_t det = q_matrix_determinant(&m);
+ * 
+ * printf("Determinant: %f\n", q_to_float(det));
+ * 
+ * Output:
+ * Determinant: 1.000000
+ * 
+ * @param m The reference to the matrix of fixed point numbers
+ * @return q_t The determinant of the matrix
+ */
+q_t q_matrix_determinant(const q_matrix_t* m)
+{
+    Q_MATRIX_ASSERT(m);
+
+    // Assert that the matrix is square shape
+    assert((m->rows == m->cols) && "Matrix is not square shape when calculating the determinant");
+    q_t ret = Q_ZERO;
+
+    // Base case for the determinant of a 2x2 matrix
+    if(m->cols == 2 && m->rows == 2)
+    {
+        /*
+        The determinant of a 2x2 matrix is calculated as follows:
+        A = | a b |
+            | c d |
+
+        det(A) = a*d - b*c
+        */
+        return q_product(Q_MATRIX_AT(m, 0, 0), Q_MATRIX_AT(m, 1, 1)) - q_product(Q_MATRIX_AT(m, 0, 1), Q_MATRIX_AT(m, 1, 0));
+    }
+
+    // The following is a block of code to make sure that the Laplace expansion happens at this specific point and no memory is allocated if the base case is the one that is being executed
+    {
+        // Calculate the determinant using the Laplace expansion
+        q_matrix_t temp = q_matrix_alloc(m->rows - 1, m->cols - 1); // Temporary matrix to store the submatrix for the Laplace expansion
+        q_t sign = Q_ONE; // Sign of the current term in the Laplace expansion
+
+        for(size_t i = 0; i < m->rows; i++)
+        {
+            q_matrix_submatrix(m, &temp, 0, i); // Get the submatrix for the Laplace expansion
+            ret += q_product(sign, q_product(Q_MATRIX_AT(m, 0, i),  q_matrix_determinant(&temp))); // Calculate the determinant of the submatrix and multiply by the current element in the matrix
+            sign = -sign; // Change the sign for the next term in the Laplace expansion
+        }
+
+        q_matrix_freeDeep(&temp); // Free the memory allocated for the temporary matrix
+    }
+
+    return ret;
+}
+
 /**
  * @brief This function sums two matrices of fixed point numbers and stores the result in the destination matrix.
  * @example 

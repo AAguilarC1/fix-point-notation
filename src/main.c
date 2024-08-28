@@ -48,6 +48,14 @@ int main() {
     q_matrix_elementwise_mul(&m5, &m6, &m7);
     Q_MATRIX_PRINT(m7);
 
+    q_matrix_t m8 = q_matrix_square_alloc(3);
+    q_ones(&m8);
+    Q_MATRIX_AT(&m8, 1, 1) = float_to_q(2.0f);
+    Q_MATRIX_AT(&m8, 2, 2) = float_to_q(3.0f);
+
+    q_t det = q_matrix_determinant(&m8);
+    printf("Determinant of 'm8': %f\n", q_to_float(det));
+    
     q_matrix_freeDeep(&m);
     q_matrix_freeDeep(&m2);
     q_matrix_freeDeep(&m3);
@@ -55,6 +63,7 @@ int main() {
     q_matrix_freeDeep(&m5);
     q_matrix_freeDeep(&m6);
     q_matrix_freeDeep(&m7);
+    q_matrix_freeDeep(&m8);
 
     return 0;
 }
