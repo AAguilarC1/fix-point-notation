@@ -36,6 +36,12 @@ struct matrix_t {
 };
 typedef struct matrix_t q_matrix_t;
 
+enum status_t {
+    Q_MATRIX_OK = 0,
+    Q_MATRIX_ERROR = 1
+};
+typedef enum status_t q_status_t;
+
 q_matrix_t q_matrix_alloc(size_t rows, size_t cols);
 
 void q_matrix_slice_row(const q_matrix_t* m, q_matrix_t* dst, size_t row);
@@ -58,11 +64,16 @@ void q_matrix_sum(const q_matrix_t* a, const q_matrix_t* b, q_matrix_t* dst);
 void q_matrix_scalar_mul(const q_matrix_t* m, q_t scalar);
 void q_matrix_elementwise_mul(const q_matrix_t* a, const q_matrix_t* b, q_matrix_t* dst);
 
+q_t q_matrix_trace(const q_matrix_t* m);
+q_t q_matrix_sum_contents(const q_matrix_t* m);
+
 //TODO: Implement the following functions
 void q_matrix_inverse(const q_matrix_t* m, q_matrix_t* dst);
 void q_cross_product(const q_matrix_t* a, const q_matrix_t* b, q_matrix_t* dst);
 
 void q_matrix_dot_product(const q_matrix_t* a, const q_matrix_t* b, q_matrix_t* dst);
+
+q_status_t q_matrix_is_equal(const q_matrix_t* a, const q_matrix_t* b);
 
 void q_matrix_cpy(const q_matrix_t* src, q_matrix_t* dst);
 void q_matrix_free(q_matrix_t* m);

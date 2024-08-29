@@ -794,6 +794,31 @@ void q_matrix_dot_product(const q_matrix_t* a, const q_matrix_t* b, q_matrix_t* 
     }
 }
 
+q_status_t q_matrix_is_equal(const q_matrix_t* a, const q_matrix_t* b)
+{
+    Q_MATRIX_ASSERT(a);
+    Q_MATRIX_ASSERT(b);
+
+    if(a->rows != b->rows || a->cols != b->cols)
+    {
+        return Q_MATRIX_ERROR;
+    }
+
+    for(size_t i = 0; i < a->rows; i++)
+    {
+        for(size_t j = 0; j < a->cols; j++)
+        {
+            if(Q_MATRIX_AT(a, i, j) != Q_MATRIX_AT(b, i, j))
+            {
+                return Q_MATRIX_ERROR;
+            }
+        }
+    }
+
+    return Q_MATRIX_OK;
+}
+
+
 // MARK: Matrix memory management
 
 /**
