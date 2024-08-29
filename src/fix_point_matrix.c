@@ -788,6 +788,79 @@ void q_matrix_elementwise_mul(const q_matrix_t* a, const q_matrix_t* b, q_matrix
 }
 
 /**
+ * @brief The function calculates the trace of the matrix of fixed point numbers. 
+ * @details The trace of a square matrix is the sum of the principal diagonal elements of the matrix.
+ * 
+ * @example
+ * q_matrix_t m = q_matrix_alloc(2, 2);
+ * q_ones(&m);
+ * q_t trace = q_matrix_trace(&m);
+ * Q_MATRIX_PRINT(m);
+ * 
+ * printf("Trace: %f\n", q_to_float(trace));
+ * 
+ * Output:
+ * m: [
+ * 1.000000, 1.000000,
+ * 1.000000, 1.000000,
+ * ]
+ * 
+ * Trace: 2.000000
+ * 
+ * @param m The reference to the matrix of fixed point numbers
+ * @return q_t The trace of the matrix
+ */
+q_t q_matrix_trace(const q_matrix_t* m)
+{
+    Q_MATRIX_ASSERT(m);
+
+    assert((m->rows == m->cols) && "Matrix is not square shape when calculating the trace");
+
+    q_t ret = Q_ZERO;
+
+    for(size_t i = 0; i < m->rows; i++)
+    {
+        ret += Q_MATRIX_AT(m, i, i);
+    }
+
+    return ret;
+}
+
+/**
+ * @brief Sum the contents of the matrix of fixed point numbers.
+ * @details The function sums all the elements of the matrix and returns the result.
+ * 
+ * @example
+ * q_matrix_t m = q_matrix_alloc(2, 2);
+ * q_ones(&m);
+ * q_t sum = q_matrix_sum_contents(&m);
+ * 
+ * printf("Sum: %f\n", q_to_float(sum));
+ * 
+ * Output:
+ * Sum: 4.000000
+ * 
+ * @param m The reference to the matrix of fixed point numbers
+ * @return q_t The resulting sum of the elements of the matrix
+ */
+q_t q_matrix_sum_contents(const q_matrix_t* m)
+{
+    Q_MATRIX_ASSERT(m);
+
+    q_t ret = Q_ZERO;
+
+    for(size_t i = 0; i < m->rows; i++)
+    {
+        for(size_t j = 0; j < m->cols; j++)
+        {
+            ret += Q_MATRIX_AT(m, i, j);
+        }
+    }
+
+    return ret;
+}
+
+/**
  * @brief The function computes the dot product of two matrices of fixed point numbers.
  * @details The number of columns of the first matrix must be equal to the number of rows of the second matrix.
  * 
