@@ -637,10 +637,27 @@ q_t q_matrix_determinant(const q_matrix_t* m)
     assert((m->rows == m->cols) && "Matrix is not square shape when calculating the determinant");
     q_t ret = Q_ONE;
 
+    q_matrix_t P = q_matrix_square_alloc(m->rows); // Allocate the permutation matrix
     q_matrix_t L = q_matrix_square_alloc(m->rows); // Allocate the lower triangular matrix
     q_matrix_t U = q_matrix_square_alloc(m->rows); // Allocate the upper triangular matrix
 
-    q_matrix_LU_decomposition(m, &L, &U); // Compute the LU decomposition of the matrix
+    q_matrix_PLU_decomposition(m, &P, &L, &U); // Compute the PLU decomposition of the matrix
+
+    q_t sign = Q_ONE;
+
+    // Calculate the sign of the permutation matrix
+    for(size_t i = 0; i < m->rows; i++)
+    {
+        /*
+        The sign of the permutation matrix is calculated by counting the number of row swaps.
+        If the number of row swaps is even, the sign is positive.
+        If the number of row swaps is odd, the sign is negative.
+        */
+        if(Q_MATRIX_AT(&P, i, i) != INT_TO_Q(i))
+        {
+            sign = -sign;
+        }
+    }
 
     for(size_t i = 0; i < m->rows; i++)
     {
@@ -653,8 +670,10 @@ q_t q_matrix_determinant(const q_matrix_t* m)
 
     q_matrix_free(&L); // Free the lower triangular matrix
     q_matrix_free(&U); // Free the upper triangular matrix
+    q_matrix_free(&P); // Free the permutation matrix
     
-    return ret;
+    return q_product(ret, sign);
+    // return ret;
 }
 
 /**
