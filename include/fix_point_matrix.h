@@ -43,9 +43,15 @@ void q_matrix_slice_col(const q_matrix_t* m, q_matrix_t* dst, size_t col);
 void q_matrix_submatrix(const q_matrix_t* m, q_matrix_t* dst, size_t row, size_t col);
 void q_matrix_transpose(const q_matrix_t* m, q_matrix_t* dst);
 
+void q_matrix_switch_rows(const q_matrix_t* m, q_matrix_t* dst, size_t row1, size_t row2);
+void q_matrix_switch_cols(const q_matrix_t* m, q_matrix_t* dst, size_t col1, size_t col2);
+
 void q_matrix_fill(const q_matrix_t* m, q_t value);
 void q_matrix_identity(const q_matrix_t* m);
 void q_matrix_fill_rand(const q_matrix_t* m, q_t min, q_t max);
+
+void q_matrix_LU_decomposition(const q_matrix_t* m, q_matrix_t* L, q_matrix_t* U);
+void q_matrix_PLU_decomposition(const q_matrix_t* m , q_matrix_t* P, q_matrix_t* L, q_matrix_t* U);
 
 q_t q_matrix_determinant(const q_matrix_t* m);
 void q_matrix_sum(const q_matrix_t* a, const q_matrix_t* b, q_matrix_t* dst);

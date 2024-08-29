@@ -178,6 +178,70 @@ void q_matrix_submatrix(const q_matrix_t* m, q_matrix_t* dst, size_t row, size_t
 
 }
 
+/**
+ * @brief This function changes the rows of the matrix m for two given rows in the destination matrix dst.
+ * 
+ * @param m The reference to the matrix of fixed point numbers
+ * @param dst The output matrix with the switched rows
+ * @param row1 The first row to switch
+ * @param row2 The second row to switch
+ */
+void q_matrix_switch_rows(const q_matrix_t* m, q_matrix_t* dst, size_t row1, size_t row2)
+{
+    Q_MATRIX_ASSERT(m);
+    Q_MATRIX_ASSERT(dst);
+
+    // Assert that the row indexes are within the bounds of the matrix
+    assert((row1 < m->rows) && "Selected row index out of bounds for the row switch");
+    assert((row2 < m->rows) && "Selected row index out of bounds for the row switch");
+
+    // Assert dimensions of the matrices
+    assert((m->cols == dst->cols) && "Source and destination matrices have different number of columns (Can not switch rows)");
+    assert((m->rows == dst->rows) && "Source and destination matrices have different number of rows (Can not switch rows)");
+
+    q_matrix_cpy(m, dst); // Copy the source matrix to the destination matrix
+
+    for(size_t j = 0; j < m->cols; j++)
+    {
+        q_t temp = Q_MATRIX_AT(dst, row1, j);
+        Q_MATRIX_AT(dst, row1, j) = Q_MATRIX_AT(dst, row2, j);
+        Q_MATRIX_AT(dst, row2, j) = temp;
+    }
+
+}
+
+/**
+ * @brief This function switches the columns of the matrix m for two specified columns into the dst matrix.
+ * 
+ * @param m The reference to the matrix of fixed point numbers
+ * @param dst The output matrix with the switched columns
+ * @param col1 The first column to switch
+ * @param col2 The second column to switch
+ */
+void q_matrix_switch_cols(const q_matrix_t* m, q_matrix_t* dst, size_t col1, size_t col2)
+{
+    Q_MATRIX_ASSERT(m);
+    Q_MATRIX_ASSERT(dst);
+
+    // Assert that the column indexes are within the bounds of the matrix
+    assert((col1 < m->cols) && "Selected column index out of bounds for the column switch");
+    assert((col2 < m->cols) && "Selected column index out of bounds for the column switch");
+
+    // Assert dimensions of the matrices
+    assert((m->cols == dst->cols) && "Source and destination matrices have different number of columns (Can not switch columns)");
+    assert((m->rows == dst->rows) && "Source and destination matrices have different number of rows (Can not switch columns)");
+
+    q_matrix_cpy(m, dst); // Copy the source matrix to the destination matrix
+
+    for(size_t i = 0; i < m->rows; i++)
+    {
+        q_t temp = Q_MATRIX_AT(dst, i, col1);
+        Q_MATRIX_AT(dst, i, col1) = Q_MATRIX_AT(dst, i, col2);
+        Q_MATRIX_AT(dst, i, col2) = temp;
+    }
+
+}
+
 // MARK: Matrix filling
 /**
  * @brief The function fills the matrix with a fixed point number of an specified value.
@@ -383,6 +447,19 @@ void q_matrix_LU_decomposition(const q_matrix_t* m, q_matrix_t* L, q_matrix_t* U
             }
         }
     }
+}
+
+void q_matrix_PLU_decomposition(const q_matrix_t* m , q_matrix_t* P, q_matrix_t* L, q_matrix_t* U)
+{
+    Q_MATRIX_ASSERT(m);
+    Q_MATRIX_ASSERT(P);
+    Q_MATRIX_ASSERT(L);
+    Q_MATRIX_ASSERT(U);
+
+    q_matrix_identity(P); // Fill the permutation matrix with the identity matrix
+    q_matrix_identity(L); // Fill the lower triangular matrix with the identity matrix    
+    q_matrix_cpy(m, U); // Copy the input matrix to the upper triangular matrix
+
 }
 
 /**
