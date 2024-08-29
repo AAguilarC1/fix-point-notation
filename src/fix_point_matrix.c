@@ -556,6 +556,50 @@ void q_matrix_PLU_decomposition(const q_matrix_t* m , q_matrix_t* P, q_matrix_t*
     q_matrix_identity(L); // Fill the lower triangular matrix with the identity matrix    
     q_matrix_cpy(m, U); // Copy the input matrix to the upper triangular matrix
 
+    for(size_t i = 0; i < m->rows; i++)
+    {
+        // Find the pivot element
+        size_t max_idx = i;
+        q_t max_val = q_absolute(Q_MATRIX_AT(U, max_idx, i));
+
+        for(size_t t = i; t < m->rows; t++)
+        {
+            if(q_absolute(Q_MATRIX_AT(U, t, i)) > max_val)
+            {
+                max_idx = t;
+            }
+        }
+
+        // Swap the rows of the permutation matrix
+        if(max_idx != i)
+        {
+            q_matrix_switch_rows(P, P, i, max_idx);
+            q_matrix_switch_rows(U, U, i, max_idx);
+        }
+
+        for(size_t j = i + 1; j < m->rows; j++)
+        {
+            // Calculate the elements of the lower triangular matrix
+            /*
+            L[i][j] = U[i][j] / U[i][i]
+            */
+            // If the diagonal element is zero, the matrix is singular
+                // In this case, the LU decomposition is not possible
+            
+            Q_MATRIX_AT(L, j, i) = q_division(Q_MATRIX_AT(U, j, i), Q_MATRIX_AT(U, i, i));
+
+            for(size_t k = i; k < m->rows; k++)
+            {
+                // Calculate the elements of the upper triangular matrix
+                /*
+                U[j][k] = U[j][k] - L[j][i] * U[i][k]
+                */
+                Q_MATRIX_AT(U, j, k) = Q_MATRIX_AT(U, j, k) - q_product(Q_MATRIX_AT(L, j, i), Q_MATRIX_AT(U, i, k));
+            }
+
+        }
+    }
+
 }
 
 /**
