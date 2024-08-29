@@ -180,6 +180,29 @@ void q_matrix_submatrix(const q_matrix_t* m, q_matrix_t* dst, size_t row, size_t
 
 /**
  * @brief This function changes the rows of the matrix m for two given rows in the destination matrix dst.
+ * @details The row indexes are zero-based.
+ * 
+ * @example
+ * q_matrix_t m = q_matrix_alloc(2, 2);
+ * q_matrix_t dst = q_matrix_alloc(2, 2);
+ * 
+ * q_ones(&m);
+ * Q_MATRIX_AT(&m, 0, 0) = float_to_q(2.0f);
+ * 
+ * q_matrix_switch_rows(&m, &dst, 0, 1);
+ * Q_MATRIX_PRINT(m);
+ * Q_MATRIX_PRINT(dst);
+ * 
+ * Output:
+ * m: [
+ * 2.000000, 1.000000,
+ * 1.000000, 1.000000,
+ * ]
+ * 
+ * dst: [
+ * 1.000000, 1.000000,
+ * 2.000000, 1.000000,
+ * ]
  * 
  * @param m The reference to the matrix of fixed point numbers
  * @param dst The output matrix with the switched rows
@@ -212,6 +235,30 @@ void q_matrix_switch_rows(const q_matrix_t* m, q_matrix_t* dst, size_t row1, siz
 
 /**
  * @brief This function switches the columns of the matrix m for two specified columns into the dst matrix.
+ * @details The column indexes are zero-based. 
+ * 
+ * @example
+ * q_matrix_t m = q_matrix_alloc(2, 2);
+ * q_matrix_t dst = q_matrix_alloc(2, 2);
+ * 
+ * q_ones(&m);
+ * Q_MATRIX_AT(&m, 0, 0) = float_to_q(2.0f);
+ * 
+ * q_matrix_switch_cols(&m, &dst, 0, 1);
+ * Q_MATRIX_PRINT(m);
+ * Q_MATRIX_PRINT(dst);
+ * 
+ * Output:
+ * m: [
+ * 2.000000, 1.000000,
+ * 1.000000, 1.000000,
+ * ]
+ * 
+ * dst: [
+ * 1.000000, 2.000000,
+ * 1.000000, 1.000000,
+ * ]
+ * 
  * 
  * @param m The reference to the matrix of fixed point numbers
  * @param dst The output matrix with the switched columns
