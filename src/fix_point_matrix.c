@@ -179,6 +179,55 @@ void q_matrix_submatrix(const q_matrix_t* m, q_matrix_t* dst, size_t row, size_t
 }
 
 /**
+ * @brief The function transposes the matrix of fixed point numbers and stores the result in the destination matrix.
+ * 
+ * @details The transpose of a matrix is a new matrix whose rows are the columns of the original matrix and whose columns are the rows of the original matrix.
+ * 
+ * @example
+ * q_matrix_t m = q_matrix_alloc(2, 3);
+ * q_matrix_t dst = q_matrix_alloc(3, 2);
+ * 
+ * q_ones(&m);
+ * Q_MATRIX_AT(&m, 0, 0) = float_to_q(2.0f);
+ * 
+ * q_matrix_transpose(&m, &dst);
+ * Q_MATRIX_PRINT(m);
+ * Q_MATRIX_PRINT(dst);
+ * 
+ * Output:
+ * m: [
+ * 2.000000, 1.000000, 1.000000,
+ * 1.000000, 1.000000, 1.000000,
+ * ]
+ * 
+ * dst: [
+ * 2.000000, 1.000000,
+ * 1.000000, 1.000000,
+ * 1.000000, 1.000000,
+ * ]
+ * 
+ * @param m The original matrix of fixed point numbers
+ * @param dst The destination matrix with the transposed matrix
+ */
+void q_matrix_transpose(const q_matrix_t* m, q_matrix_t* dst)
+{
+    Q_MATRIX_ASSERT(m);
+    Q_MATRIX_ASSERT(dst);
+
+    // Assert the dimensions of the matrices
+    assert((m->rows == dst->cols) && "Destination matrix has different number of columns than the source matrix (Can not perform transpose)");
+    assert((m->cols == dst->rows) && "Destination matrix has different number of rows than the source matrix (Can not perform transpose)");
+
+    for(size_t i = 0; i < m->rows; i++)
+    {
+        for(size_t j = 0; j < m->cols; j++)
+        {
+            Q_MATRIX_AT(dst, j, i) = Q_MATRIX_AT(m, i, j);
+        }
+    }
+}
+
+/**
  * @brief This function changes the rows of the matrix m for two given rows in the destination matrix dst.
  * @details The row indexes are zero-based.
  * 
