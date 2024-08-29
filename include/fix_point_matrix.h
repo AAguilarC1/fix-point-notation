@@ -66,6 +66,9 @@ void q_matrix_elementwise_mul(const q_matrix_t* a, const q_matrix_t* b, q_matrix
 
 q_t q_matrix_trace(const q_matrix_t* m);
 q_t q_matrix_sum_contents(const q_matrix_t* m);
+q_t q_matrix_1_norm(const q_matrix_t* m);
+q_t q_matrix_infinity_norm(const q_matrix_t* m);
+q_t q_matrix_euclidean_norm(const q_matrix_t* m);
 
 //TODO: Implement the following functions
 void q_matrix_inverse(const q_matrix_t* m, q_matrix_t* dst);
@@ -73,7 +76,7 @@ void q_cross_product(const q_matrix_t* a, const q_matrix_t* b, q_matrix_t* dst);
 
 void q_matrix_dot_product(const q_matrix_t* a, const q_matrix_t* b, q_matrix_t* dst);
 
-q_status_t q_matrix_is_equal(const q_matrix_t* a, const q_matrix_t* b);
+q_status_t q_matrix_is_equal(const q_matrix_t* a, const q_matrix_t* b); 
 
 void q_matrix_cpy(const q_matrix_t* src, q_matrix_t* dst);
 void q_matrix_free(q_matrix_t* m);

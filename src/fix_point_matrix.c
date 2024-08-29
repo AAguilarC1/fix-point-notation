@@ -861,6 +861,174 @@ q_t q_matrix_sum_contents(const q_matrix_t* m)
 }
 
 /**
+ * @brief The 1-norm of a matrix is the maximum absolute column sum of the matrix. And then return the maximum value.
+ * @details The 1-norm of a matrix is the maximum absolute column sum of the matrix. The 1-norm is calculated as follows:
+ * 
+ * ||A||_1 = max( sum( |A[i][j]| ) )
+ * 
+ * where:
+ * A is the input matrix
+ * i is the row index
+ * j is the column index
+ * 
+ * The 1-norm is the maximum absolute column sum of the matrix.
+ * 
+ * @example
+ * q_matrix_t m = q_matrix_alloc(2, 2);
+ * q_ones(&m);
+ * Q_MATRIX_AT(&m, 0, 0) = float_to_q(2.0f);
+ * q_t norm = q_matrix_1_norm(&m);
+ * 
+ * Q_MATRIX_PRINT(m);
+ * printf("1-norm: %f\n", q_to_float(norm));
+ * 
+ * Output:
+ * m : [
+ * 2.000000, 1.000000,
+ * 1.000000, 1.000000,
+ * ]
+ * 
+ * 1-norm: 3.000000
+ * 
+ * @param m The reference to the matrix of fixed point numbers
+ * @return q_t The 1-norm of the matrix
+ */
+q_t q_matrix_1_norm(const q_matrix_t* m)
+{
+    Q_MATRIX_ASSERT(m);
+
+    q_t ret = Q_ZERO;
+
+    for(size_t i = 0; i < m->rows; i++)
+    {
+        q_t sum = Q_ZERO;
+
+        for(size_t j = 0; j < m->cols; j++)
+        {
+            sum += q_absolute(Q_MATRIX_AT(m, i, j));
+        }
+
+        if(sum > ret)
+        {
+            ret = sum;
+        }
+    }
+
+    return ret;
+}
+
+/**
+ * @brief The infinity norm of a matrix is the maximum absolute row sum of the matrix. And then return the maximum value.
+ * 
+ * @details The infinity norm of a matrix is the maximum absolute row sum of the matrix. The infinity norm is calculated as follows:
+ * 
+ * ||A||_inf = max( sum( |A[i][j]| ) )
+ * 
+ * where:
+ * A is the input matrix
+ * i is the row index
+ * j is the column index
+ * 
+ * The infinity norm is the maximum absolute row sum of the matrix.
+ * 
+ * @example
+ * q_matrix_t m = q_matrix_alloc(2, 2);
+ * q_ones(&m);
+ * Q_MATRIX_AT(&m, 0, 0) = float_to_q(2.0f);
+ * 
+ * q_t norm = q_matrix_infinity_norm(&m);
+ * 
+ * Q_MATRIX_PRINT(m);
+ * printf("Infinity norm: %f\n", q_to_float(norm));
+ * 
+ * Output:
+ * m: [
+ * 2.000000, 1.000000,
+ * 1.000000, 1.000000,
+ * ]
+ * 
+ * Infinity norm: 3.000000
+ * 
+ * @param m The reference to the matrix of fixed point numbers
+ * @return q_t The infinity norm of the matrix
+ */
+q_t q_matrix_infinity_norm(const q_matrix_t* m)
+{
+    Q_MATRIX_ASSERT(m);
+
+    q_t ret = Q_ZERO;
+
+    for(size_t j = 0; j < m->cols; j++)
+    {
+        q_t sum = Q_ZERO;
+
+        for(size_t i = 0; i < m->rows; i++)
+        {
+            sum += q_absolute(Q_MATRIX_AT(m, i, j));
+        }
+
+        if(sum > ret)
+        {
+            ret = sum;
+        }
+    }
+
+    return ret;
+}
+
+/**
+ * @brief The function computes the Euclidean norm of the matrix of fixed point numbers.
+ * 
+ * @details The Euclidean norm of a matrix is the square root of the sum of the squares of the elements of the matrix.
+ * The Euclidean norm is calculated as follows:
+ * 
+ * ||A||_2 = sqrt( sum( A[i][j]^2 ) )
+ * 
+ * where:
+ * A is the input matrix
+ * i is the row index
+ * j is the column index
+ * 
+ * @example
+ * q_matrix_t m = q_matrix_alloc(2, 2);
+ * q_ones(&m);
+ * Q_MATRIX_AT(&m, 0, 0) = float_to_q(2.0f);
+ * 
+ * q_t norm = q_matrix_euclidean_norm(&m);
+ * 
+ * Q_MATRIX_PRINT(m);
+ * printf("Euclidean norm: %f\n", q_to_float(norm)); 
+ * 
+ * Output:
+ * m: [
+ * 2.000000, 1.000000,
+ * 1.000000, 1.000000,
+ * ]
+ * 
+ * Euclidean norm: 2.6457513110645907
+ * 
+ * @param m The reference to the matrix of fixed point numbers
+ * @return q_t The Euclidean norm of the matrix
+ */
+q_t q_matrix_euclidean_norm(const q_matrix_t* m)
+{
+    Q_MATRIX_ASSERT(m);
+
+    q_t ret = Q_ZERO;
+
+    for(size_t i = 0; i < m->rows; i++)
+    {
+        for(size_t j = 0; j < m->cols; j++)
+        {
+            ret += q_int_power(Q_MATRIX_AT(m, i, j), 2);
+        }
+    }
+
+    return q_sqrt(ret);
+}
+
+
+/**
  * @brief The function computes the dot product of two matrices of fixed point numbers.
  * @details The number of columns of the first matrix must be equal to the number of rows of the second matrix.
  * 
