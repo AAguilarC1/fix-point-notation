@@ -588,6 +588,122 @@ void q_matrix_PLU_decomposition(const q_matrix_t* m , q_matrix_t* P, q_matrix_t*
 
 }
 
+void q_matrix_forward_substitution(const q_matrix_t* L, const q_matrix_t* b, const q_matrix_t* X)
+{
+    Q_MATRIX_ASSERT(L);
+    Q_MATRIX_ASSERT(b);
+    Q_MATRIX_ASSERT(X);
+
+    assert((L->rows == L->cols) && "Matrix L is not square shape when performing forward substitution");
+
+    assert((L->rows == b->rows) && "Matrix L and b have different number of rows (Can not perform forward substitution)");
+    assert((b->cols == 1) && "Matrix b is not a column vector (Can not perform forward substitution)");
+
+    assert((X->rows == b->rows) && "Destination matrix and b have different number of rows (Can not perform forward substitution)");
+    assert((X->cols == 1) && "Destination matrix is not a column vector (Can not perform forward substitution)");
+
+    q_zeros(X); // Fill the X vector with zeros
+
+    for(int i = 0; i < L->rows; i++)
+    {
+        q_t temp = Q_MATRIX_AT(b, i, 0);
+        for(int j = 0; j < (i - 1); j++)
+        {
+            temp -= q_product(Q_MATRIX_AT(L, i, j), Q_MATRIX_AT(X, j, 0));
+        }
+
+        Q_MATRIX_AT(X, i, 0) = q_division(temp, Q_MATRIX_AT(L, i, i));
+
+    }
+
+}
+
+void q_matrix_back_substitution(const q_matrix_t* U, const q_matrix_t* b, const q_matrix_t* X)
+{
+    Q_MATRIX_ASSERT(U);
+    Q_MATRIX_ASSERT(b);
+    Q_MATRIX_ASSERT(X);
+
+    assert((U->rows == U->cols) && "Matrix U is not square shape when performing back substitution");
+
+    assert((U->rows == b->rows) && "Matrix U and b have different number of rows (Can not perform back substitution)");
+    assert((b->cols == 1) && "Matrix b is not a column vector (Can not perform back substitution)");
+
+    assert((X->rows == b->rows) && "Destination matrix and b have different number of rows (Can not perform back substitution)");
+    assert((X->cols == 1) && "Destination matrix is not a column vector (Can not perform back substitution)");
+
+    q_zeros(X); // Fill the X vector with zeros
+
+    for(int i = U->rows - 1; i >= 0; i--)
+    {
+        q_t temp = Q_MATRIX_AT(b, i, 0);
+        for(int j = i + 1; j < U->cols; j++)
+        {
+            temp -= q_product(Q_MATRIX_AT(U, i, j), Q_MATRIX_AT(X, j, 0));
+        }
+
+        Q_MATRIX_AT(X, i, 0) = q_division(temp, Q_MATRIX_AT(U, i, i));
+
+    }
+}
+
+void q_matrix_LU_solve(const q_matrix_t* L, const q_matrix_t* U, const q_matrix_t* b, const q_matrix_t* X)
+{
+    Q_MATRIX_ASSERT(L); 
+    Q_MATRIX_ASSERT(U);
+    Q_MATRIX_ASSERT(b);
+    Q_MATRIX_ASSERT(X);
+
+    assert((L->rows == L->cols) && "Matrix L is not square shape when solving the system of linear equations");
+    assert((U->rows == U->cols) && "Matrix U is not square shape when solving the system of linear equations");
+
+    assert((L->rows == U->rows) && "Matrix L and U have different number of rows when solving the system of linear equations");
+    
+    assert((L->rows == b->rows) && "Matrix L and b have different number of rows when solving the system of linear equations");
+    assert((b->cols == 1) && "Matrix b is not a column vector when solving the system of linear equations");
+
+    assert((X->rows == b->rows) && "Destination matrix and b have different number of rows when solving the system of linear equations");
+    assert((X->cols == 1) && "Destination matrix is not a column vector when solving the system of linear equations");
+
+    q_matrix_t Y = q_matrix_alloc(b->rows, b->cols); // Allocate the Y vector
+
+    q_matrix_forward_substitution(L, b, &Y); // Perform forward substitution
+    q_matrix_back_substitution(U, &Y, X); // Perform back substitution
+
+    q_matrix_free(&Y); // Free the Y vector
+    
+}
+
+void q_matrix_LUP_solve(const q_matrix_t* L, const q_matrix_t* U, const q_matrix_t* P, const q_matrix_t* b, const q_matrix_t* X)
+{
+    Q_MATRIX_ASSERT(L); 
+    Q_MATRIX_ASSERT(U);
+    Q_MATRIX_ASSERT(P);
+    Q_MATRIX_ASSERT(b);
+    Q_MATRIX_ASSERT(X);
+
+    assert((L->rows == L->cols) && "Matrix L is not square shape when solving the system of linear equations");
+    assert((U->rows == U->cols) && "Matrix U is not square shape when solving the system of linear equations");
+    assert((P->rows == P->cols) && "Matrix P is not square shape when solving the system of linear equations");
+
+    assert((L->rows == U->rows) && "Matrix L and U have different number of rows when solving the system of linear equations");
+    assert((L->rows == P->rows) && "Matrix L and P have different number of rows when solving the system of linear equations");
+
+    assert((L->rows == b->rows) && "Matrix L and b have different number of rows when solving the system of linear equations");
+    assert((b->cols == 1) && "Matrix b is not a column vector when solving the system of linear equations");
+
+    assert((X->rows == b->rows) && "Destination matrix and b have different number of rows when solving the system of linear equations");
+    assert((X->cols == 1) && "Destination matrix is not a column vector when solving the system of linear equations");
+
+    q_matrix_t z = q_matrix_alloc(b->rows, b->cols); // Allocate the z vector
+    q_matrix_dot_product(P, b, &z); // Perform the dot product between the permutation matrix and the b vector
+
+    q_matrix_LU_solve(L, U, &z, X); // Solve the system of linear equations using the LU decomposition
+
+    q_matrix_free(&z); // Free the z vector
+
+}
+
 /**
  * @brief This function sums two matrices of fixed point numbers and stores the result in the destination matrix.
  * @example 
@@ -1025,6 +1141,53 @@ q_t q_matrix_euclidean_norm(const q_matrix_t* m)
     return q_sqrt(ret);
 }
 
+void q_matrix_inverse(const q_matrix_t* m, q_matrix_t* dst)
+{
+    Q_MATRIX_ASSERT(m);
+    Q_MATRIX_ASSERT(dst);
+
+    assert((m->rows == m->cols) && "Matrix is not square shape when calculating the inverse");
+
+    q_matrix_t L = q_matrix_square_alloc(m->rows); // Allocate the lower triangular matrix
+    q_matrix_t U = q_matrix_square_alloc(m->rows); // Allocate the upper triangular matrix
+    q_matrix_t P = q_matrix_square_alloc(m->rows); // Allocate the permutation matrix
+
+    q_matrix_PLU_decomposition(m, &P, &L, &U); // Compute the PLU decomposition of the matrix
+
+    q_matrix_t I = q_matrix_square_alloc(m->rows); // Allocate the identity matrix
+    q_matrix_identity(&I); // Fill the identity matrix with the identity matrix
+
+    // q_matrix_t Y = q_matrix_alloc(m->rows, 1); // Allocate the Y vector
+    q_matrix_t X = q_matrix_alloc(m->rows, 1); // Allocate the X vector
+    q_matrix_t b = q_matrix_alloc(m->rows, 1); // Allocate the b vector
+
+    for(size_t i = 0; i < m->rows; i++)
+    {
+        if(i > 0)
+        {
+            Q_MATRIX_AT(&b, i - 1, 0) = Q_ZERO; // Set the (i - 1)-th element of the b vector to 0
+        }
+
+        Q_MATRIX_AT(&b, i, 0) = Q_ONE; // Set the i-th element of the b vector to 1
+
+        q_matrix_LUP_solve(&L, &U, &P, &b, &X); // Solve the system of linear equations
+
+        for(size_t j = 0; j < m->rows; j++)
+        {
+            Q_MATRIX_AT(dst, j, i) = Q_MATRIX_AT(&X, j, 0);
+        }
+
+    }
+
+    q_matrix_free(&b); // Free the b vector
+    q_matrix_free(&X); // Free the X vector
+    q_matrix_free(&I); // Free the identity matrix
+    q_matrix_free(&P); // Free the permutation matrix
+    q_matrix_free(&U); // Free the upper triangular matrix
+    q_matrix_free(&L); // Free the lower triangular matrix
+
+    return;
+}
 
 /**
  * @brief The function computes the dot product of two matrices of fixed point numbers.

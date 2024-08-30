@@ -61,6 +61,9 @@ void q_matrix_fill_rand(const q_matrix_t* m, q_t min, q_t max);
 
 void q_matrix_LU_decomposition(const q_matrix_t* m, q_matrix_t* L, q_matrix_t* U);
 void q_matrix_PLU_decomposition(const q_matrix_t* m , q_matrix_t* P, q_matrix_t* L, q_matrix_t* U);
+void q_matrix_forward_substitution(const q_matrix_t* L, const q_matrix_t* b, const q_matrix_t* X);
+void q_matrix_back_substitution(const q_matrix_t* U, const q_matrix_t* b, const q_matrix_t* X);
+void q_matrix_LU_solve(const q_matrix_t* L, const q_matrix_t* U, const q_matrix_t* b, const q_matrix_t* X);
 
 void q_matrix_sum(const q_matrix_t* a, const q_matrix_t* b, q_matrix_t* dst);
 void q_matrix_scalar_mul(const q_matrix_t* m, q_t scalar);
