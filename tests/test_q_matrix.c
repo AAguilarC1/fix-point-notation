@@ -198,6 +198,81 @@ void test_q_fill()
 
 }
 
+void test_q_matrix_LU_decomposition()
+{
+    /* We are evaluating the LU decomposition of a matrix with random values. We are checking if the matrix
+    was decomposed correctly by multiplying the lower and upper triangular matrices. 
+
+    A = L * U 
+
+    Where A is the original matrix, L is the lower triangular matrix, and U is the upper triangular matrix.
+    */
+
+    for(size_t i = 2; i < 20; i++)
+    {
+            q_matrix_t m = q_matrix_square_alloc(i);
+            q_matrix_t L = q_matrix_square_alloc(i);
+            q_matrix_t U = q_matrix_square_alloc(i);
+            q_matrix_t LU = q_matrix_square_alloc(i);
+
+            // Fill the matrix
+            q_matrix_fill_rand_float(&m, -10.0f, 10.0f);
+
+            // Perform the LU decomposition
+            q_matrix_LU_decomposition(&m, &L, &U);
+
+            // Check if the matrix was decomposed correctly
+            q_matrix_dot_product(&L, &U, &LU);
+            
+            CU_ASSERT_TRUE(q_matrix_is_approx_float(&m, &LU, 0.5f) == Q_MATRIX_OK); // The error coming from the fix point notation resolution
+
+            q_matrix_free(&m);
+            q_matrix_free(&L);
+            q_matrix_free(&U);
+            q_matrix_free(&LU);
+    }
+}
+
+void test_q_matrix_PLU_decomposition()
+{
+    /* We are evaluating the PLU decomposition of a matrix with random values. We are checking if the matrix
+    was decomposed correctly by multiplying the permutation matrix, lower triangular matrix, and upper triangular matrix.
+
+    A = P * L * U 
+
+    Where A is the original matrix, P is the permutation matrix, L is the lower triangular matrix, and U is the upper triangular matrix.
+    */
+
+    for(size_t i = 2; i < 20; i++)
+    {
+            q_matrix_t m = q_matrix_square_alloc(i);
+            q_matrix_t P = q_matrix_square_alloc(i);
+            q_matrix_t L = q_matrix_square_alloc(i);
+            q_matrix_t U = q_matrix_square_alloc(i);
+            q_matrix_t LU = q_matrix_square_alloc(i);
+            q_matrix_t PLU = q_matrix_square_alloc(i);
+
+            // Fill the matrix
+            q_matrix_fill_rand_float(&m, -10.0f, 10.0f);
+
+            // Perform the PLU decomposition
+            q_matrix_PLU_decomposition(&m, &P, &L, &U);
+
+            // Check if the matrix was decomposed correctly
+            q_matrix_dot_product(&L, &U, &LU);
+            q_matrix_dot_product(&P, &LU, &PLU);
+            
+            CU_ASSERT_TRUE(q_matrix_is_approx_float(&m, &PLU, 0.5f) == Q_MATRIX_OK); // The error coming from the fix point notation resolution
+
+            q_matrix_free(&m);
+            q_matrix_free(&P);
+            q_matrix_free(&L);
+            q_matrix_free(&U);
+            q_matrix_free(&LU);
+            q_matrix_free(&PLU);
+    }
+}
+
 void add_matrix_tests(CU_pSuite suite)
 {
     if (NULL == suite) {
@@ -209,6 +284,14 @@ void add_matrix_tests(CU_pSuite suite)
     }
 
     if(NULL == CU_add_test(suite, "test_q_fill", test_q_fill)) {
+        return;
+    }
+
+    if(NULL == CU_add_test(suite, "test_q_matrix_LU_decomposition", test_q_matrix_LU_decomposition)) {
+        return;
+    }
+
+    if(NULL == CU_add_test(suite, "test_q_matrix_PLU_decomposition", test_q_matrix_PLU_decomposition)) {
         return;
     }
 
