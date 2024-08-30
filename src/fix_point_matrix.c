@@ -589,91 +589,6 @@ void q_matrix_PLU_decomposition(const q_matrix_t* m , q_matrix_t* P, q_matrix_t*
 }
 
 /**
- * @brief The function computes the determinant of the matrix of fixed point numbers. 
- * @details The matrix must be square shape to calculate the determinant. The determinant is calculated using the LU decomposition. 
- * The determinant is calculated as follows: 
- * det(A) = det(L) * det(U) = det(U)
- * 
- * where:
- * A is the input matrix
- * L is the lower triangular matrix
- * U is the upper triangular matrix
- * 
- * The determinant of the upper triangular matrix is the product of the diagonal elements.
- * 
- * @example 
- * q_matrix_t m = q_matrix_alloc(2, 2);
- * q_ones(&m);
- * Q_MATRIX_AT(&m, 0, 0) = float_to_q(2.0f);
- * q_t det = q_matrix_determinant(&m);
- * 
- * printf("Determinant: %f\n", q_to_float(det));
- * 
- * Output:
- * Determinant: 1.000000
- * 
- * @param m The reference to the matrix of fixed point numbers
- * @return q_t The determinant of the matrix
- */
-q_t q_matrix_determinant(const q_matrix_t* m)
-{
-    Q_MATRIX_ASSERT(m);
-
-    // Assert that the matrix is square shape
-    assert((m->rows == m->cols) && "Matrix is not square shape when calculating the determinant");
-    
-    if(m->rows == 1)
-    {
-        return Q_MATRIX_AT(m, 0, 0);
-    }
-
-    if(m->rows == 2)
-    {
-        return q_product(Q_MATRIX_AT(m, 0, 0), Q_MATRIX_AT(m, 1, 1)) - q_product(Q_MATRIX_AT(m, 0, 1), Q_MATRIX_AT(m, 1, 0));
-    }
-    
-    q_t ret = Q_ONE;
-
-    q_matrix_t P = q_matrix_square_alloc(m->rows); // Allocate the permutation matrix
-    q_matrix_t L = q_matrix_square_alloc(m->rows); // Allocate the lower triangular matrix
-    q_matrix_t U = q_matrix_square_alloc(m->rows); // Allocate the upper triangular matrix
-
-    q_matrix_PLU_decomposition(m, &P, &L, &U); // Compute the PLU decomposition of the matrix
-
-    q_t sign = Q_MINUS_ONE;
-
-    // Calculate the sign of the permutation matrix
-    for(size_t i = 0; i < m->rows; i++)
-    {
-        /*
-        The sign of the permutation matrix is calculated by counting the number of row swaps.
-        If the number of row swaps is even, the sign is positive.
-        If the number of row swaps is odd, the sign is negative.
-        */
-        if(Q_MATRIX_AT(&P, i, i) != INT_TO_Q(i))
-        {
-            sign = -sign;
-        }
-    }
-
-    for(size_t i = 0; i < m->rows; i++)
-    {
-        /*
-        The determinant of the upper triangular matrix is the product of the diagonal elements.
-        det(U) = U[0][0] * U[1][1] * ... * U[n][n]
-        */
-        ret = q_product(ret, Q_MATRIX_AT(&U, i, i));
-    }
-
-    q_matrix_free(&L); // Free the lower triangular matrix
-    q_matrix_free(&U); // Free the upper triangular matrix
-    q_matrix_free(&P); // Free the permutation matrix
-    
-    return q_product(ret, sign);
-    // return ret;
-}
-
-/**
  * @brief This function sums two matrices of fixed point numbers and stores the result in the destination matrix.
  * @example 
  * q_matrix_t a = q_matrix_alloc(2, 2);
@@ -783,6 +698,92 @@ void q_matrix_elementwise_mul(const q_matrix_t* a, const q_matrix_t* b, q_matrix
         }
     }
 }
+
+/**
+ * @brief The function computes the determinant of the matrix of fixed point numbers. 
+ * @details The matrix must be square shape to calculate the determinant. The determinant is calculated using the LU decomposition. 
+ * The determinant is calculated as follows: 
+ * det(A) = det(L) * det(U) = det(U)
+ * 
+ * where:
+ * A is the input matrix
+ * L is the lower triangular matrix
+ * U is the upper triangular matrix
+ * 
+ * The determinant of the upper triangular matrix is the product of the diagonal elements.
+ * 
+ * @example 
+ * q_matrix_t m = q_matrix_alloc(2, 2);
+ * q_ones(&m);
+ * Q_MATRIX_AT(&m, 0, 0) = float_to_q(2.0f);
+ * q_t det = q_matrix_determinant(&m);
+ * 
+ * printf("Determinant: %f\n", q_to_float(det));
+ * 
+ * Output:
+ * Determinant: 1.000000
+ * 
+ * @param m The reference to the matrix of fixed point numbers
+ * @return q_t The determinant of the matrix
+ */
+q_t q_matrix_determinant(const q_matrix_t* m)
+{
+    Q_MATRIX_ASSERT(m);
+
+    // Assert that the matrix is square shape
+    assert((m->rows == m->cols) && "Matrix is not square shape when calculating the determinant");
+    
+    if(m->rows == 1)
+    {
+        return Q_MATRIX_AT(m, 0, 0);
+    }
+
+    if(m->rows == 2)
+    {
+        return q_product(Q_MATRIX_AT(m, 0, 0), Q_MATRIX_AT(m, 1, 1)) - q_product(Q_MATRIX_AT(m, 0, 1), Q_MATRIX_AT(m, 1, 0));
+    }
+    
+    q_t ret = Q_ONE;
+
+    q_matrix_t P = q_matrix_square_alloc(m->rows); // Allocate the permutation matrix
+    q_matrix_t L = q_matrix_square_alloc(m->rows); // Allocate the lower triangular matrix
+    q_matrix_t U = q_matrix_square_alloc(m->rows); // Allocate the upper triangular matrix
+
+    q_matrix_PLU_decomposition(m, &P, &L, &U); // Compute the PLU decomposition of the matrix
+
+    q_t sign = Q_MINUS_ONE;
+
+    // Calculate the sign of the permutation matrix
+    for(size_t i = 0; i < m->rows; i++)
+    {
+        /*
+        The sign of the permutation matrix is calculated by counting the number of row swaps.
+        If the number of row swaps is even, the sign is positive.
+        If the number of row swaps is odd, the sign is negative.
+        */
+        if(Q_MATRIX_AT(&P, i, i) != INT_TO_Q(i))
+        {
+            sign = -sign;
+        }
+    }
+
+    for(size_t i = 0; i < m->rows; i++)
+    {
+        /*
+        The determinant of the upper triangular matrix is the product of the diagonal elements.
+        det(U) = U[0][0] * U[1][1] * ... * U[n][n]
+        */
+        ret = q_product(ret, Q_MATRIX_AT(&U, i, i));
+    }
+
+    q_matrix_free(&L); // Free the lower triangular matrix
+    q_matrix_free(&U); // Free the upper triangular matrix
+    q_matrix_free(&P); // Free the permutation matrix
+    
+    return q_product(ret, sign);
+    // return ret;
+}
+
 
 /**
  * @brief The function calculates the trace of the matrix of fixed point numbers. 
