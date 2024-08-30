@@ -53,14 +53,14 @@ int main() {
 
     q_matrix_fill_rand_float(&m8, -10.0f, 10.0f);
 
-    Q_MATRIX_AT(&m8, 0, 0) = Q_ZERO; // TODO: Research how to implement PLU so we avoind the issue with 0 value at the principal diagonal
-    Q_MATRIX_AT(&m8, 0, 1) = float_to_q(2.656250f);
-    Q_MATRIX_AT(&m8, 1, 0) = float_to_q(3.656921f);
-    Q_MATRIX_AT(&m8, 1, 1) = float_to_q(0.0);
-    Q_MATRIX_AT(&m8, 1, 2) = float_to_q(7.096252f);
-    Q_MATRIX_AT(&m8, 2, 0) = float_to_q(-3.005981f);
-    Q_MATRIX_AT(&m8, 2, 1) = Q_ZERO;
-    Q_MATRIX_AT(&m8, 2, 2) = float_to_q(-9.760132f);
+    // Q_MATRIX_AT(&m8, 0, 0) = Q_ZERO; // TODO: Research how to implement PLU so we avoind the issue with 0 value at the principal diagonal
+    // Q_MATRIX_AT(&m8, 0, 1) = float_to_q(2.656250f);
+    // Q_MATRIX_AT(&m8, 1, 0) = float_to_q(3.656921f);
+    // Q_MATRIX_AT(&m8, 1, 1) = float_to_q(0.0);
+    // Q_MATRIX_AT(&m8, 1, 2) = float_to_q(2.096252f);
+    // Q_MATRIX_AT(&m8, 2, 0) = float_to_q(-3.005981f);
+    // Q_MATRIX_AT(&m8, 2, 1) = Q_ZERO;
+    // Q_MATRIX_AT(&m8, 2, 2) = float_to_q(-2.760132f);
 
 
     q_matrix_t P = q_matrix_square_alloc(size);
@@ -71,6 +71,7 @@ int main() {
 
     q_matrix_t LU = q_matrix_alloc(size, size);
     q_matrix_dot_product(&L, &U, &LU);
+
     Q_MATRIX_PRINT(LU);
     Q_MATRIX_PRINT(P);
     Q_MATRIX_PRINT(m8);
@@ -78,6 +79,12 @@ int main() {
     q_matrix_t m9 = q_matrix_square_alloc(size);
     q_matrix_dot_product(&P, &LU, &m9);
     Q_MATRIX_PRINT(m9);
+
+    if(q_matrix_is_approx_float(&m8, &m9, 0.001f) == Q_MATRIX_OK) {
+        printf("Matrices are equal\n");
+    } else {
+        printf("Matrices are not equal\n");
+    }
 
     q_t det  = q_matrix_determinant(&m8);
     printf("Determinant m8: %f\n", q_to_float(det));

@@ -543,6 +543,7 @@ void q_matrix_LU_decomposition(const q_matrix_t* m, q_matrix_t* L, q_matrix_t* U
             }
         }
     }
+
 }
 
 void q_matrix_PLU_decomposition(const q_matrix_t* m , q_matrix_t* P, q_matrix_t* L, q_matrix_t* U)
@@ -552,9 +553,11 @@ void q_matrix_PLU_decomposition(const q_matrix_t* m , q_matrix_t* P, q_matrix_t*
     Q_MATRIX_ASSERT(L);
     Q_MATRIX_ASSERT(U);
 
+    q_matrix_t temp = q_matrix_alloc(m->rows, m->cols);
     q_matrix_identity(P); // Fill the permutation matrix with the identity matrix
     q_matrix_identity(L); // Fill the lower triangular matrix with the identity matrix    
     q_matrix_cpy(m, U); // Copy the input matrix to the upper triangular matrix
+    q_matrix_cpy(m, &temp); // Copy the input matrix to the temporary matrix
 
     for(size_t i = 0; i < m->rows; i++)
     {
@@ -562,43 +565,26 @@ void q_matrix_PLU_decomposition(const q_matrix_t* m , q_matrix_t* P, q_matrix_t*
         size_t max_idx = i;
         q_t max_val = q_absolute(Q_MATRIX_AT(U, max_idx, i));
 
-        for(size_t t = i; t < m->rows; t++)
+        for(size_t j = i; j < m->cols; j++)
         {
-            if(q_absolute(Q_MATRIX_AT(U, t, i)) > max_val)
+            q_t val = q_absolute(Q_MATRIX_AT(U, j, i));
+            if(val > max_val)
             {
-                max_idx = t;
+                max_val = val;
+                max_idx = j;
             }
         }
 
         // Swap the rows of the permutation matrix
-        if(max_idx != i)
-        {
-            q_matrix_switch_rows(P, P, i, max_idx);
-            q_matrix_switch_rows(U, U, i, max_idx);
-        }
+        q_matrix_switch_rows(P, P, i, max_idx);
+        q_matrix_switch_rows(U, U, i, max_idx);
+        q_matrix_switch_rows(&temp, &temp, i, max_idx);
 
-        for(size_t j = i + 1; j < m->rows; j++)
-        {
-            // Calculate the elements of the lower triangular matrix
-            /*
-            L[i][j] = U[i][j] / U[i][i]
-            */
-            // If the diagonal element is zero, the matrix is singular
-                // In this case, the LU decomposition is not possible
-            
-            Q_MATRIX_AT(L, j, i) = q_division(Q_MATRIX_AT(U, j, i), Q_MATRIX_AT(U, i, i));
+        q_matrix_LU_decomposition(&temp, L, U);
 
-            for(size_t k = i; k < m->rows; k++)
-            {
-                // Calculate the elements of the upper triangular matrix
-                /*
-                U[j][k] = U[j][k] - L[j][i] * U[i][k]
-                */
-                Q_MATRIX_AT(U, j, k) = Q_MATRIX_AT(U, j, k) - q_product(Q_MATRIX_AT(L, j, i), Q_MATRIX_AT(U, i, k));
-            }
-
-        }
     }
+    
+    q_matrix_free(&temp);
 
 }
 
@@ -635,6 +621,17 @@ q_t q_matrix_determinant(const q_matrix_t* m)
 
     // Assert that the matrix is square shape
     assert((m->rows == m->cols) && "Matrix is not square shape when calculating the determinant");
+    
+    if(m->rows == 1)
+    {
+        return Q_MATRIX_AT(m, 0, 0);
+    }
+
+    if(m->rows == 2)
+    {
+        return q_product(Q_MATRIX_AT(m, 0, 0), Q_MATRIX_AT(m, 1, 1)) - q_product(Q_MATRIX_AT(m, 0, 1), Q_MATRIX_AT(m, 1, 0));
+    }
+    
     q_t ret = Q_ONE;
 
     q_matrix_t P = q_matrix_square_alloc(m->rows); // Allocate the permutation matrix
@@ -643,7 +640,7 @@ q_t q_matrix_determinant(const q_matrix_t* m)
 
     q_matrix_PLU_decomposition(m, &P, &L, &U); // Compute the PLU decomposition of the matrix
 
-    q_t sign = Q_ONE;
+    q_t sign = Q_MINUS_ONE;
 
     // Calculate the sign of the permutation matrix
     for(size_t i = 0; i < m->rows; i++)
@@ -1113,6 +1110,30 @@ q_status_t q_matrix_is_equal(const q_matrix_t* a, const q_matrix_t* b)
         for(size_t j = 0; j < a->cols; j++)
         {
             if(Q_MATRIX_AT(a, i, j) != Q_MATRIX_AT(b, i, j))
+            {
+                return Q_MATRIX_ERROR;
+            }
+        }
+    }
+
+    return Q_MATRIX_OK;
+}
+
+q_status_t q_matrix_is_approx(const q_matrix_t* a, const q_matrix_t* b, q_t abs_tol)
+{
+    Q_MATRIX_ASSERT(a);
+    Q_MATRIX_ASSERT(b);
+
+    if(a->rows != b->rows || a->cols != b->cols)
+    {
+        return Q_MATRIX_ERROR;
+    }
+
+    for(size_t i = 0; i < a->rows; i++)
+    {
+        for(size_t j = 0; j < a->cols; j++)
+        {
+            if(q_absolute(Q_MATRIX_AT(a, i, j) - Q_MATRIX_AT(b, i, j)) > abs_tol)
             {
                 return Q_MATRIX_ERROR;
             }

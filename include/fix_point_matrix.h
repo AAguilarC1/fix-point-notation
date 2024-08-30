@@ -9,6 +9,8 @@
 #define Q_FORMAT_CUSTOM 16
 #define Q_FORMAT Q_FORMAT_CUSTOM
 
+#define Q_EPSILON ((q_t) 1) // The smallest representable number in the fixed point format
+
 //TODO: Implement the matrix using fixed point numbers
 
 #define Q_MATRIX_ASSERT(m) {\
@@ -28,6 +30,7 @@
 
 #define q_matrix_scalar_mul_float(m, scalar) q_matrix_scalar_mul((m), float_to_q((scalar))) // Multiply the matrix by a scalar value in float format
 
+#define q_matrix_is_approx_float(a, b, abs_tol) q_matrix_is_approx((a), (b), float_to_q((abs_tol))) // Check if the matrices are approximately equal within an absolute tolerance in float format
 struct matrix_t {
     size_t rows;
     size_t cols;
@@ -81,6 +84,7 @@ void q_matrix_eigenvalues(const q_matrix_t* m, q_matrix_t* dst);
 void q_matrix_eigenvectors(const q_matrix_t* m, q_matrix_t* dst);
 
 q_status_t q_matrix_is_equal(const q_matrix_t* a, const q_matrix_t* b); 
+q_status_t q_matrix_is_approx(const q_matrix_t* a, const q_matrix_t* b, q_t abs_tol);
 
 void q_matrix_cpy(const q_matrix_t* src, q_matrix_t* dst);
 void q_matrix_free(q_matrix_t* m);
