@@ -76,7 +76,7 @@ q_t q_matrix_infinity_norm(const q_matrix_t* m);
 q_t q_matrix_euclidean_norm(const q_matrix_t* m);
 
 //TODO: Implement the following functions
-void q_matrix_inverse(const q_matrix_t* m, q_matrix_t* dst);
+void q_matrix_inverse(const q_matrix_t* m, q_matrix_t* dst); // TODO: Bug when calculating the inverse of the matrix
 void q_cross_product(const q_matrix_t* a, const q_matrix_t* b, q_matrix_t* dst);
 
 void q_matrix_dot_product(const q_matrix_t* a, const q_matrix_t* b, q_matrix_t* dst);
