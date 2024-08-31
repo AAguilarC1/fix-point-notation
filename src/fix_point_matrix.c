@@ -1262,19 +1262,13 @@ void q_matrix_inverse(const q_matrix_t* m, q_matrix_t* dst)
     q_matrix_t I = q_matrix_square_alloc(m->rows); // Allocate the identity matrix
     q_matrix_identity(&I); // Fill the identity matrix with the identity matrix
 
-    // q_matrix_t Y = q_matrix_alloc(m->rows, 1); // Allocate the Y vector
     q_matrix_t X = q_matrix_alloc(m->rows, 1); // Allocate the X vector
     q_matrix_t b = q_matrix_alloc(m->rows, 1); // Allocate the b vector
 
-    for(size_t i = 0; i < m->rows; i++)
+    for(size_t i = 0; i < m->cols; i++)
     {
-        if(i > 0)
-        {
-            Q_MATRIX_AT(&b, i - 1, 0) = Q_ZERO; // Set the (i - 1)-th element of the b vector to 0
-        }
-
-        Q_MATRIX_AT(&b, i, 0) = Q_ONE; // Set the i-th element of the b vector to 1
-
+        q_matrix_slice_col(&I, &b, i); // Slice the i-th column of the identity matrix
+        
         q_matrix_LUP_solve(&L, &U, &P, &b, &X); // Solve the system of linear equations
 
         for(size_t j = 0; j < m->rows; j++)
