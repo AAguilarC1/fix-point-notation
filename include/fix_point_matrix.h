@@ -5,13 +5,12 @@
 #include <stdint.h>
 #include <assert.h>
 #include <time.h>
-#include "fix_point_math.h"
 #define Q_FORMAT_CUSTOM 16
 #define Q_FORMAT Q_FORMAT_CUSTOM
 
-#define Q_EPSILON ((q_t) 1) // The smallest representable number in the fixed point format
+#include "fix_point_math.h"
 
-//TODO: Implement the matrix using fixed point numbers
+#define Q_EPSILON ((q_t) 1) // The smallest representable number in the fixed point format
 
 #define Q_MATRIX_ASSERT(m) {\
     assert(((m) != NULL) && "Matrix is NULL");\

@@ -546,6 +546,78 @@ void q_matrix_LU_decomposition(const q_matrix_t* m, q_matrix_t* L, q_matrix_t* U
 
 }
 
+/**
+ * @brief The function computes the PLU decomposition of the matrix of fixed point numbers. 
+ * @details The PLU decomposition is a method to factorize a matrix into the product of a permutation matrix, a lower triangular matrix, and an upper triangular matrix.
+ * Where the permutation matrix is a matrix that reorders the rows of the matrix, the lower triangular matrix is a matrix with ones on the diagonal and zeros above the diagonal, and the upper triangular matrix is a matrix with zeros below the diagonal.
+ * 
+ * The PLU decomposition is the product of the permutation matrix, the lower triangular matrix, and the upper triangular matrix.
+ * A = P * L * U
+ * 
+ * where:
+ * A is the input matrix
+ * P is the permutation matrix
+ * L is the lower triangular matrix
+ * U is the upper triangular matrix
+ * 
+ * The PLU decomposition is calculated using the Doolittle algorithm.
+ *
+ * @example:
+ * q_matrix_t m = q_matrix_alloc(3, 3);
+ * q_matrix_t P = q_matrix_alloc(3, 3);
+ * q_matrix_t L = q_matrix_alloc(3, 3);
+ * q_matrix_t U = q_matrix_alloc(3, 3);
+ * 
+ * q_ones(&m);
+ * Q_MATRIX_AT(&m, 0, 0) =  Q_ZERO;
+ * Q_MATRIX_AT(&m, 0, 1) = float_to_q(3.0f);
+ * Q_MATRIX_AT(&m, 0, 2) = float_to_q(1.0f);
+ * Q_MATRIX_AT(&m, 1, 0) = float_to_q(4.0f);
+ * Q_MATRIX_AT(&m, 1, 1) = float_to_q(4.0f);
+ * Q_MATRIX_AT(&m, 1, 2) = float_to_q(2.0f);
+ * 
+ * q_matrix_PLU_decomposition(&m, &P, &L, &U);
+ * q_matrix_t LU = q_matrix_alloc(3, 3);
+ * q_matrix_dot_product(&L, &U, &LU);
+ * 
+ * Q_MATRIX_PRINT(m);
+ * Q_MATRIX_PRINT(P);
+ * Q_MATRIX_PRINT(LU);
+ * 
+ * q_matrix_t m2 = q_matrix_alloc(3, 3);
+ * q_matrix_dot_product(&P, &LU, &m2);
+ * Q_MATRIX_PRINT(m2);
+ * 
+ * Output:
+ * m: [
+ * 0.000000, 3.000000, 1.000000,
+ * 4.000000, 4.000000, 2.000000,
+ * 1.000000, 1.000000, 1.000000,
+ * ]
+ * 
+ * P: [
+ * 0.000000, 1.000000, 0.000000,
+ * 1.000000, 0.000000, 0.000000,
+ * 0.000000, 0.000000, 1.000000,
+ * ]
+ * 
+ * LU: [
+ * 4.000000, 4.000000, 2.000000,
+ * 0.000000, 3.000000, 1.000000,
+ * 0.000000, 0.000000, 1.000000,
+ * ]
+ * 
+ * m2: [
+ * 0.000000, 3.000000, 1.000000,
+ * 4.000000, 4.000000, 2.000000,
+ * 0.000000, 0.000000, 1.000000,
+ * ]
+ * 
+ * @param m 
+ * @param P 
+ * @param L 
+ * @param U 
+ */
 void q_matrix_PLU_decomposition(const q_matrix_t* m , q_matrix_t* P, q_matrix_t* L, q_matrix_t* U)
 {
     Q_MATRIX_ASSERT(m);
@@ -1141,6 +1213,39 @@ q_t q_matrix_euclidean_norm(const q_matrix_t* m)
     return q_sqrt(ret);
 }
 
+/**
+ * @brief This function computes the inverse of a matrix using the PLU decomposition.
+ * @details The matrix must be square shape to calculate the inverse. The inverse of a matrix is calculated using the PLU decomposition.
+ * The inverse of a matrix is the matrix that results in the identity matrix when multiplied by the original matrix.
+ * 
+ * The inverse of a matrix is calculated as follows:
+ * A * A^-1 = I
+ * 
+ * If we assume that:
+ * A * X = b 
+ * 
+ * where: 
+ * b = I
+ * 
+ * Then,
+ * A * X = I
+ * 
+ * If we perform the PLU decomposition of the matrix:
+ * A = P *L * U
+ * P * L * U * X = I
+ * 
+ * And we assume that:
+ * X = A^-1
+ * 
+ * By solving the system of linear equations, the inverse of the matrix can be calculated.
+ * X = U^-1 * L^-1 * P^-1 = U^-1 * L^-1 * P^T
+ * 
+ * @example
+ * 
+ * 
+ * @param m The reference to the matrix of fixed point numbers
+ * @param dst The resulting inverse matrix of the input matrix  
+ */
 void q_matrix_inverse(const q_matrix_t* m, q_matrix_t* dst)
 {
     Q_MATRIX_ASSERT(m);
