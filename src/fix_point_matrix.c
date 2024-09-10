@@ -919,9 +919,6 @@ void q_matrix_LUP_solve(const q_matrix_t* L, const q_matrix_t* U, const q_matrix
  * By solving the system of linear equations, the inverse of the matrix can be calculated.
  * X = U^-1 * L^-1 * P^-1 = U^-1 * L^-1 * P^T
  * 
- * @example
- * 
- * 
  * @param m The reference to the matrix of fixed point numbers
  * @param dst The resulting inverse matrix of the input matrix  
  */
