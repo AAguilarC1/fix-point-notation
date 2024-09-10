@@ -8,6 +8,7 @@ void test_q_matrix_alloc();
 void test_q_fill();
 void test_q_matrix_LU_decomposition();
 void test_q_matrix_PLU_decomposition();
+void test_q_matrix_inverse();
 
 void add_matrix_tests(CU_pSuite suite);
 

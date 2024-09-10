@@ -273,6 +273,42 @@ void test_q_matrix_PLU_decomposition()
     }
 }
 
+void test_q_matrix_inverse()
+{
+    /* We are evaluating the inverse of a matrix with random values. We are checking if the matrix
+    was inverted correctly by multiplying the original matrix and its inverse.
+
+    A * A^-1 = I
+
+    Where A is the original matrix, A^-1 is the inverse matrix, and I is the identity matrix.
+    */
+
+    for(size_t i = 2; i < 20; i++)
+    {
+            q_matrix_t m = q_matrix_square_alloc(i);
+            q_matrix_t m_inv = q_matrix_square_alloc(i);
+            q_matrix_t m_dot_inv = q_matrix_square_alloc(i);
+            q_matrix_t I = q_matrix_square_alloc(i);
+
+            // Fill the matrix
+            q_matrix_fill_rand_float(&m, -10.0f, 10.0f);
+
+            // Perform the inverse
+            q_matrix_inverse(&m, &m_inv);
+
+            // Check if the matrix was inverted correctly
+            q_matrix_dot_product(&m, &m_inv, &m_dot_inv);
+            q_matrix_identity(&I);
+            
+            CU_ASSERT_TRUE(q_matrix_is_approx_float(&m_dot_inv, &I, 0.1f) == Q_MATRIX_OK); // The error coming from the fix point notation resolution
+
+            q_matrix_free(&m);
+            q_matrix_free(&m_inv);
+            q_matrix_free(&m_dot_inv);
+            q_matrix_free(&I);
+    }
+}
+
 void add_matrix_tests(CU_pSuite suite)
 {
     if (NULL == suite) {
@@ -292,6 +328,10 @@ void add_matrix_tests(CU_pSuite suite)
     }
 
     if(NULL == CU_add_test(suite, "test_q_matrix_PLU_decomposition", test_q_matrix_PLU_decomposition)) {
+        return;
+    }
+
+    if(NULL == CU_add_test(suite, "test_q_matrix_inverse", test_q_matrix_inverse)) {
         return;
     }
 
