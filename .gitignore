@@ -1,4 +1,9 @@
 bin
+
+# Workspace specific
+logger.c  
+logger.h 
+
 build
 obj
 data
