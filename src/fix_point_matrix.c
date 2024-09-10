@@ -434,77 +434,76 @@ void q_matrix_fill_rand(const q_matrix_t* m, q_t min, q_t max)
     }
 }
 
+// MARK: Linear Algebra Operations
 
-// MARK: Matrix operations
-
-    /**
-    @brief The function computes the LU decomposition of the matrix of fixed point numbers.
-    @details The LU decomposition is a method to factorize a matrix into the product of a lower triangular matrix and an upper triangular matrix.
-
-    The LU decomposition is calculated as follows:
-    A = L * U
-
-    where:
-    A is the input matrix
-    L is the lower triangular matrix
-    U is the upper triangular matrix
-
-    The LU decomposition is calculated using the Doolittle algorithm.
-
-    The Doolittle algorithm calculates the LU decomposition of a matrix A as follows:
-    1. Set the diagonal elements of the lower triangular matrix to 1
-    2. Calculate the elements of the lower triangular matrix and the upper triangular matrix
-    3. The elements of the lower triangular matrix are calculated as follows:
-        L[i][j] = U[i][j] / U[i][i]
-
-    4. The elements of the upper triangular matrix are calculated as follows:
-        U[j][k] = U[j][k] - L[j][i] * U[i][k]
-
-    5. Repeat the process for all rows and columns of the matrix
-    6. The LU decomposition is complete when the upper triangular matrix is obtained
-
-    @example
-    q_matrix_t m = q_matrix_alloc(3, 3);
-    q_matrix_t L = q_matrix_alloc(3, 3);
-    q_matrix_t U = q_matrix_alloc(3, 3);
-    
-    q_ones(&m);
-    Q_MATRIX_AT(&m, 0, 0) = float_to_q(2.0f);
-    Q_MATRIX_AT(&m, 0, 1) = float_to_q(3.0f);
-    Q_MATRIX_AT(&m, 0, 2) = float_to_q(1.0f);
-    Q_MATRIX_AT(&m, 1, 0) = float_to_q(4.0f);
-    Q_MATRIX_AT(&m, 1, 1) = float_to_q(4.0f);
-    Q_MATRIX_AT(&m, 1, 2) = float_to_q(2.0f);
-
-    q_matrix_LU_decomposition(&m, &L, &U);
-
-    Q_MATRIX_PRINT(m);
-    Q_MATRIX_PRINT(L);
-    Q_MATRIX_PRINT(U);
-
-    Output:
-    m: [
-    2.000000, 3.000000, 1.000000,
-    4.000000, 4.000000, 2.000000,
-    1.000000, 1.000000, 1.000000,
-    ]   
-
-    L: [
-    1.000000, 0.000000, 0.000000,
-    2.000000, 1.000000, 0.000000,
-    0.500000, 0.250000, 1.000000,
-    ]
-
-    U: [
-    2.000000, 3.000000, 1.000000,
-    0.000000, -2.000000, 0.000000,
-    0.000000, 0.000000, 0.500000,
-    ]
-
-    @param m The reference to the matrix of fixed point numbers to be decomposed
-    @param L The reference to the lower triangular matrix of fixed point numbers
-    @param U The reference to the upper triangular matrix of fixed point numbers
-    */
+/**
+* @brief The function computes the LU decomposition of the matrix of fixed point numbers.
+* @details The LU decomposition is a method to factorize a matrix into the product of a lower triangular matrix and an upper * triangular matrix.
+* 
+* The LU decomposition is calculated as follows:
+* A = L * U
+* 
+* where:
+* A is the input matrix
+* L is the lower triangular matrix
+* U is the upper triangular matrix
+* 
+* The LU decomposition is calculated using the Doolittle algorithm.
+* 
+* The Doolittle algorithm calculates the LU decomposition of a matrix A as follows:
+* 1. Set the diagonal elements of the lower triangular matrix to 1
+* 2. Calculate the elements of the lower triangular matrix and the upper triangular matrix
+* 3. The elements of the lower triangular matrix are calculated as follows:
+*     L[i][j] = U[i][j] / U[i][i]
+* 
+* 4. The elements of the upper triangular matrix are calculated as follows:
+*     U[j][k] = U[j][k] - L[j][i] * U[i][k]
+* 
+* 5. Repeat the process for all rows and columns of the matrix
+* 6. The LU decomposition is complete when the upper triangular matrix is obtained
+* 
+* @example
+* q_matrix_t m = q_matrix_alloc(3, 3);
+* q_matrix_t L = q_matrix_alloc(3, 3);
+* q_matrix_t U = q_matrix_alloc(3, 3);
+* 
+* q_ones(&m);
+* Q_MATRIX_AT(&m, 0, 0) = float_to_q(2.0f);
+* Q_MATRIX_AT(&m, 0, 1) = float_to_q(3.0f);
+* Q_MATRIX_AT(&m, 0, 2) = float_to_q(1.0f);
+* Q_MATRIX_AT(&m, 1, 0) = float_to_q(4.0f);
+* Q_MATRIX_AT(&m, 1, 1) = float_to_q(4.0f);
+* Q_MATRIX_AT(&m, 1, 2) = float_to_q(2.0f);
+* 
+* q_matrix_LU_decomposition(&m, &L, &U);
+* 
+* Q_MATRIX_PRINT(m);
+* Q_MATRIX_PRINT(L);
+* Q_MATRIX_PRINT(U);
+* 
+* Output:
+* m: [
+* 2.000000, 3.000000, 1.000000,
+* 4.000000, 4.000000, 2.000000,
+* 1.000000, 1.000000, 1.000000,
+* ]   
+* 
+* L: [
+* 1.000000, 0.000000, 0.000000,
+* 2.000000, 1.000000, 0.000000,
+* 0.500000, 0.250000, 1.000000,
+* ]
+* 
+* U: [
+* 2.000000, 3.000000, 1.000000,
+* 0.000000, -2.000000, 0.000000,
+* 0.000000, 0.000000, 0.500000,
+* ]
+* 
+* @param m The reference to the matrix of fixed point numbers to be decomposed
+* @param L The reference to the lower triangular matrix of fixed point numbers
+* @param U The reference to the upper triangular matrix of fixed point numbers
+*/
 void q_matrix_LU_decomposition(const q_matrix_t* m, q_matrix_t* L, q_matrix_t* U)
 {
     Q_MATRIX_ASSERT(m);
@@ -613,10 +612,10 @@ void q_matrix_LU_decomposition(const q_matrix_t* m, q_matrix_t* L, q_matrix_t* U
  * 0.000000, 0.000000, 1.000000,
  * ]
  * 
- * @param m 
- * @param P 
- * @param L 
- * @param U 
+ * @param m The reference to the matrix of fixed point numbers to be decomposed
+ * @param P The reference to the permutation matrix of fixed point numbers
+ * @param L The reference to the lower triangular matrix of fixed point numbers
+ * @param U The reference to the upper triangular matrix of fixed point numbers
  */
 void q_matrix_PLU_decomposition(const q_matrix_t* m , q_matrix_t* P, q_matrix_t* L, q_matrix_t* U)
 {
@@ -660,49 +659,95 @@ void q_matrix_PLU_decomposition(const q_matrix_t* m , q_matrix_t* P, q_matrix_t*
 
 }
 
-void q_matrix_forward_substitution(const q_matrix_t* L, const q_matrix_t* b, const q_matrix_t* X)
+/**
+ * @brief The function computes the forward substitution of the matrix of fixed point numbers.
+ * @details The forward substitution is a method to solve a system of linear equations using the LU decomposition.
+ * 
+ * The forward substitution is calculated as follows:
+ * L * Y = b
+ * 
+ * where:
+ * L is the lower triangular matrix of the LU decomposition
+ * Y is the intermediate vector
+ * b is the output vector of the system of linear equations
+ * 
+ * The forward substitution is calculated using the following steps:
+ * 1. Initialize the intermediate vector Y with zeros
+ * 2. Calculate the elements of the intermediate vector Y
+ * 3. The elements of the intermediate vector Y are calculated as follows:
+ *    Y[i] = b[i] - sum(L[i][j] * Y[j]) for j = 0 to i (where i is the row index)
+ *    Y[i] = Y[i] / L[i][i]
+ * 
+ * @param L The reference to the lower triangular matrix of fixed point numbers
+ * @param b The reference to the output vector of fixed point numbers
+ * @param Y The reference to the intermediate vector of fixed point numbers
+ */
+void q_matrix_forward_substitution(const q_matrix_t* L, const q_matrix_t* b, const q_matrix_t* Y)
 {
     Q_MATRIX_ASSERT(L);
     Q_MATRIX_ASSERT(b);
-    Q_MATRIX_ASSERT(X);
+    Q_MATRIX_ASSERT(Y);
 
     assert((L->rows == L->cols) && "Matrix L is not square shape when performing forward substitution");
 
     assert((L->rows == b->rows) && "Matrix L and b have different number of rows (Can not perform forward substitution)");
     assert((b->cols == 1) && "Matrix b is not a column vector (Can not perform forward substitution)");
 
-    assert((X->rows == b->rows) && "Destination matrix and b have different number of rows (Can not perform forward substitution)");
-    assert((X->cols == 1) && "Destination matrix is not a column vector (Can not perform forward substitution)");
+    assert((Y->rows == b->rows) && "Destination matrix and b have different number of rows (Can not perform forward substitution)");
+    assert((Y->cols == 1) && "Destination matrix is not a column vector (Can not perform forward substitution)");
 
-    q_zeros(X); // Fill the X vector with zeros
+    q_zeros(Y); // Fill the X vector with zeros
 
     for(int i = 0; i < L->rows; i++)
     {
         q_t temp = Q_ZERO;
-        for(int j = 0; j < (i); j++)
+        for(int j = 0; j < i; j++)
         {
-            temp += q_product(Q_MATRIX_AT(L, i, j), Q_MATRIX_AT(X, j, 0));
+            temp += q_product(Q_MATRIX_AT(L, i, j), Q_MATRIX_AT(Y, j, 0));
         }
 
         temp = Q_MATRIX_AT(b, i, 0) - temp;
-        Q_MATRIX_AT(X, i, 0) = q_division(temp, Q_MATRIX_AT(L, i, i));
+        Q_MATRIX_AT(Y, i, 0) = q_division(temp, Q_MATRIX_AT(L, i, i));
 
     }
 
 }
 
-void q_matrix_back_substitution(const q_matrix_t* U, const q_matrix_t* b, const q_matrix_t* X)
+/**
+ * @brief The function computes the back substitution of the matrix of fixed point numbers.
+ * @details The back substitution is a method to solve a system of linear equations using the LU decomposition.
+ * 
+ * The back substitution is calculated as follows:
+ * U * X = Y
+ * 
+ * where:
+ * U is the upper triangular matrix of the LU decomposition
+ * X is the solution vector
+ * Y is the intermediate vector
+ * 
+ * The back substitution is calculated using the following steps:
+ * 1. Initialize the solution vector X with zeros
+ * 2. Calculate the elements of the solution vector X
+ * 3. The elements of the solution vector X are calculated as follows:
+ *   X[i] = Y[i] - sum(U[i][j] * X[j]) for j = i to n (where n is the number of columns)
+ *   X[i] = X[i] / U[i][i]
+ * 
+ * @param U The reference to the upper triangular matrix of fixed point numbers
+ * @param Y The reference to the intermediate vector of fixed point numbers
+ * @param X The reference to the solution vector of fixed point numbers
+ */
+void q_matrix_back_substitution(const q_matrix_t* U, const q_matrix_t* Y, const q_matrix_t* X)
 {
     Q_MATRIX_ASSERT(U);
-    Q_MATRIX_ASSERT(b);
+    Q_MATRIX_ASSERT(Y);
     Q_MATRIX_ASSERT(X);
 
     assert((U->rows == U->cols) && "Matrix U is not square shape when performing back substitution");
 
-    assert((U->rows == b->rows) && "Matrix U and b have different number of rows (Can not perform back substitution)");
-    assert((b->cols == 1) && "Matrix b is not a column vector (Can not perform back substitution)");
+    assert((U->rows == Y->rows) && "Matrix U and Y have different number of rows (Can not perform back substitution)");
+    assert((Y->cols == 1) && "Matrix Y is not a column vector (Can not perform back substitution)");
 
-    assert((X->rows == b->rows) && "Destination matrix and b have different number of rows (Can not perform back substitution)");
+    assert((X->rows == Y->rows) && "Destination matrix and Y have different number of rows (Can not perform back substitution)");
     assert((X->cols == 1) && "Destination matrix is not a column vector (Can not perform back substitution)");
 
     q_zeros(X); // Fill the X vector with zeros
@@ -715,12 +760,47 @@ void q_matrix_back_substitution(const q_matrix_t* U, const q_matrix_t* b, const 
             temp += q_product(Q_MATRIX_AT(U, i, j), Q_MATRIX_AT(X, j, 0));
         }
 
-        temp = Q_MATRIX_AT(b, i, 0) - temp;
+        temp = Q_MATRIX_AT(Y, i, 0) - temp;
         Q_MATRIX_AT(X, i, 0) = q_division(temp, Q_MATRIX_AT(U, i, i));
 
     }
 }
 
+/**
+ * @brief This function solves a system of linear equations using the LU decomposition. 
+ * @attention is important to note that the LU decomposition is only possible if the matrix is non-singular.
+ * @details The system of linear equations is solved using the LU decomposition. The LU decomposition is calculated using the Doolittle algorithm. 
+ * 
+ * The system of linear equations is solved as follows:
+ * A * X = b
+ * 
+ * where:
+ * A is the input matrix
+ * X is the solution vector
+ * b is the output vector
+ * 
+ * The LU decomposition is calculated as follows:
+ * A = L * U
+ * 
+ * Therefore, the system of linear equations can be solved as follows:
+ * L * U * X = b
+ * 
+ * The system of linear equations is solved using forward substitution and back substitution.
+ * 
+ * The forward substitution is calculated as follows:
+ * L * Y = b
+ * 
+ * The back substitution is calculated as follows:
+ * U * X = Y
+ * 
+ * The solution vector X is obtained by solving the system of linear equations.
+ * 
+ * 
+ * @param L The lower triangular matrix of the LU decomposition
+ * @param U The upper triangular matrix of the LU decomposition
+ * @param b The output vector of the system of linear equations
+ * @param X The solution vector of the system of linear equations
+ */
 void q_matrix_LU_solve(const q_matrix_t* L, const q_matrix_t* U, const q_matrix_t* b, const q_matrix_t* X)
 {
     Q_MATRIX_ASSERT(L); 
@@ -736,8 +816,8 @@ void q_matrix_LU_solve(const q_matrix_t* L, const q_matrix_t* U, const q_matrix_
     assert((L->rows == b->rows) && "Matrix L and b have different number of rows when solving the system of linear equations");
     assert((b->cols == 1) && "Matrix b is not a column vector when solving the system of linear equations");
 
-    assert((X->rows == b->rows) && "Destination matrix and b have different number of rows when solving the system of linear equations");
-    assert((X->cols == 1) && "Destination matrix is not a column vector when solving the system of linear equations");
+    assert((X->rows == b->rows) && "The solution matrix and b have different number of rows when solving the system of linear equations");
+    assert((X->cols == 1) && "The solution matrix is not a column vector when solving the system of linear equations");
 
     q_matrix_t Y = q_matrix_alloc(b->rows, b->cols); // Allocate the Y vector
 
@@ -748,6 +828,40 @@ void q_matrix_LU_solve(const q_matrix_t* L, const q_matrix_t* U, const q_matrix_
     
 }
 
+/**
+ * @brief This function solves a system of linear equations using the PLU decomposition.
+ * @details The system of linear equations is solved using the PLU decomposition. The PLU decomposition is calculated using the Doolittle algorithm.
+ * 
+ * The system of linear equations is solved as follows:
+ * A * X = b
+ * 
+ * where:
+ * A is the input matrix
+ * X is the solution vector
+ * b is the output vector
+ * 
+ * The PLU decomposition is calculated as follows:
+ * A = P * L * U
+ * 
+ * Therefore, the system of linear equations can be solved as follows:
+ * P * L * U * X = b
+ * 
+ * The system of linear equations is solved using forward substitution and back substitution.
+ * 
+ * The forward substitution is calculated as follows:
+ * L * Y = P * b
+ * 
+ * The back substitution is calculated as follows:
+ * U * X = Y
+ * 
+ * The solution vector X is obtained by solving the system of linear equations.
+ * 
+ * @param L The lower triangular matrix of the PLU decomposition
+ * @param U The upper triangular matrix of the PLU decomposition
+ * @param P The permutation matrix of the PLU decomposition
+ * @param b The output vector of the system of linear equations
+ * @param X The solution vector of the system of linear equations
+ */
 void q_matrix_LUP_solve(const q_matrix_t* L, const q_matrix_t* U, const q_matrix_t* P, const q_matrix_t* b, const q_matrix_t* X)
 {
     Q_MATRIX_ASSERT(L); 
@@ -777,6 +891,83 @@ void q_matrix_LUP_solve(const q_matrix_t* L, const q_matrix_t* U, const q_matrix
     q_matrix_free(&z); // Free the z vector
 
 }
+
+/**
+ * @brief This function computes the inverse of a matrix using the PLU decomposition.
+ * @details The matrix must be square shape to calculate the inverse. The inverse of a matrix is calculated using the PLU decomposition.
+ * The inverse of a matrix is the matrix that results in the identity matrix when multiplied by the original matrix.
+ * 
+ * The inverse of a matrix is calculated as follows:
+ * A * A^-1 = I
+ * 
+ * If we assume that:
+ * A * X = b 
+ * 
+ * where: 
+ * b = I
+ * 
+ * Then,
+ * A * X = I
+ * 
+ * If we perform the PLU decomposition of the matrix:
+ * A = P *L * U
+ * P * L * U * X = I
+ * 
+ * And we assume that:
+ * X = A^-1
+ * 
+ * By solving the system of linear equations, the inverse of the matrix can be calculated.
+ * X = U^-1 * L^-1 * P^-1 = U^-1 * L^-1 * P^T
+ * 
+ * @example
+ * 
+ * 
+ * @param m The reference to the matrix of fixed point numbers
+ * @param dst The resulting inverse matrix of the input matrix  
+ */
+void q_matrix_inverse(const q_matrix_t* m, q_matrix_t* dst)
+{
+    Q_MATRIX_ASSERT(m);
+    Q_MATRIX_ASSERT(dst);
+
+    assert((m->rows == m->cols) && "Matrix is not square shape when calculating the inverse");
+
+    q_matrix_t L = q_matrix_square_alloc(m->rows); // Allocate the lower triangular matrix
+    q_matrix_t U = q_matrix_square_alloc(m->rows); // Allocate the upper triangular matrix
+    q_matrix_t P = q_matrix_square_alloc(m->rows); // Allocate the permutation matrix
+
+    q_matrix_PLU_decomposition(m, &P, &L, &U); // Compute the PLU decomposition of the matrix
+
+    q_matrix_t I = q_matrix_square_alloc(m->rows); // Allocate the identity matrix
+    q_matrix_identity(&I); // Fill the identity matrix with the identity matrix
+
+    q_matrix_t X = q_matrix_alloc(m->rows, 1); // Allocate the X vector
+    q_matrix_t b = q_matrix_alloc(m->rows, 1); // Allocate the b vector
+
+    for(size_t i = 0; i < m->cols; i++)
+    {
+        q_matrix_slice_col(&I, &b, i); // Slice the i-th column of the identity matrix
+        
+        q_matrix_LUP_solve(&L, &U, &P, &b, &X); // Solve the system of linear equations
+
+        for(size_t j = 0; j < m->rows; j++)
+        {
+            Q_MATRIX_AT(dst, j, i) = Q_MATRIX_AT(&X, j, 0);
+        }
+
+    }
+
+    q_matrix_freeDeep(&b); // Free the b vector
+    q_matrix_freeDeep(&X); // Free the X vector
+    q_matrix_freeDeep(&I); // Free the identity matrix
+    q_matrix_freeDeep(&P); // Free the permutation matrix
+    q_matrix_freeDeep(&U); // Free the upper triangular matrix
+    q_matrix_freeDeep(&L); // Free the lower triangular matrix
+
+    return;
+}
+
+// MARK: Basic Matrix Operations
 
 /**
  * @brief This function sums two matrices of fixed point numbers and stores the result in the destination matrix.
@@ -888,6 +1079,8 @@ void q_matrix_elementwise_mul(const q_matrix_t* a, const q_matrix_t* b, q_matrix
         }
     }
 }
+
+// MARK: Matrix Properties
 
 /**
  * @brief The function computes the determinant of the matrix of fixed point numbers. 
@@ -1215,80 +1408,7 @@ q_t q_matrix_euclidean_norm(const q_matrix_t* m)
     return q_sqrt(ret);
 }
 
-/**
- * @brief This function computes the inverse of a matrix using the PLU decomposition.
- * @details The matrix must be square shape to calculate the inverse. The inverse of a matrix is calculated using the PLU decomposition.
- * The inverse of a matrix is the matrix that results in the identity matrix when multiplied by the original matrix.
- * 
- * The inverse of a matrix is calculated as follows:
- * A * A^-1 = I
- * 
- * If we assume that:
- * A * X = b 
- * 
- * where: 
- * b = I
- * 
- * Then,
- * A * X = I
- * 
- * If we perform the PLU decomposition of the matrix:
- * A = P *L * U
- * P * L * U * X = I
- * 
- * And we assume that:
- * X = A^-1
- * 
- * By solving the system of linear equations, the inverse of the matrix can be calculated.
- * X = U^-1 * L^-1 * P^-1 = U^-1 * L^-1 * P^T
- * 
- * @example
- * 
- * 
- * @param m The reference to the matrix of fixed point numbers
- * @param dst The resulting inverse matrix of the input matrix  
- */
-void q_matrix_inverse(const q_matrix_t* m, q_matrix_t* dst)
-{
-    Q_MATRIX_ASSERT(m);
-    Q_MATRIX_ASSERT(dst);
-
-    assert((m->rows == m->cols) && "Matrix is not square shape when calculating the inverse");
-
-    q_matrix_t L = q_matrix_square_alloc(m->rows); // Allocate the lower triangular matrix
-    q_matrix_t U = q_matrix_square_alloc(m->rows); // Allocate the upper triangular matrix
-    q_matrix_t P = q_matrix_square_alloc(m->rows); // Allocate the permutation matrix
-
-    q_matrix_PLU_decomposition(m, &P, &L, &U); // Compute the PLU decomposition of the matrix
-
-    q_matrix_t I = q_matrix_square_alloc(m->rows); // Allocate the identity matrix
-    q_matrix_identity(&I); // Fill the identity matrix with the identity matrix
-
-    q_matrix_t X = q_matrix_alloc(m->rows, 1); // Allocate the X vector
-    q_matrix_t b = q_matrix_alloc(m->rows, 1); // Allocate the b vector
-
-    for(size_t i = 0; i < m->cols; i++)
-    {
-        q_matrix_slice_col(&I, &b, i); // Slice the i-th column of the identity matrix
-        
-        q_matrix_LUP_solve(&L, &U, &P, &b, &X); // Solve the system of linear equations
-
-        for(size_t j = 0; j < m->rows; j++)
-        {
-            Q_MATRIX_AT(dst, j, i) = Q_MATRIX_AT(&X, j, 0);
-        }
-
-    }
-
-    q_matrix_free(&b); // Free the b vector
-    q_matrix_free(&X); // Free the X vector
-    q_matrix_free(&I); // Free the identity matrix
-    q_matrix_free(&P); // Free the permutation matrix
-    q_matrix_free(&U); // Free the upper triangular matrix
-    q_matrix_free(&L); // Free the lower triangular matrix
-
-    return;
-}
+// MARK: Matrix Operations
 
 /**
  * @brief The function computes the dot product of two matrices of fixed point numbers.
@@ -1360,6 +1480,16 @@ void q_matrix_dot_product(const q_matrix_t* a, const q_matrix_t* b, q_matrix_t* 
     }
 }
 
+// MARK: Matrix validation
+
+/**
+ * @brief This function checks if two matrices have the same contents
+ * @attention Do not use this function to compare floating-point numbers
+ * 
+ * @param a The reference to matrix A of fixed point numbers
+ * @param b The reference to matrix B of fixed point numbers 
+ * @return q_status_t Returns Q_MATRIX_OK if the matrices are equal, otherwise returns Q_MATRIX_ERROR
+ */
 q_status_t q_matrix_is_equal(const q_matrix_t* a, const q_matrix_t* b)
 {
     Q_MATRIX_ASSERT(a);
@@ -1384,6 +1514,15 @@ q_status_t q_matrix_is_equal(const q_matrix_t* a, const q_matrix_t* b)
     return Q_MATRIX_OK;
 }
 
+/**
+ * @brief This function checks if two matrices are approximately equal within a tolerance value.
+ * @details The function checks if the absolute difference between the elements of the matrices is less than the tolerance value.
+ * 
+ * @param a The reference to matrix A of fixed point numbers 
+ * @param b The reference to matrix B of fixed point numbers
+ * @param abs_tol The absolute tolerance value
+ * @return q_status_t Returns Q_MATRIX_OK if the matrices are approximately equal, otherwise returns Q_MATRIX_ERROR
+ */
 q_status_t q_matrix_is_approx(const q_matrix_t* a, const q_matrix_t* b, q_t abs_tol)
 {
     Q_MATRIX_ASSERT(a);

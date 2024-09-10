@@ -58,15 +58,23 @@ void q_matrix_fill(const q_matrix_t* m, q_t value);
 void q_matrix_identity(const q_matrix_t* m);
 void q_matrix_fill_rand(const q_matrix_t* m, q_t min, q_t max);
 
+// Linear algebra operations
+
 void q_matrix_LU_decomposition(const q_matrix_t* m, q_matrix_t* L, q_matrix_t* U);
 void q_matrix_PLU_decomposition(const q_matrix_t* m , q_matrix_t* P, q_matrix_t* L, q_matrix_t* U);
-void q_matrix_forward_substitution(const q_matrix_t* L, const q_matrix_t* b, const q_matrix_t* X);
-void q_matrix_back_substitution(const q_matrix_t* U, const q_matrix_t* b, const q_matrix_t* X);
+void q_matrix_forward_substitution(const q_matrix_t* L, const q_matrix_t* b, const q_matrix_t* Y);
+void q_matrix_back_substitution(const q_matrix_t* U, const q_matrix_t* Y, const q_matrix_t* X);
 void q_matrix_LU_solve(const q_matrix_t* L, const q_matrix_t* U, const q_matrix_t* b, const q_matrix_t* X);
+void q_matrix_LUP_solve(const q_matrix_t* L, const q_matrix_t* U, const q_matrix_t* P, const q_matrix_t* b, const q_matrix_t* X);
+void q_matrix_inverse(const q_matrix_t* m, q_matrix_t* dst); 
+
+// Basic matrix operations
 
 void q_matrix_sum(const q_matrix_t* a, const q_matrix_t* b, q_matrix_t* dst);
 void q_matrix_scalar_mul(const q_matrix_t* m, q_t scalar);
 void q_matrix_elementwise_mul(const q_matrix_t* a, const q_matrix_t* b, q_matrix_t* dst);
+
+// Matrix operations 
 
 q_t q_matrix_determinant(const q_matrix_t* m);
 q_t q_matrix_trace(const q_matrix_t* m);
@@ -76,21 +84,25 @@ q_t q_matrix_infinity_norm(const q_matrix_t* m);
 q_t q_matrix_euclidean_norm(const q_matrix_t* m);
 
 //TODO: Implement the following functions
-void q_matrix_inverse(const q_matrix_t* m, q_matrix_t* dst); // TODO: Bug when calculating the inverse of the matrix
+// Matrix operations
+
 void q_cross_product(const q_matrix_t* a, const q_matrix_t* b, q_matrix_t* dst);
-
 void q_matrix_dot_product(const q_matrix_t* a, const q_matrix_t* b, q_matrix_t* dst);
-
-//TODO: Implement the following functions
 void q_matrix_eigenvalues(const q_matrix_t* m, q_matrix_t* dst);
 void q_matrix_eigenvectors(const q_matrix_t* m, q_matrix_t* dst);
+
+// Matrix validation
 
 q_status_t q_matrix_is_equal(const q_matrix_t* a, const q_matrix_t* b); 
 q_status_t q_matrix_is_approx(const q_matrix_t* a, const q_matrix_t* b, q_t abs_tol);
 
+// Matrix memory management
+
 void q_matrix_cpy(const q_matrix_t* src, q_matrix_t* dst);
 void q_matrix_free(q_matrix_t* m);
 void q_matrix_freeDeep(q_matrix_t* m);
+
+// Matrix printing
 
 void q_matrix_print(const q_matrix_t* m, const char* name);
 
