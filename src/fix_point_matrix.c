@@ -678,12 +678,13 @@ void q_matrix_forward_substitution(const q_matrix_t* L, const q_matrix_t* b, con
 
     for(int i = 0; i < L->rows; i++)
     {
-        q_t temp = Q_MATRIX_AT(b, i, 0);
-        for(int j = 0; j < (i - 1); j++)
+        q_t temp = Q_ZERO;
+        for(int j = 0; j < (i); j++)
         {
-            temp -= q_product(Q_MATRIX_AT(L, i, j), Q_MATRIX_AT(X, j, 0));
+            temp += q_product(Q_MATRIX_AT(L, i, j), Q_MATRIX_AT(X, j, 0));
         }
 
+        temp = Q_MATRIX_AT(b, i, 0) - temp;
         Q_MATRIX_AT(X, i, 0) = q_division(temp, Q_MATRIX_AT(L, i, i));
 
     }
@@ -708,12 +709,13 @@ void q_matrix_back_substitution(const q_matrix_t* U, const q_matrix_t* b, const 
 
     for(int i = U->rows - 1; i >= 0; i--)
     {
-        q_t temp = Q_MATRIX_AT(b, i, 0);
-        for(int j = i + 1; j < U->cols; j++)
+        q_t temp = Q_ZERO;
+        for(int j = i; j < U->cols; j++)
         {
-            temp -= q_product(Q_MATRIX_AT(U, i, j), Q_MATRIX_AT(X, j, 0));
+            temp += q_product(Q_MATRIX_AT(U, i, j), Q_MATRIX_AT(X, j, 0));
         }
 
+        temp = Q_MATRIX_AT(b, i, 0) - temp;
         Q_MATRIX_AT(X, i, 0) = q_division(temp, Q_MATRIX_AT(U, i, i));
 
     }
