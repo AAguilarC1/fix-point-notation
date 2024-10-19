@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "../include/fix_point_matrix.h"
 
-int main() {
+int main(void) {
     uint8_t size = 2;
     q_matrix_t m = q_matrix_square_alloc(size);
     q_matrix_fill_rand_float(&m, -10.0f, 10.0f);
@@ -14,7 +14,6 @@ int main() {
     // Q_MATRIX_AT(&m, 2, 0) = float_to_q(3.1532f);
     // Q_MATRIX_AT(&m, 2, 1) = float_to_q(0.1532f);
     // Q_MATRIX_AT(&m, 2, 2) = float_to_q(1.1532f);
-
 
     q_matrix_t L = q_matrix_square_alloc(size);
     q_matrix_t U = q_matrix_square_alloc(size);
