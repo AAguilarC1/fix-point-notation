@@ -83,7 +83,6 @@ q_t q_matrix_1_norm(const q_matrix_t* m);
 q_t q_matrix_infinity_norm(const q_matrix_t* m);
 q_t q_matrix_euclidean_norm(const q_matrix_t* m);
 
-//TODO: Implement the following functions
 // Matrix operations
 
 void q_cross_product(const q_matrix_t* a, const q_matrix_t* b, q_matrix_t* dst);

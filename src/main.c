@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "../include/fix_point_complex.h"
 #include "../include/fix_point_matrix.h"
 
 int main(void) {
