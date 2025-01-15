@@ -17,6 +17,12 @@ typedef struct q_complex q_complex_t;
 q_complex_t q_complex_alloc(q_t real, q_t imag);
 
 //TODO: Add complex number operations
+void q_complex_sum(q_complex_t* src, q_complex_t* dst);
+void q_complex_mult(q_complex_t* src, q_complex_t* dst);
+void q_complex_conjugate(q_complex_t* src, q_complex_t* dst);
+void q_complex_div(q_complex_t* src, q_complex_t* dst);
+
+q_t q_complex_abs(q_complex_t* src);
 
 void q_complex_free(q_complex_t* c);
 

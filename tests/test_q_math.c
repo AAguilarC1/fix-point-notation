@@ -5,7 +5,7 @@ const float start_product = -1000.0;
 const float end_product = 1000.0;
 const uint16_t N_product = 1 << 8;
 
-void testProduct() {
+void testProduct(void){
 
     srand((uint32_t) time(NULL));
 
@@ -47,7 +47,7 @@ const float start_division = -1000.0;
 const float end_division = 1000.0;
 const uint16_t N_division = 1 << 8;
 
-void testDivision(){
+void testDivision(void){
     srand((uint32_t) time(NULL));
 
     float range = end_division - start_division;
@@ -95,7 +95,7 @@ const float start_absolute = -1000.0;
 const float end_absolute = 1000.0;
 const uint16_t N_absolute = 1 << 8;
 
-void testAbsolute(){
+void testAbsolute(void){
     float range = end_absolute - start_absolute;
     float step = range / (N_absolute - 1);
 
@@ -110,7 +110,7 @@ void testAbsolute(){
 
 // MARK: - Int Power Q format
 const uint16_t N_power = 5;
-void testIntPower()
+void testIntPower(void)
 {
     float start_power = -5.0f;
     float end_power = 5.0f;
@@ -167,7 +167,7 @@ const float start_sqrt = 0;
 const float end_sqrt = 10000;
 const uint16_t N_sqrt = 1 << 12;
 
-void test_q_sqrt()
+void test_q_sqrt(void)
 {
     float range = end_sqrt - start_sqrt;
     float step = range / (N_sqrt - 1);
@@ -188,7 +188,7 @@ const float end_angle    = 3 * 3.14159265358979323846;   //  3 * pi
 const uint16_t N_trig = 1 << 12; // Number of points to test
 
 // MARK: - Sine Q format
-void test_q_sin(){
+void test_q_sin(void){
 
     float range = end_angle - start_angle;
     float step = range / (N_trig - 1);
@@ -204,7 +204,7 @@ void test_q_sin(){
 }
 
 // MARK: - Cosine Q format
-void test_q_cos(){
+void test_q_cos(void){
 
     float range = end_angle - start_angle;
     float step = range / (N_trig - 1);
@@ -232,7 +232,7 @@ float err(float measured, float expected){
 }
 
 // MARK: - Tangent Q format
-void test_q_tan(){
+void test_q_tan(void){
     float range = end_angle - start_angle;
     float step = range / (N_trig - 1);
     for (size_t i = 0; i < N_trig; i++){

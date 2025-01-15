@@ -7,18 +7,18 @@
 #include <math.h>
 #include "../include/fix_point_math.h"
 
-void testProduct();
-void testDivision();
-void testAbsolute();
-void testIntPower();
-void test_q_sqrt();
+void testProduct(void);
+void testDivision(void);
+void testAbsolute(void);
+void testIntPower(void);
+void test_q_sqrt(void);
 
-void test_q_sin();
-void test_q_cos();
-void test_q_tan();
-void test_q_sec();
-void test_q_csc();
-void test_q_cot();
+void test_q_sin(void);
+void test_q_cos(void);
+void test_q_tan(void);
+void test_q_sec(void);
+void test_q_csc(void);
+void test_q_cot(void);
 
 void add_trigonometric_tests(CU_pSuite suite);
 void add_general_math_tests(CU_pSuite suite);

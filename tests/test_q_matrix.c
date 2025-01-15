@@ -1,7 +1,7 @@
 #include "test_q_matrix.h"
 //TODO: Implement tests for q_matrix.c
 
-void test_q_matrix_alloc()
+void test_q_matrix_alloc(void)
 {
     for (size_t i = 1; i < 100; i++)
     {
@@ -114,7 +114,7 @@ void test_q_matrix_alloc()
 
 }
 
-void test_q_fill()
+void test_q_fill(void)
 {
     for (size_t i = 1; i < 20; i++)
     {
@@ -198,7 +198,7 @@ void test_q_fill()
 
 }
 
-void test_q_matrix_LU_decomposition()
+void test_q_matrix_LU_decomposition(void)
 {
     /* We are evaluating the LU decomposition of a matrix with random values. We are checking if the matrix
     was decomposed correctly by multiplying the lower and upper triangular matrices. 
@@ -233,7 +233,7 @@ void test_q_matrix_LU_decomposition()
     }
 }
 
-void test_q_matrix_PLU_decomposition()
+void test_q_matrix_PLU_decomposition(void)
 {
     /* We are evaluating the PLU decomposition of a matrix with random values. We are checking if the matrix
     was decomposed correctly by multiplying the permutation matrix, lower triangular matrix, and upper triangular matrix.
@@ -273,7 +273,7 @@ void test_q_matrix_PLU_decomposition()
     }
 }
 
-void test_q_matrix_inverse()
+void test_q_matrix_inverse(void)
 {
     /* We are evaluating the inverse of a matrix with random values. We are checking if the matrix
     was inverted correctly by multiplying the original matrix and its inverse.

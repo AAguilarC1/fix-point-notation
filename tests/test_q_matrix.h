@@ -4,11 +4,11 @@
 #include "../include/fix_point_matrix.h"
 //TODO: Implement the tests for the matrix of fixed point numbers
 
-void test_q_matrix_alloc();
-void test_q_fill();
-void test_q_matrix_LU_decomposition();
-void test_q_matrix_PLU_decomposition();
-void test_q_matrix_inverse();
+void test_q_matrix_alloc(void);
+void test_q_fill(void);
+void test_q_matrix_LU_decomposition(void);
+void test_q_matrix_PLU_decomposition(void);
+void test_q_matrix_inverse(void);
 
 void add_matrix_tests(CU_pSuite suite);
 

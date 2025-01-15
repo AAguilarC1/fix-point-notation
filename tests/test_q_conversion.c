@@ -3,7 +3,7 @@
 // MARK: - Integer to Q format
 const uint32_t start_N = -1000;
 const uint32_t end_N = 1000;
-void testInt_Q() {
+void testInt_Q(void) {
     uint32_t N = end_N - start_N;
     for (uint32_t i = 0; i < N; i++){
         int32_t x = start_N + i;
@@ -18,7 +18,7 @@ const float start_float = -1000.0;
 const float end_float = 1000.0;
 const uint16_t N_float = 1 << 12;
 
-void testFloat_Q() {
+void testFloat_Q(void) {
     float range = end_float - start_float;
     float step = range / (N_float - 1);
 

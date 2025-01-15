@@ -5,7 +5,11 @@
 #include <stdint.h>
 #include <assert.h>
 #include <time.h>
+
+#ifndef Q_FORMAT_CUSTOM
 #define Q_FORMAT_CUSTOM 16
+#endif // Q_FORMAT_CUSTOM
+
 #define Q_FORMAT Q_FORMAT_CUSTOM
 
 #include "fix_point_math.h"
