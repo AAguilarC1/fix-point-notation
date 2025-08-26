@@ -35,12 +35,50 @@
 !_TAG_KIND_DESCRIPTION!C++	t,typedef	/typedefs/
 !_TAG_KIND_DESCRIPTION!C++	u,union	/union names/
 !_TAG_KIND_DESCRIPTION!C++	v,variable	/variable definitions/
+!_TAG_KIND_DESCRIPTION!Diff	d,deletedFile	/deleted files/
+!_TAG_KIND_DESCRIPTION!Diff	h,hunk	/hunks/
+!_TAG_KIND_DESCRIPTION!Diff	m,modifiedFile	/modified files/
+!_TAG_KIND_DESCRIPTION!Diff	n,newFile	/newly created files/
+!_TAG_KIND_DESCRIPTION!JSON	a,array	/arrays/
+!_TAG_KIND_DESCRIPTION!JSON	b,boolean	/booleans/
+!_TAG_KIND_DESCRIPTION!JSON	n,number	/numbers/
+!_TAG_KIND_DESCRIPTION!JSON	o,object	/objects/
+!_TAG_KIND_DESCRIPTION!JSON	s,string	/strings/
+!_TAG_KIND_DESCRIPTION!JSON	z,null	/nulls/
+!_TAG_KIND_DESCRIPTION!Make	I,makefile	/makefiles/
+!_TAG_KIND_DESCRIPTION!Make	m,macro	/macros/
+!_TAG_KIND_DESCRIPTION!Make	t,target	/targets/
+!_TAG_KIND_DESCRIPTION!Markdown	S,subsection	/level 2 sections/
+!_TAG_KIND_DESCRIPTION!Markdown	T,l4subsection	/level 4 sections/
+!_TAG_KIND_DESCRIPTION!Markdown	c,chapter	/chapters/
+!_TAG_KIND_DESCRIPTION!Markdown	h,hashtag	/hashtags/
+!_TAG_KIND_DESCRIPTION!Markdown	n,footnote	/footnotes/
+!_TAG_KIND_DESCRIPTION!Markdown	s,section	/sections/
+!_TAG_KIND_DESCRIPTION!Markdown	t,subsubsection	/level 3 sections/
+!_TAG_KIND_DESCRIPTION!Markdown	u,l5subsection	/level 5 sections/
+!_TAG_KIND_DESCRIPTION!Perl	c,constant	/constants/
+!_TAG_KIND_DESCRIPTION!Perl	f,format	/formats/
+!_TAG_KIND_DESCRIPTION!Perl	l,label	/labels/
+!_TAG_KIND_DESCRIPTION!Perl	p,package	/packages/
+!_TAG_KIND_DESCRIPTION!Perl	s,subroutine	/subroutines/
+!_TAG_KIND_DESCRIPTION!Sh	a,alias	/aliases/
+!_TAG_KIND_DESCRIPTION!Sh	f,function	/functions/
+!_TAG_KIND_DESCRIPTION!Sh	h,heredoc	/label for here document/
+!_TAG_KIND_DESCRIPTION!Sh	s,script	/script files/
+!_TAG_KIND_DESCRIPTION!Yaml	a,anchor	/anchors/
 !_TAG_OUTPUT_EXCMD	mixed	/number, pattern, mixed, or combineV2/
 !_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
 !_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
 !_TAG_OUTPUT_VERSION	0.0	/current.age/
 !_TAG_PARSER_VERSION!C	1.1	/current.age/
 !_TAG_PARSER_VERSION!C++	1.1	/current.age/
+!_TAG_PARSER_VERSION!Diff	0.0	/current.age/
+!_TAG_PARSER_VERSION!JSON	0.0	/current.age/
+!_TAG_PARSER_VERSION!Make	0.0	/current.age/
+!_TAG_PARSER_VERSION!Markdown	1.1	/current.age/
+!_TAG_PARSER_VERSION!Perl	0.0	/current.age/
+!_TAG_PARSER_VERSION!Sh	0.0	/current.age/
+!_TAG_PARSER_VERSION!Yaml	0.0	/current.age/
 !_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
 !_TAG_PROC_CWD	/home/abel_ca/code/c/fix-point/	//
 !_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
@@ -60,6 +98,38 @@
 !_TAG_ROLE_DESCRIPTION!C++!module	imported	/imported with "imported ..."/
 !_TAG_ROLE_DESCRIPTION!C++!module	partOwner	/used for specifying a partition/
 !_TAG_ROLE_DESCRIPTION!C++!partition	imported	/imported with "imported ..."/
+!_TAG_ROLE_DESCRIPTION!Make!makefile	included	/included/
+!_TAG_ROLE_DESCRIPTION!Make!makefile	optional	/optionally included/
+!_TAG_ROLE_DESCRIPTION!Sh!heredoc	endmarker	/end marker/
+!_TAG_ROLE_DESCRIPTION!Sh!script	loaded	/loaded/
+!_TAG_ROLE_DESCRIPTION!Yaml!anchor	alias	/alias/
+$(DIRS)	./Makefile	/^$(DIRS):$/;"	t
+$(OBJ)	./Makefile	/^$(OBJ): obj\/%.o: src\/%.c$/;"	t
+$(TARGET)	./Makefile	/^$(TARGET): $(OBJ)$/;"	t
+$(TEST)	./Makefile	/^$(TEST): $(OBJ)$/;"	t
+*.c	./.vscode/settings.json	/^        "*.c": "c",$/;"	s	object:files.associations
+*.cps	./.vscode/settings.json	/^        "*.cps": "javascript",$/;"	s	object:files.associations
+-9,8 +9,21	./.git/addp-hunk-edit.diff	/^@@ -9,8 +9,21 @@$/;"	h
+0	./.vscode/launch.json	/^                {$/;"	o	array:configurations.0.setupCommands
+0	./.vscode/launch.json	/^                {$/;"	o	array:configurations.1.setupCommands
+0	./.vscode/launch.json	/^        {$/;"	o	array:configurations
+0	./.vscode/settings.json	/^        "submatrix"$/;"	s	array:cSpell.words
+0	./.vscode/tasks.json	/^				"clean",$/;"	s	array:tasks.0.args
+0	./.vscode/tasks.json	/^				"clean",$/;"	s	array:tasks.1.args
+0	./.vscode/tasks.json	/^		{$/;"	o	array:tasks
+1	./.vscode/launch.json	/^                {$/;"	o	array:configurations.0.setupCommands
+1	./.vscode/launch.json	/^                {$/;"	o	array:configurations.1.setupCommands
+1	./.vscode/launch.json	/^        {$/;"	o	array:configurations
+1	./.vscode/tasks.json	/^				"all"$/;"	s	array:tasks.0.args
+1	./.vscode/tasks.json	/^				"all",$/;"	s	array:tasks.1.args
+1	./.vscode/tasks.json	/^		{$/;"	o	array:tasks
+2	./.vscode/tasks.json	/^				"dbg=1"$/;"	s	array:tasks.1.args
+BIN_DIR	./Makefile	/^BIN_DIR := bin$/;"	m
+Build	./README.md	/^# Build$/;"	c
+CC	./Makefile	/^CC := clang$/;"	m
+CFLAGS	./Makefile	/^CFLAGS := -std=gnu17 -D _GNU_SOURCE -D __STDC_WANT_LIB_EXT1__ -Wall -Wextra -pedantic$/;"	m
+DATA_DIR	./Makefile	/^DATA_DIR := data$/;"	m
+DIRS	./Makefile	/^DIRS := $(BIN_DIR) $(OBJ_DIR) $(BUILD_DIR) $(DATA_DIR) $/;"	m
 FIX_POINT_COMPLEX_H	./include/fix_point_complex.h	/^#define FIX_POINT_COMPLEX_H /;"	d
 FIX_POINT_H	./include/fix_point.h	/^#define FIX_POINT_H /;"	d
 FIX_POINT_MATH_H	./include/fix_point_math.h	/^#define FIX_POINT_MATH_H$/;"	d
@@ -68,7 +138,11 @@ FRACTIONAL_BITS	./include/fix_point.h	/^#define FRACTIONAL_BITS /;"	d
 GET_FORMAT	./include/fix_point.h	/^#define GET_FORMAT /;"	d
 INT_BITS	./include/fix_point.h	/^#define INT_BITS (Q_FORM_INT_BITS /;"	d
 INT_TO_Q	./include/fix_point.h	/^#define INT_TO_Q(/;"	d
+LDFLAGS	./Makefile	/^LDFLAGS := -lm$/;"	m
 LOGGER_H	./include/logger.h	/^#define LOGGER_H$/;"	d
+MIMode	./.vscode/launch.json	/^            "MIMode": "gdb",$/;"	s	object:configurations.0
+MIMode	./.vscode/launch.json	/^            "MIMode": "gdb",$/;"	s	object:configurations.1
+NAME	./Makefile	/^NAME := fix_point$/;"	m
 N_absolute	./tests/test_q_math.c	/^const uint16_t N_absolute = 1 << 8;$/;"	v	typeref:typename:const uint16_t
 N_division	./tests/test_q_math.c	/^const uint16_t N_division = 1 << 8;$/;"	v	typeref:typename:const uint16_t
 N_float	./tests/test_q_conversion.c	/^const uint16_t N_float = 1 << 12;$/;"	v	typeref:typename:const uint16_t
@@ -76,6 +150,8 @@ N_power	./tests/test_q_math.c	/^const uint16_t N_power = 5;$/;"	v	typeref:typena
 N_product	./tests/test_q_math.c	/^const uint16_t N_product = 1 << 8;$/;"	v	typeref:typename:const uint16_t
 N_sqrt	./tests/test_q_math.c	/^const uint16_t N_sqrt = 1 << 12;$/;"	v	typeref:typename:const uint16_t
 N_trig	./tests/test_q_math.c	/^const uint16_t N_trig = 1 << 12; \/\/ Number of points to test$/;"	v	typeref:typename:const uint16_t
+OBJ	./Makefile	/^OBJ := $(SRC:src\/%.c=obj\/%.o)$/;"	m
+OBJ_DIR	./Makefile	/^OBJ_DIR := obj$/;"	m
 PRINT_FORMAT	./include/fix_point.h	/^#define PRINT_FORMAT /;"	d
 PRINT_MAX_FLOAT	./include/fix_point.h	/^#define PRINT_MAX_FLOAT /;"	d
 PRINT_MAX_INT	./include/fix_point.h	/^#define PRINT_MAX_INT /;"	d
@@ -125,15 +201,52 @@ Q_TO_INT	./include/fix_point.h	/^#define Q_TO_INT(/;"	d
 Q_TWO	./include/fix_point.h	/^#define Q_TWO /;"	d
 Q_TWO_PI	./include/fix_point.h	/^#define Q_TWO_PI /;"	d
 Q_ZERO	./include/fix_point.h	/^#define Q_ZERO /;"	d
+Run	./README.md	/^# Run$/;"	c
+SCRIPTS	./Makefile	/^SCRIPTS := scripts$/;"	m
+SRC	./Makefile	/^SRC := $(wildcard $(SRC_DIR)\/*.c)$/;"	m
+SRC_DIR	./Makefile	/^SRC_DIR := src$/;"	m
+TABLE_DIR	./Makefile	/^TABLE_DIR := lib\/table$/;"	m
+TARGET	./Makefile	/^TARGET := $(BIN_DIR)\/$(NAME).out$/;"	m
+TEST	./Makefile	/^TEST := $(BIN_DIR)\/$(NAME)_test.out$/;"	m
+TESTS_DIR	./Makefile	/^TESTS_DIR := tests$/;"	m
 TEST_H	./tests/test.h	/^#define TEST_H$/;"	d
 TEST_Q_MATH_H	./tests/test_q_math.h	/^#define TEST_Q_MATH_H$/;"	d
 TEST_Q_MATRIX_H	./tests/test_q_matrix.h	/^#define TEST_Q_MATRIX_H$/;"	d
+Tests	./README.md	/^# Tests$/;"	c
 add_conversion_tests	./tests/test_q_conversion.c	/^void add_conversion_tests(CU_pSuite suite)$/;"	f	typeref:typename:void
 add_general_math_tests	./tests/test_q_math.c	/^void add_general_math_tests(CU_pSuite suite)$/;"	f	typeref:typename:void
 add_matrix_tests	./tests/test_q_matrix.c	/^void add_matrix_tests(CU_pSuite suite)$/;"	f	typeref:typename:void
 add_trigonometric_tests	./tests/test_q_math.c	/^void add_trigonometric_tests(CU_pSuite suite)$/;"	f	typeref:typename:void
+algorithm	./.vscode/settings.json	/^        "algorithm": "c",$/;"	s	object:files.associations
+all	./Makefile	/^all: build $(TARGET)$/;"	t
+args	./.vscode/launch.json	/^            "args": [],$/;"	a	object:configurations.0
+args	./.vscode/launch.json	/^            "args": [],$/;"	a	object:configurations.1
+args	./.vscode/tasks.json	/^			"args":[$/;"	a	object:tasks.0
+args	./.vscode/tasks.json	/^			"args":[$/;"	a	object:tasks.1
+array	./.vscode/settings.json	/^        "array": "c",$/;"	s	object:files.associations
+assert.h	./.vscode/settings.json	/^        "assert.h": "c",$/;"	s	object:files.associations
+atomic	./.vscode/settings.json	/^        "atomic": "c",$/;"	s	object:files.associations
+basic.h	./.vscode/settings.json	/^        "basic.h": "c",$/;"	s	object:files.associations
+build	./Makefile	/^build: $(DIRS)$/;"	t
+cSpell.words	./.vscode/settings.json	/^    "cSpell.words": [$/;"	a
+check	./Makefile	/^check: all$/;"	t
+clean	./Makefile	/^clean:$/;"	t
 cleanup_suite	./tests/test.c	/^int cleanup_suite() {$/;"	f	typeref:typename:int
+cmath	./.vscode/settings.json	/^        "cmath": "c",$/;"	s	object:files.associations
 cols	./include/fix_point_matrix.h	/^    size_t cols;$/;"	m	struct:matrix_t	typeref:typename:size_t
+command	./.vscode/tasks.json	/^			"command":"make",$/;"	s	object:tasks.0
+command	./.vscode/tasks.json	/^			"command":"make",$/;"	s	object:tasks.1
+configurations	./.vscode/launch.json	/^    "configurations": [$/;"	a
+costable_0_1.h	./.vscode/settings.json	/^        "costable_0_1.h": "c",$/;"	s	object:files.associations
+cstdint	./.vscode/settings.json	/^        "cstdint": "c",$/;"	s	object:files.associations
+cwd	./.vscode/launch.json	/^            "cwd": "${fileDirname}",$/;"	s	object:configurations.0
+cwd	./.vscode/launch.json	/^            "cwd": "${fileDirname}",$/;"	s	object:configurations.1
+dbg	./Makefile	/^dbg ?= 0$/;"	m
+description	./.vscode/launch.json	/^                    "description": "Enable pretty-printing for gdb",$/;"	s	object:configurations.0.setupCommands.0
+description	./.vscode/launch.json	/^                    "description": "Enable pretty-printing for gdb",$/;"	s	object:configurations.1.setupCommands.0
+description	./.vscode/launch.json	/^                    "description": "Set Disassembly Flavor to Intel",$/;"	s	object:configurations.0.setupCommands.1
+description	./.vscode/launch.json	/^                    "description": "Set Disassembly Flavor to Intel",$/;"	s	object:configurations.1.setupCommands.1
+die	./.git/hooks/push-to-checkout.sample	/^die () {$/;"	f
 elements	./include/fix_point_matrix.h	/^    q_t* elements;$/;"	m	struct:matrix_t	typeref:typename:q_t *
 end_N	./tests/test_q_conversion.c	/^const uint32_t end_N = 1000;$/;"	v	typeref:typename:const uint32_t
 end_absolute	./tests/test_q_math.c	/^const float end_absolute = 1000.0;$/;"	v	typeref:typename:const float
@@ -142,17 +255,46 @@ end_division	./tests/test_q_math.c	/^const float end_division = 1000.0;$/;"	v	ty
 end_float	./tests/test_q_conversion.c	/^const float end_float = 1000.0;$/;"	v	typeref:typename:const float
 end_product	./tests/test_q_math.c	/^const float end_product = 1000.0;$/;"	v	typeref:typename:const float
 end_sqrt	./tests/test_q_math.c	/^const float end_sqrt = 10000;$/;"	v	typeref:typename:const float
+environment	./.vscode/launch.json	/^            "environment": [],$/;"	a	object:configurations.0
+environment	./.vscode/launch.json	/^            "environment": [],$/;"	a	object:configurations.1
 err	./tests/test_q_math.c	/^float err(float measured, float expected){$/;"	f	typeref:typename:float
+externalConsole	./.vscode/launch.json	/^            "externalConsole": false,$/;"	b	object:configurations.0
+externalConsole	./.vscode/launch.json	/^            "externalConsole": false,$/;"	b	object:configurations.1
 file	./include/logger.h	/^    FILE* file;$/;"	m	struct:logger	typeref:typename:FILE *
 filename	./include/logger.h	/^    char* filename;$/;"	m	struct:logger	typeref:typename:char *
+files.associations	./.vscode/settings.json	/^    "files.associations": {$/;"	o
+fix_point.h	./.vscode/settings.json	/^        "fix_point.h": "c",$/;"	s	object:files.associations
+fix_point_complex.h	./.vscode/settings.json	/^        "fix_point_complex.h": "c",$/;"	s	object:files.associations
+fix_point_math.h	./.vscode/settings.json	/^        "fix_point_math.h": "c",$/;"	s	object:files.associations
+fix_point_matrix.h	./.vscode/settings.json	/^        "fix_point_matrix.h": "c",$/;"	s	object:files.associations
 float_to_q	./src/fix_point.c	/^inline q_t float_to_q(float x) {$/;"	f	typeref:typename:q_t
+functional	./.vscode/settings.json	/^        "functional": "c",$/;"	s	object:files.associations
+get_working_dir	./.git/hooks/fsmonitor-watchman.sample	/^sub get_working_dir {$/;"	s
+ignoreFailures	./.vscode/launch.json	/^                    "ignoreFailures": true$/;"	b	object:configurations.0.setupCommands.0
+ignoreFailures	./.vscode/launch.json	/^                    "ignoreFailures": true$/;"	b	object:configurations.0.setupCommands.1
+ignoreFailures	./.vscode/launch.json	/^                    "ignoreFailures": true$/;"	b	object:configurations.1.setupCommands.0
+ignoreFailures	./.vscode/launch.json	/^                    "ignoreFailures": true$/;"	b	object:configurations.1.setupCommands.1
 imag	./include/fix_point_complex.h	/^    q_t imag;$/;"	m	struct:q_complex	typeref:typename:q_t
 initialize_suite	./tests/test.c	/^int initialize_suite() {$/;"	f	typeref:typename:int
+is_work_tree_watched	./.git/hooks/fsmonitor-watchman.sample	/^sub is_work_tree_watched {$/;"	s
+label	./.vscode/tasks.json	/^			"label": "build",$/;"	s	object:tasks.0
+label	./.vscode/tasks.json	/^			"label": "debug",$/;"	s	object:tasks.1
+launch_watchman	./.git/hooks/fsmonitor-watchman.sample	/^sub launch_watchman {$/;"	s
+limits	./.vscode/settings.json	/^        "limits": "c",$/;"	s	object:files.associations
 logger	./include/logger.h	/^struct logger{$/;"	s
 logger_t	./include/logger.h	/^typedef struct logger logger_t;$/;"	t	typeref:struct:logger
 main	./src/main.c	/^int main(void) {$/;"	f	typeref:typename:int
 main	./tests/test.c	/^int main() {$/;"	f	typeref:typename:int
+math.h	./.vscode/settings.json	/^        "math.h": "c",$/;"	s	object:files.associations
 matrix_t	./include/fix_point_matrix.h	/^struct matrix_t {$/;"	s
+name	./.vscode/launch.json	/^            "name": "(gdb) Debug",$/;"	s	object:configurations.1
+name	./.vscode/launch.json	/^            "name": "(gdb) Launch",$/;"	s	object:configurations.0
+obj/%.o	./Makefile	/^$(OBJ): obj\/%.o: src\/%.c$/;"	t
+output_result	./.git/hooks/fsmonitor-watchman.sample	/^sub output_result {$/;"	s
+preLaunchTask	./.vscode/launch.json	/^            "preLaunchTask": "build",$/;"	s	object:configurations.0
+preLaunchTask	./.vscode/launch.json	/^            "preLaunchTask": "debug"$/;"	s	object:configurations.1
+program	./.vscode/launch.json	/^            "program": "${workspaceFolder}\/bin\/fix_point.out",$/;"	s	object:configurations.0
+program	./.vscode/launch.json	/^            "program": "${workspaceFolder}\/bin\/fix_point.out",$/;"	s	object:configurations.1
 q15_t	./include/fix_point.h	/^typedef int16_t q15_t;$/;"	t	typeref:typename:int16_t
 q31_t	./include/fix_point.h	/^typedef int32_t q31_t;$/;"	t	typeref:typename:int32_t
 q7_t	./include/fix_point.h	/^typedef int8_t q7_t; $/;"	t	typeref:typename:int8_t
@@ -223,8 +365,15 @@ q_t	./include/fix_point.h	/^typedef q7_t q_t;$/;"	t	typeref:typename:q7_t
 q_tan	./src/fix_point_math.c	/^q_t q_tan(q_t a){$/;"	f	typeref:typename:q_t
 q_to_float	./src/fix_point.c	/^inline float q_to_float(q_t x) {$/;"	f	typeref:typename:float
 q_zeros	./include/fix_point_matrix.h	/^#define q_zeros(/;"	d
+random	./.vscode/settings.json	/^        "random": "c",$/;"	s	object:files.associations
 real	./include/fix_point_complex.h	/^    q_t real;$/;"	m	struct:q_complex	typeref:typename:q_t
+request	./.vscode/launch.json	/^            "request": "launch",$/;"	s	object:configurations.0
+request	./.vscode/launch.json	/^            "request": "launch",$/;"	s	object:configurations.1
 rows	./include/fix_point_matrix.h	/^    size_t rows;$/;"	m	struct:matrix_t	typeref:typename:size_t
+run	./Makefile	/^run: all$/;"	t
+setup	./Makefile	/^setup:$/;"	t
+setupCommands	./.vscode/launch.json	/^            "setupCommands": [$/;"	a	object:configurations.0
+setupCommands	./.vscode/launch.json	/^            "setupCommands": [$/;"	a	object:configurations.1
 start_N	./tests/test_q_conversion.c	/^const uint32_t start_N = -1000;$/;"	v	typeref:typename:const uint32_t
 start_absolute	./tests/test_q_math.c	/^const float start_absolute = -1000.0;$/;"	v	typeref:typename:const float
 start_angle	./tests/test_q_math.c	/^const float start_angle  = - 3 * 3.14159265358979323846; \/\/ -3 * pi$/;"	v	typeref:typename:const float
@@ -233,15 +382,29 @@ start_float	./tests/test_q_conversion.c	/^const float start_float = -1000.0;$/;"
 start_product	./tests/test_q_math.c	/^const float start_product = -1000.0;$/;"	v	typeref:typename:const float
 start_sqrt	./tests/test_q_math.c	/^const float start_sqrt = 0;$/;"	v	typeref:typename:const float
 status_t	./include/fix_point_matrix.h	/^enum status_t {$/;"	g
+stdint.h	./.vscode/settings.json	/^        "stdint.h": "c",$/;"	s	object:files.associations
+stdio.h	./.vscode/settings.json	/^        "stdio.h": "c",$/;"	s	object:files.associations
+stdlib.h	./.vscode/settings.json	/^        "stdlib.h": "c",$/;"	s	object:files.associations
+stopAtEntry	./.vscode/launch.json	/^            "stopAtEntry": false,$/;"	b	object:configurations.0
+stopAtEntry	./.vscode/launch.json	/^            "stopAtEntry": true,$/;"	b	object:configurations.1
 stride	./include/fix_point_matrix.h	/^    size_t stride;$/;"	m	struct:matrix_t	typeref:typename:size_t
+string	./.vscode/settings.json	/^        "string": "c",$/;"	s	object:files.associations
+string_view	./.vscode/settings.json	/^        "string_view": "c",$/;"	s	object:files.associations
+system_error	./.vscode/settings.json	/^        "system_error": "c",$/;"	s	object:files.associations
+tasks	./.vscode/tasks.json	/^	"tasks": [$/;"	a
+test	./Makefile	/^test: build $(TEST)$/;"	t
+test.h	./.vscode/settings.json	/^        "test.h": "c",$/;"	s	object:files.associations
 testAbsolute	./tests/test_q_math.c	/^void testAbsolute(void){$/;"	f	typeref:typename:void
 testDivision	./tests/test_q_math.c	/^void testDivision(void){$/;"	f	typeref:typename:void
 testFloat_Q	./tests/test_q_conversion.c	/^void testFloat_Q(void) {$/;"	f	typeref:typename:void
 testIntPower	./tests/test_q_math.c	/^void testIntPower(void)$/;"	f	typeref:typename:void
 testInt_Q	./tests/test_q_conversion.c	/^void testInt_Q(void) {$/;"	f	typeref:typename:void
 testProduct	./tests/test_q_math.c	/^void testProduct(void){$/;"	f	typeref:typename:void
+test_q_conversion.h	./.vscode/settings.json	/^        "test_q_conversion.h": "c",$/;"	s	object:files.associations
 test_q_cos	./tests/test_q_math.c	/^void test_q_cos(void){$/;"	f	typeref:typename:void
 test_q_fill	./tests/test_q_matrix.c	/^void test_q_fill(void)$/;"	f	typeref:typename:void
+test_q_math.h	./.vscode/settings.json	/^        "test_q_math.h": "c",$/;"	s	object:files.associations
+test_q_matrix.h	./.vscode/settings.json	/^        "test_q_matrix.h": "c"$/;"	s	object:files.associations
 test_q_matrix_LU_decomposition	./tests/test_q_matrix.c	/^void test_q_matrix_LU_decomposition(void)$/;"	f	typeref:typename:void
 test_q_matrix_PLU_decomposition	./tests/test_q_matrix.c	/^void test_q_matrix_PLU_decomposition(void)$/;"	f	typeref:typename:void
 test_q_matrix_alloc	./tests/test_q_matrix.c	/^void test_q_matrix_alloc(void)$/;"	f	typeref:typename:void
@@ -249,3 +412,18 @@ test_q_matrix_inverse	./tests/test_q_matrix.c	/^void test_q_matrix_inverse(void)
 test_q_sin	./tests/test_q_math.c	/^void test_q_sin(void){$/;"	f	typeref:typename:void
 test_q_sqrt	./tests/test_q_math.c	/^void test_q_sqrt(void)$/;"	f	typeref:typename:void
 test_q_tan	./tests/test_q_math.c	/^void test_q_tan(void){$/;"	f	typeref:typename:void
+text	./.vscode/launch.json	/^                    "text": "-enable-pretty-printing",$/;"	s	object:configurations.0.setupCommands.0
+text	./.vscode/launch.json	/^                    "text": "-enable-pretty-printing",$/;"	s	object:configurations.1.setupCommands.0
+text	./.vscode/launch.json	/^                    "text": "-gdb-set disassembly-flavor intel",$/;"	s	object:configurations.0.setupCommands.1
+text	./.vscode/launch.json	/^                    "text": "-gdb-set disassembly-flavor intel",$/;"	s	object:configurations.1.setupCommands.1
+time.h	./.vscode/settings.json	/^        "time.h": "c",$/;"	s	object:files.associations
+tuple	./.vscode/settings.json	/^        "tuple": "c",$/;"	s	object:files.associations
+type	./.vscode/launch.json	/^            "type": "cppdbg",$/;"	s	object:configurations.0
+type	./.vscode/launch.json	/^            "type": "cppdbg",$/;"	s	object:configurations.1
+type	./.vscode/tasks.json	/^			"type":"shell",$/;"	s	object:tasks.0
+type	./.vscode/tasks.json	/^			"type":"shell",$/;"	s	object:tasks.1
+type_traits	./.vscode/settings.json	/^        "type_traits": "c",$/;"	s	object:files.associations
+utility	./.vscode/settings.json	/^        "utility": "c",$/;"	s	object:files.associations
+version	./.vscode/tasks.json	/^	"version": "2.0.0",$/;"	s
+watchman_clock	./.git/hooks/fsmonitor-watchman.sample	/^sub watchman_clock {$/;"	s
+watchman_query	./.git/hooks/fsmonitor-watchman.sample	/^sub watchman_query {$/;"	s
